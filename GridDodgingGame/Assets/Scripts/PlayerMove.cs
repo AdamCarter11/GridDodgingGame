@@ -1,17 +1,23 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
 
 public class PlayerMove : MonoBehaviour
 {
     [SerializeField] float moveSpeed;
     [SerializeField] Transform movePoint;
     [SerializeField] LayerMask whatStopsMovement;
+    [SerializeField] TextMeshProUGUI scoreText;
+    int score = 0;
 
     void Start()
     {
         //removes the movepoint from the player (keeps things organized)
         movePoint.parent = null;
+        scoreText.text = "Score: " + 0;
+        StartCoroutine(timeScoreIncrease());
     }
 
     void Update()
@@ -34,5 +40,13 @@ public class PlayerMove : MonoBehaviour
             }
         }
 
+        scoreText.text = "Score: " + score;
+    }
+
+    IEnumerator timeScoreIncrease(){
+        while(true){
+            yield return new WaitForSeconds(1f);
+            score++;
+        }
     }
 }

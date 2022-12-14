@@ -7,12 +7,12 @@ public class EnemySpawner : MonoBehaviour
     [SerializeField] GameObject enemy;
     [SerializeField] float spawnDelay;
     private float spawnScaling = 0;
-    [SerializeField] EnemyMove enemyMoveScript;
+    //[SerializeField] EnemyMove enemyMoveScript;
 
     void Start()
     {
         StartCoroutine(spawnEnemy());
-        enemyMoveScript.dir = 4;
+        //enemyMoveScript.dir = 4;
     }
 
     
