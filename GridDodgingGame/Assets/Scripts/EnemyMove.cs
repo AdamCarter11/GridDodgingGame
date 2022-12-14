@@ -5,15 +5,16 @@ using UnityEngine;
 public class EnemyMove : MonoBehaviour
 {
     [SerializeField] float enemySpeed;
+    [SerializeField] float moveDelay;
     [SerializeField] Transform movePoint;
     bool canMove = false;
-    [HideInInspector] public int dir {get; set;}
+    int dir;
     bool canBeDamaged = false;
 
     void Start()
     {
         movePoint.parent = null;
-        dir = Random.Range(1,4);
+        dir = Random.Range(1,5);
         //dir = 2;
         //1 = right, 2 = left, 3 = up, 4 = down
         if(dir == 1){
@@ -63,7 +64,7 @@ public class EnemyMove : MonoBehaviour
 
     IEnumerator triggerMove(){
         while(true){
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSeconds(moveDelay);
             canMove = true;
         }
         
@@ -74,7 +75,8 @@ public class EnemyMove : MonoBehaviour
     }
     private void OnTriggerEnter2D(Collider2D other) {
         if(other.gameObject.CompareTag("Wall") && canBeDamaged){
-            Destroy(gameObject);
+            Destroy(movePoint.gameObject);
+            Destroy(gameObject); 
         }
     }
     private void OnTriggerExit2D(Collider2D other) {

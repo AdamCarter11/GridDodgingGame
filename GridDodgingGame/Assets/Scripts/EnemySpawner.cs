@@ -24,7 +24,7 @@ public class EnemySpawner : MonoBehaviour
     IEnumerator spawnEnemy(){
         while(true){
             yield return new WaitForSeconds(spawnDelay - spawnScaling);
-            Instantiate(enemy, new Vector3(5.5f, 1.5f, 0), Quaternion.identity);
+            Instantiate(enemy, new Vector3(4.5f, 1.5f, 0), Quaternion.identity);
             if(spawnScaling <= 2){
                 spawnScaling += .1f;
             }
