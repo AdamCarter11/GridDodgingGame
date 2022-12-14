@@ -7,13 +7,14 @@ public class EnemyMove : MonoBehaviour
     [SerializeField] float enemySpeed;
     [SerializeField] Transform movePoint;
     bool canMove = false;
-    int dir;
+    [HideInInspector] public int dir {get; set;}
     bool canBeDamaged = false;
 
     void Start()
     {
         movePoint.parent = null;
         dir = Random.Range(1,4);
+        //dir = 2;
         //1 = right, 2 = left, 3 = up, 4 = down
         if(dir == 1){
             transform.eulerAngles = new Vector3(0,0,0);
