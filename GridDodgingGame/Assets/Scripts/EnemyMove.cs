@@ -8,27 +8,12 @@ public class EnemyMove : MonoBehaviour
     [SerializeField] float moveDelay;
     [SerializeField] Transform movePoint;
     bool canMove = false;
-    int dir;
     bool canBeDamaged = false;
+    int dir;
 
     void Start()
     {
         movePoint.parent = null;
-        dir = Random.Range(1,5);
-        //dir = 2;
-        //1 = right, 2 = left, 3 = up, 4 = down
-        if(dir == 1){
-            transform.eulerAngles = new Vector3(0,0,0);
-        }
-        if(dir == 2){
-            transform.eulerAngles = new Vector3(0,0,180);
-        }
-        if(dir == 3){
-            transform.eulerAngles = new Vector3(0,0,90);
-        }
-        if(dir == 4){
-            transform.eulerAngles = new Vector3(0,0,270);
-        }
         StartCoroutine(triggerMove());
     }
 
@@ -41,12 +26,12 @@ public class EnemyMove : MonoBehaviour
         if(Vector3.Distance(transform.position, movePoint.position) <= .05f){
             //right
             if(canMove && dir == 1){
-                movePoint.position += new Vector3(1f, 0f, movePoint.position.z);
+                movePoint.position += new Vector3(-1f, 0f, movePoint.position.z);
                 canMove = false;
             }
             //left
             if(canMove && dir == 2){
-                movePoint.position += new Vector3(-1f, 0f, movePoint.position.z);
+                movePoint.position += new Vector3(1f, 0f, movePoint.position.z);
                 canMove = false;
             }
             //up
@@ -60,6 +45,12 @@ public class EnemyMove : MonoBehaviour
                 canMove = false;
             }
         }
+    }
+
+    // Set facing of enemy
+    public void setFacing(int facing)
+    {
+        dir = facing;
     }
 
     IEnumerator triggerMove(){
