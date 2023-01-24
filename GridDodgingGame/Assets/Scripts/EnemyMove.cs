@@ -69,6 +69,17 @@ public class EnemyMove : MonoBehaviour
             Destroy(movePoint.gameObject);
             Destroy(gameObject); 
         }
+        if(other.gameObject.CompareTag("enemy")){
+            Destroy(other.gameObject);
+            Destroy(this.gameObject);
+            Destroy(movePoint.gameObject);
+            PlayerMove.score += 10;
+        }
+        if(other.gameObject.CompareTag("dirTrap")){
+            transform.rotation = Quaternion.Euler(0.0f, 0.0f, 90.0f);
+            dir = (dir + 1) % 4;
+            Destroy(other.gameObject);
+        }
     }
     private void OnTriggerExit2D(Collider2D other) {
         if(other.gameObject.CompareTag("Wall")){

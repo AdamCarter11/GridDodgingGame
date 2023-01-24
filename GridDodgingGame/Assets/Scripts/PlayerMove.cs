@@ -10,12 +10,14 @@ public class PlayerMove : MonoBehaviour
     [SerializeField] Transform movePoint;
     [SerializeField] LayerMask whatStopsMovement;
     [SerializeField] TextMeshProUGUI scoreText;
-    int score = 0;
+    [HideInInspector] public static int score = 0;
     bool canDig = false;
     GameObject currDiggingTile;
     float[] possibleXVals = new float[11];
     float[] possibleYVals = new float[8];
     Queue<int> myQueue = new Queue<int>();
+
+    [SerializeField] int health;
 
     void Start()
     {
@@ -63,6 +65,14 @@ public class PlayerMove : MonoBehaviour
         if(other.gameObject.CompareTag("DigginTile")){
             canDig = true;
             currDiggingTile = other.gameObject;
+        }
+        if(other.gameObject.CompareTag("enemy")){
+            Destroy(other.gameObject);
+            health--;
+            if(health <= 0){
+                //gameover
+                print("gameover!");
+            }
         }
     }
     private void OnTriggerExit2D(Collider2D other) {
