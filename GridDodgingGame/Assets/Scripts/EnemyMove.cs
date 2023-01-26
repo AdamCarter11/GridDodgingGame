@@ -79,10 +79,40 @@ public class EnemyMove : MonoBehaviour
             transform.Rotate(new Vector3(0.0f,0.0f,90.0f), Space.Self);
             print(dir);
             dir++;
+            //if(dir == 2){ dir = 1; }
+            //if(dir == 4){ dir = 3; }
             if(dir > 4){
                 dir %= 4;
             }
             print(dir);
+            Destroy(other.gameObject);
+        }
+        if(other.gameObject.CompareTag("dirTrapRight")){
+            transform.Rotate(new Vector3(0.0f,0.0f,-90.0f), Space.Self);
+            print(dir);
+            dir--;
+            if(dir == 2){ dir = 3; }
+            if(dir == 4){ dir = 1; }
+            if(dir <= 0){
+                dir = 4;
+            }
+            print(dir);
+            Destroy(other.gameObject);
+        }
+        if(other.gameObject.CompareTag("pushTrapUp")){
+            movePoint.position += new Vector3(0f, 1f, movePoint.position.z);
+            Destroy(other.gameObject);
+        }
+        if(other.gameObject.CompareTag("pushTrapDown")){
+            movePoint.position += new Vector3(0f, -1f, movePoint.position.z);
+            Destroy(other.gameObject);
+        }
+        if(other.gameObject.CompareTag("pushTrapRight")){
+            movePoint.position += new Vector3(1f, 0f, movePoint.position.z);
+            Destroy(other.gameObject);
+        }
+        if(other.gameObject.CompareTag("pushTrapLeft")){
+            movePoint.position += new Vector3(-1f, 0f, movePoint.position.z);
             Destroy(other.gameObject);
         }
     }

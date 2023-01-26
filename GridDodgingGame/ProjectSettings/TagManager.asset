@@ -8,6 +8,11 @@ TagManager:
   - enemy
   - DigginTile
   - dirTrap
+  - pushTrapUp
+  - dirTrapRight
+  - pushTrapDown
+  - pushTrapLeft
+  - pushTrapRight
   layers:
   - Default
   - TransparentFX
