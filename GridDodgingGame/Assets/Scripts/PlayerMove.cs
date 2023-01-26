@@ -2,15 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
+//using TMPro;
 
 public class PlayerMove : MonoBehaviour
 {
     [SerializeField] float moveSpeed;
     [SerializeField] Transform movePoint;
     [SerializeField] LayerMask whatStopsMovement;
-    [SerializeField] TextMeshProUGUI scoreText;
-    int score = 0;
+    //[SerializeField] TextMeshProUGUI scoreText;
+    //int score = 0;
     bool canDig = false;
     GameObject currDiggingTile;
     float[] possibleXVals = new float[11];
@@ -21,9 +21,9 @@ public class PlayerMove : MonoBehaviour
     {
         //removes the movepoint from the player (keeps things organized)
         movePoint.parent = null;
-        scoreText.text = "Score: " + 0;
+        //scoreText.text = "Score: " + 0;
         setupTiles();
-        StartCoroutine(timeScoreIncrease());
+        //StartCoroutine(timeScoreIncrease());
     }
 
     void Update()
@@ -49,15 +49,15 @@ public class PlayerMove : MonoBehaviour
             }
         }
 
-        scoreText.text = "Score: " + score;
+        //scoreText.text = "Score: " + score;
     }
 
-    IEnumerator timeScoreIncrease(){
-        while(true){
-            yield return new WaitForSeconds(1f);
-            score++;
-        }
-    }
+    //IEnumerator timeScoreIncrease(){
+    //    while(true){
+    //        yield return new WaitForSeconds(1f);
+    //        score++;
+    //    }
+    //}
 
     private void OnTriggerEnter2D(Collider2D other) {
         if(other.gameObject.CompareTag("DigginTile")){
@@ -79,7 +79,8 @@ public class PlayerMove : MonoBehaviour
                 myQueue.Enqueue(Random.Range(1,3));
             }
             else{
-                score += 5;
+                // Call game manager
+                //score += 5;
             }
         }
     }
