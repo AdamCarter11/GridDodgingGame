@@ -106,7 +106,7 @@ public class PlayerMove : MonoBehaviour
             if(items.Count > 0){
                 int trap = items.Dequeue();
                 //intantiate trap where we are standing
-                Instantiate(traps[trap], transform.position, Quaternion.identity);
+                Instantiate(traps[trap], movePoint.transform.position, Quaternion.identity);
             }
             else{
                 print("no items");
