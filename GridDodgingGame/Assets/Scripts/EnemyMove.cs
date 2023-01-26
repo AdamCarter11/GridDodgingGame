@@ -74,7 +74,7 @@ public class EnemyMove : MonoBehaviour
             Destroy(other.gameObject);
             Destroy(this.gameObject);
             Destroy(movePoint.gameObject);
-            GameManager.Instance.IncreaseScore(10);
+            Instantiate(gold, transform.position, Quaternion.identity);
         }
         if(other.gameObject.CompareTag("dirTrap")){
             transform.Rotate(new Vector3(0.0f,0.0f,90.0f), Space.Self);
