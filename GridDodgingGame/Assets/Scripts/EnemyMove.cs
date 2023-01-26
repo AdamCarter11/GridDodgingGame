@@ -30,17 +30,17 @@ public class EnemyMove : MonoBehaviour
                 canMove = false;
             }
             //left
-            if(canMove && dir == 2){
+            if(canMove && dir == 3){
                 movePoint.position += new Vector3(1f, 0f, movePoint.position.z);
                 canMove = false;
             }
             //up
-            if(canMove && dir == 3){
+            if(canMove && dir == 4){
                 movePoint.position += new Vector3(0f, 1f, movePoint.position.z);
                 canMove = false;
             }
             //down
-            if(canMove && dir == 4){
+            if(canMove && dir == 2){
                 movePoint.position += new Vector3(0f, -1f, movePoint.position.z);
                 canMove = false;
             }
@@ -76,8 +76,13 @@ public class EnemyMove : MonoBehaviour
             PlayerMove.score += 10;
         }
         if(other.gameObject.CompareTag("dirTrap")){
-            transform.rotation = Quaternion.Euler(0.0f, 0.0f, 90.0f);
-            dir = (dir + 1) % 4;
+            transform.Rotate(new Vector3(0.0f,0.0f,90.0f), Space.Self);
+            print(dir);
+            dir++;
+            if(dir > 4){
+                dir %= 4;
+            }
+            print(dir);
             Destroy(other.gameObject);
         }
     }
