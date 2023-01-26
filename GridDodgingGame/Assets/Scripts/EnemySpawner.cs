@@ -57,21 +57,21 @@ public class EnemySpawner : MonoBehaviour
                 // set position
                 enemyPosition = new Vector3(END_X, START_Y + GRID_INTERVAL * pos_y, 0);
             }
-            if (dir == 2) {
+            if (dir == 3) {
                 // Set direction
                 //transform.eulerAngles = new Vector3(0,0,180);
                 enemyFacing = new Vector3(0, 0, 0);
                 // Set position
                 enemyPosition = new Vector3(START_X, START_Y + GRID_INTERVAL * pos_y, 0);
             }
-            if (dir == 3) {
+            if (dir == 4) {
                 // Set direction
                 //transform.eulerAngles = new Vector3(0,0,90);
                 enemyFacing = new Vector3(0, 0, 90);
                 // Set position
                 enemyPosition = new Vector3(START_X + GRID_INTERVAL * pos_x, START_Y, 0);
             }
-            if (dir == 4) {
+            if (dir == 2) {
                 // Set direction
                 //transform.eulerAngles = new Vector3(0,0,270);
                 enemyFacing = new Vector3(0, 0, 270);

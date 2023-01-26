@@ -10,12 +10,14 @@ public class PlayerMove : MonoBehaviour
     [SerializeField] Transform movePoint;
     [SerializeField] LayerMask whatStopsMovement;
     //[SerializeField] TextMeshProUGUI scoreText;
-    //int score = 0;
+    //[HideInInspector] public static int score = 0;
     bool canDig = false;
     GameObject currDiggingTile;
     float[] possibleXVals = new float[11];
     float[] possibleYVals = new float[8];
-    Queue<int> myQueue = new Queue<int>();
+    Queue<int> items = new Queue<int>();
+
+    [SerializeField] int health;
 
     void Start()
     {
@@ -64,6 +66,14 @@ public class PlayerMove : MonoBehaviour
             canDig = true;
             currDiggingTile = other.gameObject;
         }
+        if(other.gameObject.CompareTag("enemy")){
+            Destroy(other.gameObject);
+            health--;
+            if(health <= 0){
+                //gameover
+                print("gameover!");
+            }
+        }
     }
     private void OnTriggerExit2D(Collider2D other) {
         if(other.gameObject.CompareTag("DigginTile")){
@@ -75,20 +85,20 @@ public class PlayerMove : MonoBehaviour
         if(Input.GetKeyDown(KeyCode.Space) && canDig){
             print("dug tile");
             currDiggingTile.transform.position = new Vector3(possibleXVals[Random.Range(0,possibleXVals.Length)], possibleYVals[Random.Range(0,possibleYVals.Length)], currDiggingTile.transform.position.z);
-            if(myQueue.Count < 2){
-                myQueue.Enqueue(Random.Range(1,3));
+            if(items.Count < 2){
+                items.Enqueue(Random.Range(1,4));
             }
             else{
-                // Call game manager
-                //score += 5;
+                items.Dequeue();
+                items.Enqueue(Random.Range(1,4));
             }
         }
     }
 
     void placeTrapLogic(){
         if(Input.GetKeyDown(KeyCode.F)){
-            if(myQueue.Count > 0){
-                print(myQueue.Dequeue());
+            if(items.Count > 0){
+                print(items.Dequeue());
                 //intantiate trap where we are standing
             }
             else{
