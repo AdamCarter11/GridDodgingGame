@@ -69,6 +69,7 @@ public class PlayerMove : MonoBehaviour
         }
         if(other.gameObject.CompareTag("enemy")){
             Destroy(other.gameObject);
+            GameManager.Instance.ChangeTime(-5);
             health--;
             if(health <= 0){
                 //gameover
@@ -79,6 +80,13 @@ public class PlayerMove : MonoBehaviour
             Destroy(other.gameObject);
             //increase score
             GameManager.Instance.IncreaseScore(10);
+            GameManager.Instance.ChangeTime(1);
+        }
+        if(other.gameObject.CompareTag("betterGold")){
+            Destroy(other.gameObject);
+            //increase score
+            GameManager.Instance.IncreaseScore(20);
+            GameManager.Instance.ChangeTime(2);
         }
     }
     private void OnTriggerExit2D(Collider2D other) {
@@ -90,7 +98,8 @@ public class PlayerMove : MonoBehaviour
     void DiggingLogic(){
         if(Input.GetKeyDown(KeyCode.Space) && canDig){
             print("dug tile");
-            currDiggingTile.transform.position = new Vector3(possibleXVals[Random.Range(0,possibleXVals.Length)], possibleYVals[Random.Range(0,possibleYVals.Length)], currDiggingTile.transform.position.z);
+            currDiggingTile.SetActive(false);
+            StartCoroutine(spawnDigTile());
             if(items.Count < 2){
                 items.Enqueue(Random.Range(0,6));
             }
@@ -99,6 +108,11 @@ public class PlayerMove : MonoBehaviour
                 items.Enqueue(Random.Range(0,6));
             }
         }
+    }
+    IEnumerator spawnDigTile(){
+        yield return new WaitForSeconds(3f);
+        currDiggingTile.transform.position = new Vector3(possibleXVals[Random.Range(0,possibleXVals.Length)], possibleYVals[Random.Range(0,possibleYVals.Length)], currDiggingTile.transform.position.z);
+        currDiggingTile.SetActive(true);
     }
 
     void placeTrapLogic(){
