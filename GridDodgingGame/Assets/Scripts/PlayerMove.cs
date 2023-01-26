@@ -17,6 +17,7 @@ public class PlayerMove : MonoBehaviour
     float[] possibleXVals = new float[11];
     float[] possibleYVals = new float[8];
     public Queue<int> items = new Queue<int>();
+    private bool dir = true;
 
     [SerializeField] int health;
 
@@ -36,7 +37,12 @@ public class PlayerMove : MonoBehaviour
 
         //moves player
         transform.position = Vector3.MoveTowards(transform.position, movePoint.position, moveSpeed * Time.deltaTime);
-
+        if(dir == false && movePoint.transform.position.x > transform.position.x){
+            Flip();
+        }
+        if(dir && movePoint.transform.position.x < transform.position.x){
+            Flip();
+        }
         if(Vector3.Distance(transform.position, movePoint.position) <= .05f){
             //left-right input
             if(Mathf.Abs(Input.GetAxisRaw("Horizontal")) == 1f){
@@ -55,6 +61,12 @@ public class PlayerMove : MonoBehaviour
         //scoreText.text = "Score: " + score;
     }
 
+    void Flip(){
+        dir = !dir;
+        Vector3 Scaler = transform.localScale;
+        Scaler.x *= -1;
+        transform.localScale = Scaler;
+    }
     //IEnumerator timeScoreIncrease(){
     //    while(true){
     //        yield return new WaitForSeconds(1f);
