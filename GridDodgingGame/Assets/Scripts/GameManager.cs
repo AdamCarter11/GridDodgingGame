@@ -8,7 +8,7 @@ public class GameManager : MonoBehaviour
     private static GameManager _instance = new GameManager();
 
     [SerializeField] TextMeshProUGUI scoreText;
-    int score = 0;
+    [HideInInspector] public static int score = 0;
 
     private GameManager() {
 
@@ -27,7 +27,6 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
         scoreText.text = "Score: " + 0;
         StartCoroutine(timeScoreIncrease());
     }
@@ -36,6 +35,11 @@ public class GameManager : MonoBehaviour
     void Update()
     {
         scoreText.text = "Score: " + score;
+    }
+
+    public void IncreaseScore(int val)
+    {
+        score += val;
     }
 
     IEnumerator timeScoreIncrease()
