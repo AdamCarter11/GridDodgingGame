@@ -35,11 +35,20 @@ public class GameManager : MonoBehaviour
     void Update()
     {
         scoreText.text = "Score: " + score;
+        ShowQueue();
     }
 
     public void IncreaseScore(int val)
     {
         score += val;
+    }
+
+    public void ShowQueue()
+    {
+        // Access player items
+        //PlayerMove.items;
+
+        // Send information to UI
     }
 
     IEnumerator timeScoreIncrease()

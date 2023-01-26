@@ -15,7 +15,7 @@ public class PlayerMove : MonoBehaviour
     GameObject currDiggingTile;
     float[] possibleXVals = new float[11];
     float[] possibleYVals = new float[8];
-    Queue<int> items = new Queue<int>();
+    public Queue<int> items = new Queue<int>();
 
     [SerializeField] int health;
 
