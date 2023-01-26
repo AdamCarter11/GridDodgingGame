@@ -7,6 +7,7 @@ public class EnemyMove : MonoBehaviour
     [SerializeField] float enemySpeed;
     [SerializeField] float moveDelay;
     [SerializeField] Transform movePoint;
+    [SerializeField] GameObject gold;
     bool canMove = false;
     bool canBeDamaged = false;
     int dir;
@@ -73,7 +74,7 @@ public class EnemyMove : MonoBehaviour
             Destroy(other.gameObject);
             Destroy(this.gameObject);
             Destroy(movePoint.gameObject);
-            PlayerMove.score += 10;
+            Instantiate(gold, transform.position, Quaternion.identity);
         }
         if(other.gameObject.CompareTag("dirTrap")){
             transform.Rotate(new Vector3(0.0f,0.0f,90.0f), Space.Self);

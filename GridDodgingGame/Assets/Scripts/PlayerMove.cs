@@ -9,6 +9,7 @@ public class PlayerMove : MonoBehaviour
     [SerializeField] float moveSpeed;
     [SerializeField] Transform movePoint;
     [SerializeField] LayerMask whatStopsMovement;
+    [SerializeField] GameObject[] traps;
     //[SerializeField] TextMeshProUGUI scoreText;
     //[HideInInspector] public static int score = 0;
     bool canDig = false;
@@ -74,6 +75,10 @@ public class PlayerMove : MonoBehaviour
                 print("gameover!");
             }
         }
+        if(other.gameObject.CompareTag("Gold")){
+            Destroy(other.gameObject);
+            //increase score
+        }
     }
     private void OnTriggerExit2D(Collider2D other) {
         if(other.gameObject.CompareTag("DigginTile")){
@@ -98,8 +103,9 @@ public class PlayerMove : MonoBehaviour
     void placeTrapLogic(){
         if(Input.GetKeyDown(KeyCode.F)){
             if(items.Count > 0){
-                print(items.Dequeue());
+                int trap = items.Dequeue();
                 //intantiate trap where we are standing
+                Instantiate(traps[trap], transform.position, Quaternion.identity);
             }
             else{
                 print("no items");
