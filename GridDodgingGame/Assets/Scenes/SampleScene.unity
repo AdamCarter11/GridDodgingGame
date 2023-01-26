@@ -1657,7 +1657,13 @@ MonoBehaviour:
   whatStopsMovement:
     serializedVersion: 2
     m_Bits: 128
-  traps: []
+  traps:
+  - {fileID: 2404610771850897405, guid: 0252088b8a3b01c44bac29a9cf26f9db, type: 3}
+  - {fileID: 2885193311003861118, guid: 5a3a9e2e52de23c4da31b9ecf72cc3f0, type: 3}
+  - {fileID: 3433169126004298490, guid: 146bcb8e18b42464681cf8959a6b6d5b, type: 3}
+  - {fileID: 8782562804687113541, guid: 364ef90d5132167469925c497804b9fa, type: 3}
+  - {fileID: 6017579669986000517, guid: 9aacde0960d622445a01341b376a31d6, type: 3}
+  - {fileID: 3523853144034873865, guid: a9f658b6a372e984685e7903914057a0, type: 3}
   health: 0
 --- !u!212 &448065018
 SpriteRenderer:
@@ -3345,6 +3351,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 610811193072830024, guid: 99453195e14533347ac77de8638c8a72, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 0c0e3d646dea5d649989de6a72b74d3e, type: 3}
     - target: {fileID: 5483333760135259421, guid: 99453195e14533347ac77de8638c8a72, type: 3}
       propertyPath: m_RootOrder
       value: 13

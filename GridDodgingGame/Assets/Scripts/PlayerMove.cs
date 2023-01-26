@@ -92,11 +92,11 @@ public class PlayerMove : MonoBehaviour
             print("dug tile");
             currDiggingTile.transform.position = new Vector3(possibleXVals[Random.Range(0,possibleXVals.Length)], possibleYVals[Random.Range(0,possibleYVals.Length)], currDiggingTile.transform.position.z);
             if(items.Count < 2){
-                items.Enqueue(Random.Range(1,4));
+                items.Enqueue(Random.Range(0,6));
             }
             else{
                 items.Dequeue();
-                items.Enqueue(Random.Range(1,4));
+                items.Enqueue(Random.Range(0,6));
             }
         }
     }
