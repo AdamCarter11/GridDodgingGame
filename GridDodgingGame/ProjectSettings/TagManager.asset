@@ -13,6 +13,7 @@ TagManager:
   - pushTrapDown
   - pushTrapLeft
   - pushTrapRight
+  - Gold
   layers:
   - Default
   - TransparentFX
