@@ -78,6 +78,7 @@ public class PlayerMove : MonoBehaviour
         if(other.gameObject.CompareTag("Gold")){
             Destroy(other.gameObject);
             //increase score
+            GameManager.Instance.IncreaseScore(10);
         }
     }
     private void OnTriggerExit2D(Collider2D other) {
