@@ -8,7 +8,6 @@ public class GameManager : MonoBehaviour
 {
     private static GameManager _instance = new GameManager();
 
-    [SerializeField] TextMeshProUGUI scoreText;
     [SerializeField] Image slot0, slot1, slot2, slot3;
     [SerializeField] Sprite empty, dirTrapRight, dirTrapLeft,
         pushTrapDown, pushTrapLeft, pushTrapRight, pushTrapUp;
