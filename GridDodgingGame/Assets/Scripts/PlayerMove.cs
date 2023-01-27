@@ -20,6 +20,12 @@ public class PlayerMove : MonoBehaviour
     float[] possibleYVals = new float[8];
 
     public Queue<int> items = new Queue<int>();
+
+    [SerializeField] Canvas canvas;
+    [SerializeField] Image currentImage;
+    [SerializeField] Image[] imageSlots;
+    [SerializeField] Sprite empty, dirTrapRight, dirTrapLeft,
+        pushTrapDown, pushTrapLeft, pushTrapRight, pushTrapUp;
     //TrapType Enum
     // dirTrapRight = 0,
     // dirTrapLeft = 1,
@@ -27,7 +33,7 @@ public class PlayerMove : MonoBehaviour
     // pushTrapLeft = 3,
     // pushTrapRight = 4,
     // pushTrapUp = 5,
-    
+
     private bool dir = true;
 
     [SerializeField] int health;
@@ -47,24 +53,21 @@ public class PlayerMove : MonoBehaviour
 
     void Start()
     {
+        //canvas = GetComponent<Canvas>();
+        imageSlots = canvas.GetComponentsInChildren<Image>();
 
         //removes the movepoint from the player (keeps things organized)
         movePoint.parent = null;
         //scoreText.text = "Score: " + 0;
         setupTiles();
         //StartCoroutine(timeScoreIncrease());
-        
-        // Load all the items as -1
-        for (int i = 0; i < 4; i++)
-        {
-            items.Enqueue(-1);
-        }
     }
 
     void Update()
     {
         DiggingLogic();
         placeTrapLogic();
+        ShowQueue();
 
         //moves player
         transform.position = Vector3.MoveTowards(transform.position, movePoint.position, moveSpeed * Time.deltaTime);
@@ -143,7 +146,7 @@ public class PlayerMove : MonoBehaviour
             print("dug tile");
             currDiggingTile.SetActive(false);
             StartCoroutine(spawnDigTile());
-            if(items.Count < 2){
+            if(items.Count < 4){
                 items.Enqueue(Random.Range(0,6));
             }
             else{
@@ -151,13 +154,39 @@ public class PlayerMove : MonoBehaviour
                 items.Enqueue(Random.Range(0,6));
             }
         }
-
-        GameManager.Instance.ShowQueue();
     }
+
     IEnumerator spawnDigTile(){
         yield return new WaitForSeconds(3f);
         currDiggingTile.transform.position = new Vector3(possibleXVals[Random.Range(0,possibleXVals.Length)], possibleYVals[Random.Range(0,possibleYVals.Length)], currDiggingTile.transform.position.z);
         currDiggingTile.SetActive(true);
+    }
+
+    public void ShowQueue()
+    {
+        // Send information to UI
+        int i;
+        for (i = 0; i < items.ToArray().Length; ++i)
+        {
+            if (i == 0) currentImage = GameObject.Find("queue0").GetComponent<Image>();
+            else if (i == 1) currentImage = GameObject.Find("queue1").GetComponent<Image>();
+            else if (i == 2) currentImage = GameObject.Find("queue2").GetComponent<Image>();
+            else if (i == 3) currentImage = GameObject.Find("queue3").GetComponent<Image>();
+
+            if (items.ToArray()[i] == 0) currentImage.sprite = dirTrapRight;
+            else if (items.ToArray()[i] == 1) currentImage.sprite = dirTrapLeft;
+            else if (items.ToArray()[i] == 2) currentImage.sprite = pushTrapDown;
+            else if (items.ToArray()[i] == 3) currentImage.sprite = pushTrapLeft;
+            else if (items.ToArray()[i] == 4) currentImage.sprite = pushTrapRight;
+            else if (items.ToArray()[i] == 5) currentImage.sprite = pushTrapUp;
+            else currentImage.sprite = empty;
+        }
+        while (i < 4)
+        {
+            currentImage = GameObject.Find($"queue{i}").GetComponent<Image>();
+            currentImage.sprite = empty;
+            i++;
+        }
     }
 
     void placeTrapLogic(){
