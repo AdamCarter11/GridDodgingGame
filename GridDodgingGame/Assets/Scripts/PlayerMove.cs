@@ -6,6 +6,8 @@ using UnityEngine.UI;
 
 public class PlayerMove : MonoBehaviour
 {
+    private static PlayerMove _instance = new PlayerMove();
+
     [SerializeField] float moveSpeed;
     [SerializeField] Transform movePoint;
     [SerializeField] LayerMask whatStopsMovement;
@@ -16,17 +18,45 @@ public class PlayerMove : MonoBehaviour
     GameObject currDiggingTile;
     float[] possibleXVals = new float[11];
     float[] possibleYVals = new float[8];
+
     public Queue<int> items = new Queue<int>();
+    //TrapType Enum
+    // dirTrapRight = 0,
+    // dirTrapLeft = 1,
+    // pushTrapDown = 2,
+    // pushTrapLeft = 3,
+    // pushTrapRight = 4,
+    // pushTrapUp = 5,
 
     [SerializeField] int health;
 
+    public static PlayerMove Instance
+    {
+        get
+        {
+            if (_instance == null)
+            {
+                _instance = new PlayerMove();
+            }
+
+            return _instance;
+        }
+    }
+
     void Start()
     {
+
         //removes the movepoint from the player (keeps things organized)
         movePoint.parent = null;
         //scoreText.text = "Score: " + 0;
         setupTiles();
         //StartCoroutine(timeScoreIncrease());
+        
+        // Load all the items as -1
+        for (int i = 0; i < 4; i++)
+        {
+            items.Enqueue(-1);
+        }
     }
 
     void Update()
@@ -99,6 +129,8 @@ public class PlayerMove : MonoBehaviour
                 items.Enqueue(Random.Range(0,6));
             }
         }
+
+        GameManager.Instance.ShowQueue();
     }
 
     void placeTrapLogic(){

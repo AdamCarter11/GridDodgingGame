@@ -1605,6 +1605,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   scoreText: {fileID: 1571370062}
+  slot0: {fileID: 1465287991}
+  slot1: {fileID: 1842916095}
+  slot2: {fileID: 858102394}
+  slot3: {fileID: 400062466}
+  empty: {fileID: 7482667652216324306, guid: f28d7391da324d9408adfce5914f4f01, type: 3}
+  dirTrapRight: {fileID: 21300000, guid: 68287a28407413f45855da4ce7cf133b, type: 3}
+  dirTrapLeft: {fileID: 21300000, guid: e2fd83fb54fe884429279a5e92a305b5, type: 3}
+  pushTrapDown: {fileID: 21300000, guid: 6175fe97788601647b5421ae4d33bfeb, type: 3}
+  pushTrapLeft: {fileID: 21300000, guid: 305ef1aa4414b394097cd454d4468316, type: 3}
+  pushTrapRight: {fileID: 21300000, guid: c693928e4bef7914b9409dc102ce9c10, type: 3}
+  pushTrapUp: {fileID: 21300000, guid: c0594e7787ccc0949956e3545a83d253, type: 3}
+  currentItems: 
 --- !u!4 &66823576
 Transform:
   m_ObjectHideFlags: 0
@@ -3497,8 +3509,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1941744842}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -1.77, y: -0.06, z: 0}
-  m_LocalScale: {x: 20, y: 15, z: 1}
+  m_LocalPosition: {x: -0.9107, y: -0.1106, z: 0}
+  m_LocalScale: {x: 100.530014, y: 57.568787, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1721806398}
@@ -3544,7 +3556,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: -1
   m_Sprite: {fileID: 7482667652216324306, guid: 676eb7f90cdd31e4d83672a0ef3f8c1a, type: 3}
   m_Color: {r: 0.99273545, g: 0.8632076, b: 1, a: 1}
   m_FlipX: 0
