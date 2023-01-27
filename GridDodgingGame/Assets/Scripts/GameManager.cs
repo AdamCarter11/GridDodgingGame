@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -61,6 +62,16 @@ public class GameManager : MonoBehaviour
             time--;
             if(time <= 0){
                 print("Gameover");
+                PlayerPrefs.SetInt("tempScore", score);
+                if(PlayerPrefs.HasKey("score")){
+                    if(score > PlayerPrefs.GetInt("score")){
+                        PlayerPrefs.SetInt("score", score);
+                    }
+                }
+                else{
+                    PlayerPrefs.SetInt("score", score);
+                }
+                SceneManager.LoadScene("GameOver");
                 //gameover logic
             }
         }
