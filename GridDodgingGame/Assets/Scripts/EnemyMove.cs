@@ -8,12 +8,17 @@ public class EnemyMove : MonoBehaviour
     [SerializeField] float moveDelay;
     [SerializeField] Transform movePoint;
     [SerializeField] GameObject gold;
+    [SerializeField] GameObject extraGold;
+    [SerializeField] Sprite enchantedSprite;
+    private Camera cam;
+
     bool canMove = false;
     bool canBeDamaged = false;
     int dir;
 
     void Start()
     {
+        cam = GameObject.Find("Main Camera").GetComponent<Camera>();
         movePoint.parent = null;
         StartCoroutine(triggerMove());
     }
@@ -71,10 +76,15 @@ public class EnemyMove : MonoBehaviour
             Destroy(gameObject); 
         }
         if(other.gameObject.CompareTag("enemy")){
+            cam.GetComponent<ScreenShake>().TriggerShake();
             Destroy(other.gameObject);
             Destroy(this.gameObject);
             Destroy(movePoint.gameObject);
-            Instantiate(gold, transform.position, Quaternion.identity);
+            if(this.GetComponent<SpriteRenderer>().sprite == enchantedSprite){
+                Instantiate(extraGold, transform.position, Quaternion.identity);
+            }else{
+                Instantiate(gold, transform.position, Quaternion.identity);
+            }
         }
         if(other.gameObject.CompareTag("dirTrap")){
             transform.Rotate(new Vector3(0.0f,0.0f,90.0f), Space.Self);
@@ -115,6 +125,11 @@ public class EnemyMove : MonoBehaviour
         if(other.gameObject.CompareTag("pushTrapLeft")){
             movePoint.position += new Vector3(-1f, 0f, movePoint.position.z);
             Destroy(other.gameObject);
+        }
+
+        if(other.gameObject.CompareTag("Gold")){
+            Destroy(other.gameObject);
+            this.GetComponent<SpriteRenderer>().sprite = enchantedSprite;
         }
     }
     private void OnTriggerExit2D(Collider2D other) {

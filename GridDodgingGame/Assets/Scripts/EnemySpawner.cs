@@ -84,7 +84,7 @@ public class EnemySpawner : MonoBehaviour
             currentEnemy.transform.eulerAngles = enemyFacing;
             currentEnemy.GetComponent<EnemyMove>().setFacing(dir);
 
-            if(spawnScaling <= 2){
+            if(spawnScaling <= 1.5f){
                 spawnScaling += .1f;
             }
         }

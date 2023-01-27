@@ -27,6 +27,8 @@ public class PlayerMove : MonoBehaviour
     // pushTrapLeft = 3,
     // pushTrapRight = 4,
     // pushTrapUp = 5,
+    
+    private bool dir = true;
 
     [SerializeField] int health;
 
@@ -66,7 +68,12 @@ public class PlayerMove : MonoBehaviour
 
         //moves player
         transform.position = Vector3.MoveTowards(transform.position, movePoint.position, moveSpeed * Time.deltaTime);
-
+        if(dir == false && movePoint.transform.position.x > transform.position.x){
+            Flip();
+        }
+        if(dir && movePoint.transform.position.x < transform.position.x){
+            Flip();
+        }
         if(Vector3.Distance(transform.position, movePoint.position) <= .05f){
             //left-right input
             if(Mathf.Abs(Input.GetAxisRaw("Horizontal")) == 1f){
@@ -85,6 +92,12 @@ public class PlayerMove : MonoBehaviour
         //scoreText.text = "Score: " + score;
     }
 
+    void Flip(){
+        dir = !dir;
+        Vector3 Scaler = transform.localScale;
+        Scaler.x *= -1;
+        transform.localScale = Scaler;
+    }
     //IEnumerator timeScoreIncrease(){
     //    while(true){
     //        yield return new WaitForSeconds(1f);
@@ -99,6 +112,7 @@ public class PlayerMove : MonoBehaviour
         }
         if(other.gameObject.CompareTag("enemy")){
             Destroy(other.gameObject);
+            GameManager.Instance.ChangeTime(-5);
             health--;
             if(health <= 0){
                 //gameover
@@ -109,6 +123,13 @@ public class PlayerMove : MonoBehaviour
             Destroy(other.gameObject);
             //increase score
             GameManager.Instance.IncreaseScore(10);
+            GameManager.Instance.ChangeTime(1);
+        }
+        if(other.gameObject.CompareTag("betterGold")){
+            Destroy(other.gameObject);
+            //increase score
+            GameManager.Instance.IncreaseScore(20);
+            GameManager.Instance.ChangeTime(2);
         }
     }
     private void OnTriggerExit2D(Collider2D other) {
@@ -120,7 +141,8 @@ public class PlayerMove : MonoBehaviour
     void DiggingLogic(){
         if(Input.GetKeyDown(KeyCode.Space) && canDig){
             print("dug tile");
-            currDiggingTile.transform.position = new Vector3(possibleXVals[Random.Range(0,possibleXVals.Length)], possibleYVals[Random.Range(0,possibleYVals.Length)], currDiggingTile.transform.position.z);
+            currDiggingTile.SetActive(false);
+            StartCoroutine(spawnDigTile());
             if(items.Count < 2){
                 items.Enqueue(Random.Range(0,6));
             }
@@ -131,6 +153,11 @@ public class PlayerMove : MonoBehaviour
         }
 
         GameManager.Instance.ShowQueue();
+    }
+    IEnumerator spawnDigTile(){
+        yield return new WaitForSeconds(3f);
+        currDiggingTile.transform.position = new Vector3(possibleXVals[Random.Range(0,possibleXVals.Length)], possibleYVals[Random.Range(0,possibleYVals.Length)], currDiggingTile.transform.position.z);
+        currDiggingTile.SetActive(true);
     }
 
     void placeTrapLogic(){

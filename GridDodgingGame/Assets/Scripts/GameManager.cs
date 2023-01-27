@@ -21,9 +21,11 @@ public class GameManager : MonoBehaviour
     // pushTrapLeft = 3,
     // pushTrapRight = 4,
     // pushTrapUp = 5,
-
+    
+    [SerializeField] TextMeshProUGUI scoreText, timeText;
     [HideInInspector] public static int score = 0;
-
+    [HideInInspector] public static int time;
+    [SerializeField] private int startingTime;
     private GameManager() {
 
     }
@@ -41,6 +43,8 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        time = startingTime;
+        timeText.text = "Time: " + time;
         scoreText.text = "Score: " + 0;
         //ShowQueue();
         StartCoroutine(timeScoreIncrease());
@@ -50,12 +54,18 @@ public class GameManager : MonoBehaviour
     void Update()
     {
         scoreText.text = "Score: " + score;
+        timeText.text = "Time: " + time;
         ShowQueue();
     }
 
     public void IncreaseScore(int val)
     {
         score += val;
+    }
+
+    public void ChangeTime(int val)
+    {
+        time += val;
     }
 
     public void ShowQueue()
@@ -90,7 +100,11 @@ public class GameManager : MonoBehaviour
         while (true)
         {
             yield return new WaitForSeconds(1f);
-            score++;
+            time--;
+            if(time <= 0){
+                print("Gameover");
+                //gameover logic
+            }
         }
     }
 }
