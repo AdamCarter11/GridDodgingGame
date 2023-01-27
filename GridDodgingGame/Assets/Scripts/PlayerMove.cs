@@ -37,6 +37,8 @@ public class PlayerMove : MonoBehaviour
     private bool dir = true;
 
     [SerializeField] int health;
+    [SerializeField] AudioSource audioSource;
+    [SerializeField] AudioClip[] sfx;
 
     public static PlayerMove Instance
     {
@@ -123,12 +125,14 @@ public class PlayerMove : MonoBehaviour
             }
         }
         if(other.gameObject.CompareTag("Gold")){
+            audioSource.PlayOneShot(sfx[0], .7f);
             Destroy(other.gameObject);
             //increase score
             GameManager.Instance.IncreaseScore(10);
             GameManager.Instance.ChangeTime(1);
         }
         if(other.gameObject.CompareTag("betterGold")){
+            audioSource.PlayOneShot(sfx[0], .7f);
             Destroy(other.gameObject);
             //increase score
             GameManager.Instance.IncreaseScore(20);
@@ -143,6 +147,7 @@ public class PlayerMove : MonoBehaviour
 
     void DiggingLogic(){
         if(Input.GetKeyDown(KeyCode.Space) && canDig){
+            audioSource.PlayOneShot(sfx[1], .7f);
             print("dug tile");
             currDiggingTile.SetActive(false);
             StartCoroutine(spawnDigTile());

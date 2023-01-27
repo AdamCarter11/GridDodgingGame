@@ -1798,6 +1798,10 @@ MonoBehaviour:
   pushTrapRight: {fileID: 21300000, guid: c693928e4bef7914b9409dc102ce9c10, type: 3}
   pushTrapUp: {fileID: 21300000, guid: c0594e7787ccc0949956e3545a83d253, type: 3}
   health: 1
+  audioSource: {fileID: 519420034}
+  sfx:
+  - {fileID: 8300000, guid: 77f3a8d934f1e944da828b78ac8ea026, type: 3}
+  - {fileID: 8300000, guid: a9e8c4456d8fea447b16590c1d80565d, type: 3}
 --- !u!212 &448065018
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -2005,7 +2009,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: fb0cc565a67df80418afaae8374b2b9d, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 1
+  m_Volume: 0.2
   m_Pitch: 1
   Loop: 1
   Mute: 0
