@@ -11,7 +11,7 @@ public class GameManager : MonoBehaviour
     
     [SerializeField] TextMeshProUGUI scoreText, timeText;
     [HideInInspector] public static int score = 0;
-    [HideInInspector] public static int time;
+    [HideInInspector] public static int time = 1;
     [SerializeField] private int startingTime;
     private GameManager() {
 
@@ -30,6 +30,7 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        score = 0;
         time = startingTime;
         timeText.text = "Time: " + time;
         scoreText.text = "Score: " + 0;
