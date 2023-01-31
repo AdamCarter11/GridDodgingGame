@@ -14,10 +14,13 @@ public class EnemyMove : MonoBehaviour
 
     bool canMove = false;
     bool canBeDamaged = false;
+    bool frozen = false;
+    float startMoveDelay;
     int dir;
 
     void Start()
     {
+        startMoveDelay = moveDelay;
         cam = GameObject.Find("Main Camera").GetComponent<Camera>();
         movePoint.parent = null;
         StartCoroutine(triggerMove());
@@ -63,14 +66,16 @@ public class EnemyMove : MonoBehaviour
         while(true){
             yield return new WaitForSeconds(moveDelay);
             canMove = true;
+            moveDelay = startMoveDelay;
         }
-        
     }
 
-    private void OnCollisionEnter2D(Collision2D other) {
-        
-    }
     private void OnTriggerEnter2D(Collider2D other) {
+
+        if(other.gameObject.CompareTag("hole")){
+            moveDelay+=2;
+            Destroy(other.gameObject);
+        }
         if(other.gameObject.CompareTag("Wall") && canBeDamaged){
             Destroy(movePoint.gameObject);
             Destroy(gameObject); 

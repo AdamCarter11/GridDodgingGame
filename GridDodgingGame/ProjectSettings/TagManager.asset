@@ -15,6 +15,7 @@ TagManager:
   - pushTrapRight
   - Gold
   - betterGold
+  - hole
   layers:
   - Default
   - TransparentFX

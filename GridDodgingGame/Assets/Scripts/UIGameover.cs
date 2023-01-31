@@ -23,5 +23,7 @@ public class UIGameover : MonoBehaviour
     public void startGame(){
         SceneManager.LoadScene("MainGame");
     }
-
+    public void goToMenu(){
+        SceneManager.LoadScene("Menu");
+    }
 }
