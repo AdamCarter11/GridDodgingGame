@@ -10,6 +10,7 @@ public class GameManager : MonoBehaviour
     private static GameManager _instance = new GameManager();
     
     [SerializeField] TextMeshProUGUI scoreText, timeText;
+    [SerializeField] GameObject pauseMenu;
     [HideInInspector] public static int score = 0;
     [HideInInspector] public static int time = 1;
     [SerializeField] private int startingTime;
@@ -49,9 +50,11 @@ public class GameManager : MonoBehaviour
         if(Input.GetKeyDown(KeyCode.Escape)){
             if(!pause){
                 Time.timeScale = 0;
+                pauseMenu.SetActive(true);
                 pause = true;
             }
             else{
+                pauseMenu.SetActive(false);
                 Time.timeScale = 1;
                 pause = false;
             }
