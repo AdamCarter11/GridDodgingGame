@@ -13,6 +13,7 @@ public class GameManager : MonoBehaviour
     [HideInInspector] public static int score = 0;
     [HideInInspector] public static int time = 1;
     [SerializeField] private int startingTime;
+    private bool pause = false;
     private GameManager() {
 
     }
@@ -43,6 +44,18 @@ public class GameManager : MonoBehaviour
     {
         scoreText.text = "Score: " + score;
         timeText.text = "Time: " + time;
+
+        //Pause logic
+        if(Input.GetKeyDown(KeyCode.Escape)){
+            if(!pause){
+                Time.timeScale = 0;
+                pause = true;
+            }
+            else{
+                Time.timeScale = 1;
+                pause = false;
+            }
+        }
     }
 
     public void IncreaseScore(int val)

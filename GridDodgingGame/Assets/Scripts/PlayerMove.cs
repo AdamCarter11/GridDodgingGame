@@ -14,7 +14,7 @@ public class PlayerMove : MonoBehaviour
     [SerializeField] GameObject[] traps;
     //[SerializeField] TextMeshProUGUI scoreText;
     //[HideInInspector] public static int score = 0;
-    bool canDig = false;
+    bool canDig = false, movePause = false;
     GameObject currDiggingTile;
     float[] possibleXVals = new float[11];
     float[] possibleYVals = new float[8];
@@ -39,6 +39,8 @@ public class PlayerMove : MonoBehaviour
     [SerializeField] int health;
     [SerializeField] AudioSource audioSource;
     [SerializeField] AudioClip[] sfx;
+    private Camera cam;
+    [SerializeField] private ParticleSystem particleMinus;
 
     public static PlayerMove Instance
     {
@@ -55,6 +57,7 @@ public class PlayerMove : MonoBehaviour
 
     void Start()
     {
+        cam = GameObject.Find("Main Camera").GetComponent<Camera>();
         //canvas = GetComponent<Canvas>();
         imageSlots = canvas.GetComponentsInChildren<Image>();
 
@@ -68,10 +71,14 @@ public class PlayerMove : MonoBehaviour
     void Update()
     {
         DiggingLogic();
-        //placeTrapLogic();
+
         ShowQueue();
 
         //moves player
+        moveLogic();
+
+    }
+    void moveLogic(){
         transform.position = Vector3.MoveTowards(transform.position, movePoint.position, moveSpeed * Time.deltaTime);
         if(dir == false && movePoint.transform.position.x > transform.position.x){
             Flip();
@@ -80,23 +87,31 @@ public class PlayerMove : MonoBehaviour
             Flip();
         }
         if(Vector3.Distance(transform.position, movePoint.position) <= .05f){
+            if(!movePause){
             //left-right input
             if(Mathf.Abs(Input.GetAxisRaw("Horizontal")) == 1f){
                 if(!Physics2D.OverlapCircle(movePoint.position + new Vector3(Input.GetAxisRaw("Horizontal"), 0f, movePoint.position.z), .2f, whatStopsMovement)){
                     movePoint.position += new Vector3(Input.GetAxisRaw("Horizontal"), 0f, movePoint.position.z);
+                    StartCoroutine(onMovePause());
                 }
             }
             //top-down input
             if(Mathf.Abs(Input.GetAxisRaw("Vertical")) == 1f){
                 if(!Physics2D.OverlapCircle(movePoint.position + new Vector3(0f, Input.GetAxisRaw("Vertical"), movePoint.position.z), .2f, whatStopsMovement)){
                     movePoint.position += new Vector3(0f, Input.GetAxisRaw("Vertical"), movePoint.position.z);
+                    StartCoroutine(onMovePause());
                 }
             }
+            }
         }
-
-        //scoreText.text = "Score: " + score;
     }
 
+    IEnumerator onMovePause(){
+        //used to add a slight pause between player movement (.4 and higher is too long)
+        movePause = true;
+        yield return new WaitForSeconds(.2f);
+        movePause = false;
+    }
     void Flip(){
         dir = !dir;
         Vector3 Scaler = transform.localScale;
@@ -116,6 +131,8 @@ public class PlayerMove : MonoBehaviour
             currDiggingTile = other.gameObject;
         }
         if(other.gameObject.CompareTag("enemy")){
+            cam.GetComponent<ScreenShake>().TriggerShake();
+            Instantiate(particleMinus, transform.position, Quaternion.identity);
             Destroy(other.gameObject);
             GameManager.Instance.ChangeTime(-5);
             health--;
@@ -201,19 +218,6 @@ public class PlayerMove : MonoBehaviour
             currentImage = GameObject.Find($"queue{i}").GetComponent<Image>();
             currentImage.sprite = empty;
             i++;
-        }
-    }
-
-    void placeTrapLogic(){
-        if(Input.GetKeyDown(KeyCode.Space) && canDig == false){
-            if(items.Count > 0){
-                int trap = items.Dequeue();
-                //intantiate trap where we are standing
-                Instantiate(traps[trap], movePoint.transform.position, Quaternion.identity);
-            }
-            else{
-                print("no items");
-            }
         }
     }
 
