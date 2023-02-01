@@ -8,4 +8,7 @@ public class goBackToMenu : MonoBehaviour
     public void returnToMenu(){
         SceneManager.LoadScene("Menu");
     }
+    public void quitGame(){
+        Application.Quit();
+    }
 }

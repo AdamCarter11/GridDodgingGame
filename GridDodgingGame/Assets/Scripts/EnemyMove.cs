@@ -66,14 +66,14 @@ public class EnemyMove : MonoBehaviour
         while(true){
             yield return new WaitForSeconds(moveDelay);
             canMove = true;
-            moveDelay = startMoveDelay;
+            //moveDelay = startMoveDelay;
         }
     }
 
     private void OnTriggerEnter2D(Collider2D other) {
 
         if(other.gameObject.CompareTag("hole")){
-            moveDelay+=2;
+            moveDelay+=5;
             Destroy(other.gameObject);
         }
         if(other.gameObject.CompareTag("Wall") && canBeDamaged){

@@ -26,4 +26,7 @@ public class UIGameover : MonoBehaviour
     public void goToMenu(){
         SceneManager.LoadScene("Menu");
     }
+    public void quitGame(){
+        Application.Quit();
+    }
 }
