@@ -77,7 +77,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 2
-  m_Sprite: {fileID: 21300000, guid: 774f2eb4e0395a846832ac1b64b554d8, type: 3}
+  m_Sprite: {fileID: 1655149867, guid: 9d65303f8d00c634db5e94fa0ddcccc1, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -131,7 +131,7 @@ MonoBehaviour:
   movePoint: {fileID: 5947950032516403004}
   gold: {fileID: 6705016374558732091, guid: 99453195e14533347ac77de8638c8a72, type: 3}
   extraGold: {fileID: 6591509246444799225, guid: decfffd2ef496934eace6ccf7951dea8, type: 3}
-  enchantedSprite: {fileID: 21300000, guid: fc4f0117f6c574e4db4755740c7c1ac5, type: 3}
+  enchantedSprite: {fileID: 1441109764, guid: 9d65303f8d00c634db5e94fa0ddcccc1, type: 3}
 --- !u!50 &5947950031403965646
 Rigidbody2D:
   serializedVersion: 4
