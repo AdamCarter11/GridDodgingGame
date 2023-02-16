@@ -5,7 +5,10 @@ using UnityEngine;
 public class EnemySpawner : MonoBehaviour
 {
     [SerializeField] GameObject enemy;
-    [SerializeField] float spawnDelay;
+
+    float spawnDelay;
+    float spawnScalingChange;
+
     private float spawnScaling = 0;
 
     // Grid spawn borders
@@ -29,6 +32,13 @@ public class EnemySpawner : MonoBehaviour
 
     void Start()
     {
+        if(Difficulty.instance.enemySpawnDelay >= 0){
+            spawnDelay = Difficulty.instance.enemySpawnDelay;
+        }
+        if(Difficulty.instance.enemySpawnDelayScaling >= 0){
+            spawnScalingChange = Difficulty.instance.enemySpawnDelayScaling;
+        }
+        
         StartCoroutine(spawnEnemy());
         //enemyMoveScript.dir = 4;
 
@@ -84,8 +94,8 @@ public class EnemySpawner : MonoBehaviour
             currentEnemy.transform.eulerAngles = enemyFacing;
             currentEnemy.GetComponent<EnemyMove>().setFacing(dir);
 
-            if(spawnScaling <= 1.5f){
-                spawnScaling += .1f;
+            if(spawnScaling <= spawnDelay - .2f){
+                spawnScaling += spawnScalingChange;
             }
         }
     }

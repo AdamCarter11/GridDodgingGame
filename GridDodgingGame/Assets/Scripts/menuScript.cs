@@ -7,6 +7,7 @@ using UnityEngine.SceneManagement;
 public class menuScript : MonoBehaviour
 {
     [SerializeField] TMP_Text scoreText;
+    [SerializeField] GameObject difficultyPanel;
 
     // Start is called before the first frame update
     void Start()
@@ -20,7 +21,7 @@ public class menuScript : MonoBehaviour
     }
 
     public void startGame(){
-        SceneManager.LoadScene("MainGame");
+        difficultyPanel.SetActive(true);
     }
 
     public void quitGame(){

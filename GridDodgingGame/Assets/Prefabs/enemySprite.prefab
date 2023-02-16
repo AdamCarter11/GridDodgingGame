@@ -127,7 +127,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemySpeed: 5
-  moveDelay: 1
   movePoint: {fileID: 5947950032516403004}
   gold: {fileID: 6705016374558732091, guid: 99453195e14533347ac77de8638c8a72, type: 3}
   extraGold: {fileID: 6591509246444799225, guid: decfffd2ef496934eace6ccf7951dea8, type: 3}

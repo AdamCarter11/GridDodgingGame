@@ -21,6 +21,7 @@ public class PlayerMove : MonoBehaviour
 
     public Queue<int> items = new Queue<int>();
 
+    [SerializeField] GameObject holeTile;
     [SerializeField] Canvas canvas;
     [SerializeField] Image currentImage;
     [SerializeField] Image[] imageSlots;
@@ -35,12 +36,15 @@ public class PlayerMove : MonoBehaviour
     // pushTrapUp = 5,
 
     private bool dir = true;
+    bool movingDelayCo = true;
+    bool canSlow = false;
 
     [SerializeField] int health;
     [SerializeField] AudioSource audioSource;
     [SerializeField] AudioClip[] sfx;
     private Camera cam;
     [SerializeField] private ParticleSystem particleMinus;
+    Animator playerAnimator;
 
     public static PlayerMove Instance
     {
@@ -57,6 +61,7 @@ public class PlayerMove : MonoBehaviour
 
     void Start()
     {
+        playerAnimator = this.GetComponent<Animator>();
         cam = GameObject.Find("Main Camera").GetComponent<Camera>();
         //canvas = GetComponent<Canvas>();
         imageSlots = canvas.GetComponentsInChildren<Image>();
@@ -89,14 +94,14 @@ public class PlayerMove : MonoBehaviour
         if(Vector3.Distance(transform.position, movePoint.position) <= .05f){
             if(!movePause){
             //left-right input
-            if(Mathf.Abs(Input.GetAxisRaw("Horizontal")) == 1f){
+            if(Mathf.Abs(Input.GetAxisRaw("Horizontal")) == 1f && movingDelayCo){
                 if(!Physics2D.OverlapCircle(movePoint.position + new Vector3(Input.GetAxisRaw("Horizontal"), 0f, movePoint.position.z), .2f, whatStopsMovement)){
                     movePoint.position += new Vector3(Input.GetAxisRaw("Horizontal"), 0f, movePoint.position.z);
                     StartCoroutine(onMovePause());
                 }
             }
             //top-down input
-            if(Mathf.Abs(Input.GetAxisRaw("Vertical")) == 1f){
+            if(Mathf.Abs(Input.GetAxisRaw("Vertical")) == 1f && movingDelayCo){
                 if(!Physics2D.OverlapCircle(movePoint.position + new Vector3(0f, Input.GetAxisRaw("Vertical"), movePoint.position.z), .2f, whatStopsMovement)){
                     movePoint.position += new Vector3(0f, Input.GetAxisRaw("Vertical"), movePoint.position.z);
                     StartCoroutine(onMovePause());
@@ -105,7 +110,11 @@ public class PlayerMove : MonoBehaviour
             }
         }
     }
-
+    IEnumerator movingDelay(){
+        movingDelayCo = false;
+        yield return new WaitForSeconds(1f);
+        movingDelayCo = true;
+    }
     IEnumerator onMovePause(){
         //used to add a slight pause between player movement (.4 and higher is too long)
         movePause = true;
@@ -126,6 +135,10 @@ public class PlayerMove : MonoBehaviour
     //}
 
     private void OnTriggerEnter2D(Collider2D other) {
+        if(other.gameObject.CompareTag("hole") && canSlow){
+            Destroy(other.gameObject);
+            StartCoroutine(movingDelay());
+        }
         if(other.gameObject.CompareTag("DigginTile")){
             canDig = true;
             currDiggingTile = other.gameObject;
@@ -160,20 +173,29 @@ public class PlayerMove : MonoBehaviour
         if(other.gameObject.CompareTag("DigginTile")){
             canDig = false;
         }
+        if(other.gameObject.CompareTag("hole") && !canSlow){
+            canSlow = true;
+        }
     }
 
     void DiggingLogic(){
-        if(Input.GetKeyDown(KeyCode.Space) && canDig){
-            audioSource.PlayOneShot(sfx[1], .7f);
-            print("dug tile");
-            currDiggingTile.SetActive(false);
-            StartCoroutine(spawnDigTile());
-            if(items.Count < 4){
-                items.Enqueue(Random.Range(0,6));
-            }
-            else{
-                items.Dequeue();
-                items.Enqueue(Random.Range(0,6));
+        if(Input.GetKeyDown(KeyCode.Space)){
+            canSlow = false;
+            playerAnimator.SetTrigger("dig");
+            GameObject spawnedHoleTile = Instantiate(holeTile, movePoint.transform.position, Quaternion.identity);
+            Destroy(spawnedHoleTile, 3f);
+            if(canDig){
+                audioSource.PlayOneShot(sfx[1], .7f);
+                print("dug tile");
+                currDiggingTile.SetActive(false);
+                StartCoroutine(spawnDigTile());
+                if(items.Count < 4){
+                    items.Enqueue(Random.Range(0,6));
+                }
+                else{
+                    items.Dequeue();
+                    items.Enqueue(Random.Range(0,6));
+                }
             }
         }
         else if(Input.GetKeyDown(KeyCode.Space)){

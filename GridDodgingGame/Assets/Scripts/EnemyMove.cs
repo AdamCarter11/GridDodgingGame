@@ -5,7 +5,9 @@ using UnityEngine;
 public class EnemyMove : MonoBehaviour
 {
     [SerializeField] float enemySpeed;
-    [SerializeField] float moveDelay;
+
+    float enemyMoveDelayRat;
+
     [SerializeField] Transform movePoint;
     [SerializeField] GameObject gold;
     [SerializeField] GameObject extraGold;
@@ -15,14 +17,23 @@ public class EnemyMove : MonoBehaviour
     bool canMove = false;
     bool canBeDamaged = false;
     bool frozen = false;
+    bool movingDelayCo = true;
     float startMoveDelay;
     int dir;
 
     void Start()
     {
-        startMoveDelay = moveDelay;
+        
         cam = GameObject.Find("Main Camera").GetComponent<Camera>();
         movePoint.parent = null;
+        if(Difficulty.instance.enemyMoveDelay >= 0){
+            enemyMoveDelayRat = Difficulty.instance.enemyMoveDelay;
+            print("mode select");
+        }
+        else{
+            enemyMoveDelayRat = 2f;
+        }
+        startMoveDelay = enemyMoveDelayRat;
         StartCoroutine(triggerMove());
     }
 
@@ -64,16 +75,23 @@ public class EnemyMove : MonoBehaviour
 
     IEnumerator triggerMove(){
         while(true){
-            yield return new WaitForSeconds(moveDelay);
-            canMove = true;
+            yield return new WaitForSeconds(enemyMoveDelayRat);
+            if(movingDelayCo){
+                canMove = true;
+            }
             //moveDelay = startMoveDelay;
         }
+    }
+    IEnumerator movingDelay(){
+        movingDelayCo = false;
+        yield return new WaitForSeconds(2f);
+        movingDelayCo = true;
     }
 
     private void OnTriggerEnter2D(Collider2D other) {
 
         if(other.gameObject.CompareTag("hole")){
-            moveDelay+=5;
+            StartCoroutine(movingDelay());
             Destroy(other.gameObject);
         }
         if(other.gameObject.CompareTag("Wall") && canBeDamaged){
