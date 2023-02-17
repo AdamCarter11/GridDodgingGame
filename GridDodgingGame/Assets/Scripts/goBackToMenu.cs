@@ -8,6 +8,7 @@ public class goBackToMenu : MonoBehaviour
     [SerializeField] GameObject pausePanel;
     public void returnToMenu(){
         SceneManager.LoadScene("Menu");
+        Time.timeScale = 1;
     }
     public void quitGame(){
         Application.Quit();

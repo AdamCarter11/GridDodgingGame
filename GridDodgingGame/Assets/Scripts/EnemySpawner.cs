@@ -8,6 +8,7 @@ public class EnemySpawner : MonoBehaviour
 
     float spawnDelay;
     float spawnScalingChange;
+    float spawnCap;
 
     private float spawnScaling = 0;
 
@@ -38,6 +39,7 @@ public class EnemySpawner : MonoBehaviour
         if(Difficulty.instance.enemySpawnDelayScaling >= 0){
             spawnScalingChange = Difficulty.instance.enemySpawnDelayScaling;
         }
+        spawnCap = Difficulty.instance.spawnCap;
         
         StartCoroutine(spawnEnemy());
         //enemyMoveScript.dir = 4;
@@ -94,7 +96,7 @@ public class EnemySpawner : MonoBehaviour
             currentEnemy.transform.eulerAngles = enemyFacing;
             currentEnemy.GetComponent<EnemyMove>().setFacing(dir);
 
-            if(spawnScaling <= spawnDelay - .2f){
+            if(spawnScaling <= spawnDelay - spawnCap){
                 spawnScaling += spawnScalingChange;
             }
         }

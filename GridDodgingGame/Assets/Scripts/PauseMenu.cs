@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class PauseMenu : MonoBehaviour
 {
     [SerializeField] Slider volumeSlider;
+    [SerializeField] Toggle shakeToggle;
     // Start is called before the first frame update
     void Start()
     {
@@ -16,6 +17,17 @@ public class PauseMenu : MonoBehaviour
         else{
             LoadVolume();
         }
+        if(!PlayerPrefs.HasKey("ScreenShake")){
+            PlayerPrefs.SetInt("ScreenShake" , 1);
+        }
+        shakeToggle.onValueChanged.AddListener(delegate { ToggleValueChanged(shakeToggle);});
+    }
+
+    void ToggleValueChanged(Toggle change){
+        print("change toggle");
+        int tempShake = PlayerPrefs.GetInt("ScreenShake");
+        tempShake *= -1;
+        PlayerPrefs.SetInt("ScreenShake", tempShake);
     }
 
     public void ChangeVolume(){
@@ -30,5 +42,7 @@ public class PauseMenu : MonoBehaviour
     void SaveVolume(){
         PlayerPrefs.SetFloat("volume", volumeSlider.value);
     }
+
+
 
 }

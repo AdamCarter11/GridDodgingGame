@@ -70,6 +70,9 @@ public class PlayerMove : MonoBehaviour
         movePoint.parent = null;
         //scoreText.text = "Score: " + 0;
         setupTiles();
+        if(!PlayerPrefs.HasKey("ScreenShake")){
+            PlayerPrefs.SetInt("ScreenShake" , 1);
+        }
         //StartCoroutine(timeScoreIncrease());
     }
 
@@ -144,7 +147,9 @@ public class PlayerMove : MonoBehaviour
             currDiggingTile = other.gameObject;
         }
         if(other.gameObject.CompareTag("enemy")){
-            cam.GetComponent<ScreenShake>().TriggerShake();
+            if(PlayerPrefs.GetInt("ScreenShake") > 0){
+                cam.GetComponent<ScreenShake>().TriggerShake();
+            }
             Instantiate(particleMinus, transform.position, Quaternion.identity);
             Destroy(other.gameObject);
             GameManager.Instance.ChangeTime(-5);
@@ -181,10 +186,10 @@ public class PlayerMove : MonoBehaviour
     void DiggingLogic(){
         if(Input.GetKeyDown(KeyCode.Space)){
             canSlow = false;
-            playerAnimator.SetTrigger("dig");
-            GameObject spawnedHoleTile = Instantiate(holeTile, movePoint.transform.position, Quaternion.identity);
-            Destroy(spawnedHoleTile, 3f);
             if(canDig){
+                playerAnimator.SetTrigger("dig");
+                GameObject spawnedHoleTile = Instantiate(holeTile, movePoint.transform.position, Quaternion.identity);
+                Destroy(spawnedHoleTile, 3f);
                 audioSource.PlayOneShot(sfx[1], .7f);
                 print("dug tile");
                 currDiggingTile.SetActive(false);

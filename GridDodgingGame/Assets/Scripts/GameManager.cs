@@ -10,6 +10,8 @@ public class GameManager : MonoBehaviour
     private static GameManager _instance = new GameManager();
     
     [SerializeField] TextMeshProUGUI scoreText, timeText;
+    [SerializeField] AudioSource audioSourcePitch;
+    float startingPitch;
     [SerializeField] GameObject pauseMenu;
     [HideInInspector] public static int score = 0;
     [HideInInspector] public static int time = 1;
@@ -36,6 +38,7 @@ public class GameManager : MonoBehaviour
         time = startingTime;
         timeText.text = "Time: " + time;
         scoreText.text = "Score: " + 0;
+        startingPitch = audioSourcePitch.pitch;
 
         StartCoroutine(timeScoreIncrease());
     }
