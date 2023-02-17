@@ -197,17 +197,18 @@ public class PlayerMove : MonoBehaviour
                     items.Enqueue(Random.Range(0,6));
                 }
             }
-        }
-        else if(Input.GetKeyDown(KeyCode.Space)){
-            if(items.Count > 0){
-                int trap = items.Dequeue();
-                //intantiate trap where we are standing
-                Instantiate(traps[trap], movePoint.transform.position, Quaternion.identity);
-            }
             else{
-                print("no items");
+                if(items.Count > 0){
+                    int trap = items.Dequeue();
+                    //intantiate trap where we are standing
+                    Instantiate(traps[trap], movePoint.transform.position, Quaternion.identity);
+                }
+                else{
+                    print("no items");
+                }
             }
         }
+        
     }
 
     IEnumerator spawnDigTile(){
