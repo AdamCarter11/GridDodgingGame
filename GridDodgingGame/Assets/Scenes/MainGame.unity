@@ -2216,7 +2216,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 55a1d6a6101eee14eab8b8b57856dd4a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  shakeMagnitude: 0.2
+  shakeMagnitude: 0.1
   dampeningSpeed: 2
   initialPos: {x: 0, y: 0, z: 0}
 --- !u!82 &519420034

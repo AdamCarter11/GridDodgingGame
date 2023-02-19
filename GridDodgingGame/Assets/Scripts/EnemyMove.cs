@@ -101,6 +101,9 @@ public class EnemyMove : MonoBehaviour
         if(other.gameObject.CompareTag("enemy")){
             //disabled screenshake on enemies for now
             //cam.GetComponent<ScreenShake>().TriggerShake();
+            if(PlayerPrefs.GetInt("ScreenShake") > 0){
+                cam.GetComponent<ScreenShake>().TriggerShake();
+            }
             Destroy(other.gameObject);
             Destroy(this.gameObject);
             Destroy(movePoint.gameObject);
