@@ -22,10 +22,10 @@ public class EnemyMove : MonoBehaviour
     bool movingDelayCo = true;
     float startMoveDelay;
     int dir;
+    [SerializeField] private int health;
 
     void Start()
     {
-        
         cam = GameObject.Find("Main Camera").GetComponent<Camera>();
         movePoint.parent = null;
         if(Difficulty.instance.enemyMoveDelay >= 0){
@@ -75,39 +75,40 @@ public class EnemyMove : MonoBehaviour
             }
             else
             {
-                print("AI calc player pos at " + PlayerMove.Instance.GetPlayerPos());
+                //print("AI calc player pos at " + PlayerMove.Instance.GetPlayerPos());
                 // AI movement towards player
-                Vector3 currentPlayerPos = PlayerMove.Instance.GetPlayerPos();
+                //Vector3 currentPlayerPos = PlayerMove.Instance.GetPlayerPos();
+                Vector3 currentPlayerPos = GameObject.Find("Player").GetComponent<PlayerMove>().GetPlayerPos();
                 float xDiff, yDiff;
-                xDiff = Mathf.Abs(currentPlayerPos.x - gameObject.transform.position.x);
-                yDiff = Mathf.Abs(currentPlayerPos.y - gameObject.transform.position.y);
+                xDiff = Mathf.Abs(currentPlayerPos.x - transform.position.x);
+                yDiff = Mathf.Abs(currentPlayerPos.y - transform.position.y);
                 if (xDiff > yDiff)
                 {
-                    if (currentPlayerPos.x - gameObject.transform.position.x > 0)
-                    {
-                        // Move right
-                        movePoint.position += new Vector3(-1f, 0f, movePoint.position.z);
-                        canMove = false;
-                    }
-                    else
+                    if (canMove && currentPlayerPos.x - transform.position.x > 0)
                     {
                         // Move left
                         movePoint.position += new Vector3(1f, 0f, movePoint.position.z);
                         canMove = false;
                     }
+                    else if(canMove)
+                    {
+                        // Move right
+                        movePoint.position += new Vector3(-1f, 0f, movePoint.position.z);
+                        canMove = false;
+                    }
                 }
                 else
                 {
-                    if (currentPlayerPos.y - gameObject.transform.position.y > 0)
-                    {
-                        // Move down
-                        movePoint.position += new Vector3(0f, -1f, movePoint.position.z);
-                        canMove = false;
-                    }
-                    else
+                    if (canMove && currentPlayerPos.y - transform.position.y > 0)
                     {
                         // Move up
                         movePoint.position += new Vector3(0f, 1f, movePoint.position.z);
+                        canMove = false;
+                    }
+                    else if(canMove)
+                    {
+                        // Move down
+                        movePoint.position += new Vector3(0f, -1f, movePoint.position.z);
                         canMove = false;
                     }
                 }
@@ -153,13 +154,28 @@ public class EnemyMove : MonoBehaviour
                 cam.GetComponent<ScreenShake>().TriggerShake();
             }
             Destroy(other.gameObject);
-            Destroy(this.gameObject);
-            Destroy(movePoint.gameObject);
-            if(this.GetComponent<SpriteRenderer>().sprite == enchantedSprite){
-                Instantiate(extraGold, transform.position, Quaternion.identity);
-            }else{
-                Instantiate(gold, transform.position, Quaternion.identity);
+            if(!isBerserk){
+                Destroy(this.gameObject);
+                Destroy(movePoint.gameObject);
+                if(this.GetComponent<SpriteRenderer>().sprite == enchantedSprite){
+                    Instantiate(extraGold, transform.position, Quaternion.identity);
+                }else{
+                    Instantiate(gold, transform.position, Quaternion.identity);
+                }
             }
+            else{
+                health--;
+                if(health <= 0){
+                    Destroy(this.gameObject);
+                    Destroy(movePoint.gameObject);
+                    if(this.GetComponent<SpriteRenderer>().sprite == enchantedSprite){
+                        Instantiate(extraGold, transform.position, Quaternion.identity);
+                    }else{
+                        Instantiate(gold, transform.position, Quaternion.identity);
+                    }
+                }
+            }
+            
         }
         if(other.gameObject.CompareTag("dirTrap")){
             transform.Rotate(new Vector3(0.0f,0.0f,90.0f), Space.Self);
@@ -208,8 +224,9 @@ public class EnemyMove : MonoBehaviour
         }
         if (other.gameObject.CompareTag("betterGold"))
         {
-            //isBerserk = true;
+            isBerserk = true;
             Destroy(other.gameObject);
+            this.GetComponent<SpriteRenderer>().color = Color.red;
             //this.GetComponent<SpriteRenderer>().sprite = berzerkSprite;
         }
     }

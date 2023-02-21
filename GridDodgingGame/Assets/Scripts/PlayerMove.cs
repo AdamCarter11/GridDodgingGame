@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public class PlayerMove : MonoBehaviour
 {
-    private static PlayerMove _instance = new PlayerMove();
+    //private static PlayerMove _instance = new PlayerMove();
 
     [SerializeField] float moveSpeed;
     [SerializeField] Transform movePoint;
@@ -46,6 +46,7 @@ public class PlayerMove : MonoBehaviour
     [SerializeField] private ParticleSystem particleMinus;
     Animator playerAnimator;
 
+    /*
     public static PlayerMove Instance
     {
         get
@@ -58,7 +59,8 @@ public class PlayerMove : MonoBehaviour
             return _instance;
         }
     }
-
+    */
+    
     void Start()
     {
         playerAnimator = this.GetComponent<Animator>();
@@ -218,7 +220,7 @@ public class PlayerMove : MonoBehaviour
 
     public Vector3 GetPlayerPos()
     {
-        return _instance.gameObject.transform.position;
+        return transform.position;
     }
 
     IEnumerator spawnDigTile(){
