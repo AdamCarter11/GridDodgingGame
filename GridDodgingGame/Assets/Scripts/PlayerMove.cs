@@ -216,6 +216,11 @@ public class PlayerMove : MonoBehaviour
         
     }
 
+    public Vector3 GetPlayerPos()
+    {
+        return _instance.gameObject.transform.position;
+    }
+
     IEnumerator spawnDigTile(){
         yield return new WaitForSeconds(3f);
         currDiggingTile.transform.position = new Vector3(possibleXVals[Random.Range(0,possibleXVals.Length)], possibleYVals[Random.Range(0,possibleYVals.Length)], currDiggingTile.transform.position.z);
