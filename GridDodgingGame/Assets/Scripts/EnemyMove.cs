@@ -12,11 +12,13 @@ public class EnemyMove : MonoBehaviour
     [SerializeField] GameObject gold;
     [SerializeField] GameObject extraGold;
     [SerializeField] Sprite enchantedSprite;
+    [SerializeField] Sprite berzerkSprite;
     private Camera cam;
 
     bool canMove = false;
     bool canBeDamaged = false;
     bool frozen = false;
+    bool isBerserk = false;
     bool movingDelayCo = true;
     float startMoveDelay;
     int dir;
@@ -44,25 +46,71 @@ public class EnemyMove : MonoBehaviour
         transform.position = Vector3.MoveTowards(transform.position, movePoint.position, enemySpeed * Time.deltaTime);
 
         if(Vector3.Distance(transform.position, movePoint.position) <= .05f){
-            //right
-            if(canMove && dir == 1){
-                movePoint.position += new Vector3(-1f, 0f, movePoint.position.z);
-                canMove = false;
+            if (!isBerserk)
+            {
+                //right
+                if (canMove && dir == 1)
+                {
+                    movePoint.position += new Vector3(-1f, 0f, movePoint.position.z);
+                    canMove = false;
+                }
+                //left
+                if (canMove && dir == 3)
+                {
+                    movePoint.position += new Vector3(1f, 0f, movePoint.position.z);
+                    canMove = false;
+                }
+                //up
+                if (canMove && dir == 4)
+                {
+                    movePoint.position += new Vector3(0f, 1f, movePoint.position.z);
+                    canMove = false;
+                }
+                //down
+                if (canMove && dir == 2)
+                {
+                    movePoint.position += new Vector3(0f, -1f, movePoint.position.z);
+                    canMove = false;
+                }
             }
-            //left
-            if(canMove && dir == 3){
-                movePoint.position += new Vector3(1f, 0f, movePoint.position.z);
-                canMove = false;
-            }
-            //up
-            if(canMove && dir == 4){
-                movePoint.position += new Vector3(0f, 1f, movePoint.position.z);
-                canMove = false;
-            }
-            //down
-            if(canMove && dir == 2){
-                movePoint.position += new Vector3(0f, -1f, movePoint.position.z);
-                canMove = false;
+            else
+            {
+                print("AI calc player pos at " + PlayerMove.Instance.GetPlayerPos());
+                // AI movement towards player
+                Vector3 currentPlayerPos = PlayerMove.Instance.GetPlayerPos();
+                float xDiff, yDiff;
+                xDiff = Mathf.Abs(currentPlayerPos.x - gameObject.transform.position.x);
+                yDiff = Mathf.Abs(currentPlayerPos.y - gameObject.transform.position.y);
+                if (xDiff > yDiff)
+                {
+                    if (currentPlayerPos.x - gameObject.transform.position.x > 0)
+                    {
+                        // Move right
+                        movePoint.position += new Vector3(-1f, 0f, movePoint.position.z);
+                        canMove = false;
+                    }
+                    else
+                    {
+                        // Move left
+                        movePoint.position += new Vector3(1f, 0f, movePoint.position.z);
+                        canMove = false;
+                    }
+                }
+                else
+                {
+                    if (currentPlayerPos.y - gameObject.transform.position.y > 0)
+                    {
+                        // Move down
+                        movePoint.position += new Vector3(0f, -1f, movePoint.position.z);
+                        canMove = false;
+                    }
+                    else
+                    {
+                        // Move up
+                        movePoint.position += new Vector3(0f, 1f, movePoint.position.z);
+                        canMove = false;
+                    }
+                }
             }
         }
     }
@@ -157,6 +205,12 @@ public class EnemyMove : MonoBehaviour
         if(other.gameObject.CompareTag("Gold")){
             Destroy(other.gameObject);
             this.GetComponent<SpriteRenderer>().sprite = enchantedSprite;
+        }
+        if (other.gameObject.CompareTag("betterGold"))
+        {
+            //isBerserk = true;
+            Destroy(other.gameObject);
+            //this.GetComponent<SpriteRenderer>().sprite = berzerkSprite;
         }
     }
     private void OnTriggerExit2D(Collider2D other) {
