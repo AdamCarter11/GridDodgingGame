@@ -15,12 +15,14 @@ public class EnemyMove : MonoBehaviour
     [SerializeField] Sprite berzerkSprite;
     private Camera cam;
 
+    //float ratMoveDelay = 2f;
     bool canMove = false;
     bool canBeDamaged = false;
     bool frozen = false;
     bool isBerserk = false;
     bool movingDelayCo = true;
     float startMoveDelay;
+    bool launched = false;
     int dir;
     [SerializeField] private int health;
 
@@ -138,12 +140,18 @@ public class EnemyMove : MonoBehaviour
     }
 
     private void OnTriggerEnter2D(Collider2D other) {
+        if(other.gameObject.CompareTag("LaunchTrap")){
+            Destroy(other.gameObject);
+            this.GetComponent<SpriteRenderer>().color = Color.green;
+            enemyMoveDelayRat = .1f;
+            launched = true;
+        }
 
         if(other.gameObject.CompareTag("hole")){
             StartCoroutine(movingDelay());
             Destroy(other.gameObject);
         }
-        if(other.gameObject.CompareTag("Wall") && canBeDamaged){
+        if(other.gameObject.CompareTag("Wall") && canBeDamaged && !launched){
             Destroy(movePoint.gameObject);
             Destroy(gameObject); 
         }
@@ -153,25 +161,27 @@ public class EnemyMove : MonoBehaviour
             if(PlayerPrefs.GetInt("ScreenShake") > 0){
                 cam.GetComponent<ScreenShake>().TriggerShake();
             }
-            Destroy(other.gameObject);
-            if(!isBerserk){
-                Destroy(this.gameObject);
-                Destroy(movePoint.gameObject);
-                if(this.GetComponent<SpriteRenderer>().sprite == enchantedSprite){
-                    Instantiate(extraGold, transform.position, Quaternion.identity);
-                }else{
-                    Instantiate(gold, transform.position, Quaternion.identity);
-                }
-            }
-            else{
-                health--;
-                if(health <= 0){
+            //Destroy(other.gameObject);
+            if(!launched){
+                if(!isBerserk){
                     Destroy(this.gameObject);
                     Destroy(movePoint.gameObject);
                     if(this.GetComponent<SpriteRenderer>().sprite == enchantedSprite){
                         Instantiate(extraGold, transform.position, Quaternion.identity);
                     }else{
                         Instantiate(gold, transform.position, Quaternion.identity);
+                    }
+                }
+                else{
+                    health--;
+                    if(health <= 0){
+                        Destroy(this.gameObject);
+                        Destroy(movePoint.gameObject);
+                        if(this.GetComponent<SpriteRenderer>().sprite == enchantedSprite){
+                            Instantiate(extraGold, transform.position, Quaternion.identity);
+                        }else{
+                            Instantiate(gold, transform.position, Quaternion.identity);
+                        }
                     }
                 }
             }
