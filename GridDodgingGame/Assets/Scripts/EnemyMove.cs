@@ -12,6 +12,7 @@ public class EnemyMove : MonoBehaviour
     [SerializeField] GameObject gold;
     [SerializeField] GameObject extraGold;
     [SerializeField] Sprite enchantedSprite;
+    [SerializeField] Sprite normalRat;
     [SerializeField] Sprite berzerkSprite;
     private Camera cam;
 
@@ -29,10 +30,30 @@ public class EnemyMove : MonoBehaviour
     void Start()
     {
         cam = GameObject.Find("Main Camera").GetComponent<Camera>();
+        movePoint.transform.position = transform.position;
         movePoint.parent = null;
         if(Difficulty.instance.enemyMoveDelay >= 0){
             enemyMoveDelayRat = Difficulty.instance.enemyMoveDelay;
-            print("mode select");
+            //print("mode select");
+        }
+        else{
+            enemyMoveDelayRat = 2f;
+        }
+        startMoveDelay = enemyMoveDelayRat;
+        StartCoroutine(triggerMove());
+    }
+
+    private void OnEnable() {
+        canBeDamaged = false;
+        frozen = false;
+        isBerserk = false;
+        launched = false;
+        this.GetComponent<SpriteRenderer>().sprite = normalRat;
+        gameObject.GetComponent<SpriteRenderer>().color = Color.white;
+        movePoint.transform.position = transform.position;
+        if(Difficulty.instance.enemyMoveDelay >= 0){
+            enemyMoveDelayRat = Difficulty.instance.enemyMoveDelay;
+            //print("mode select");
         }
         else{
             enemyMoveDelayRat = 2f;
@@ -151,9 +172,11 @@ public class EnemyMove : MonoBehaviour
             StartCoroutine(movingDelay());
             Destroy(other.gameObject);
         }
-        if(other.gameObject.CompareTag("Wall") && canBeDamaged && !launched){
-            Destroy(movePoint.gameObject);
-            Destroy(gameObject); 
+        if(other.gameObject.CompareTag("Wall") && canBeDamaged){
+            //Destroy(movePoint.gameObject);
+            //Destroy(gameObject); 
+            canBeDamaged = false;
+            gameObject.SetActive(false);
         }
         if(other.gameObject.CompareTag("enemy")){
             //disabled screenshake on enemies for now
@@ -164,26 +187,30 @@ public class EnemyMove : MonoBehaviour
             //Destroy(other.gameObject);
             if(!launched){
                 if(!isBerserk){
-                    Destroy(this.gameObject);
-                    Destroy(movePoint.gameObject);
+                    //Destroy(this.gameObject);
+                    //Destroy(movePoint.gameObject);
                     if(this.GetComponent<SpriteRenderer>().sprite == enchantedSprite){
                         Instantiate(extraGold, transform.position, Quaternion.identity);
                     }else{
                         Instantiate(gold, transform.position, Quaternion.identity);
                     }
+                    gameObject.SetActive(false);
                 }
                 else{
                     health--;
                     if(health <= 0){
-                        Destroy(this.gameObject);
-                        Destroy(movePoint.gameObject);
+                        //Destroy(this.gameObject);
+                        //Destroy(movePoint.gameObject);
                         if(this.GetComponent<SpriteRenderer>().sprite == enchantedSprite){
                             Instantiate(extraGold, transform.position, Quaternion.identity);
                         }else{
                             Instantiate(gold, transform.position, Quaternion.identity);
                         }
+                        gameObject.SetActive(false);
                     }
                 }
+                //object pooling code
+                
             }
             
         }
@@ -243,6 +270,7 @@ public class EnemyMove : MonoBehaviour
     private void OnTriggerExit2D(Collider2D other) {
         if(other.gameObject.CompareTag("Wall")){
             canBeDamaged = true;
+            //print("left wall");
         }
     }
 }

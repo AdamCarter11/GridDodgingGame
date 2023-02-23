@@ -153,7 +153,8 @@ public class PlayerMove : MonoBehaviour
                 cam.GetComponent<ScreenShake>().TriggerShake();
             }
             Instantiate(particleMinus, transform.position, Quaternion.identity);
-            Destroy(other.gameObject);
+            //Destroy(other.gameObject);
+            other.gameObject.SetActive(false);
             GameManager.Instance.ChangeTime(-5);
             health--;
             if(health <= 0){
