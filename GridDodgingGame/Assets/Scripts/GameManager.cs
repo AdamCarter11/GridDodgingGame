@@ -9,12 +9,13 @@ public class GameManager : MonoBehaviour
 {
     private static GameManager _instance = new GameManager();
     
-    [SerializeField] TextMeshProUGUI scoreText, timeText;
+    [SerializeField] TextMeshProUGUI scoreText, timeText, multiplierText;
     [SerializeField] AudioSource audioSourcePitch;
     float startingPitch;
     [SerializeField] GameObject pauseMenu;
     [HideInInspector] public static int score = 0;
     [HideInInspector] public static int time = 1;
+    [HideInInspector] public static int multiplier = 1;
     [SerializeField] private int startingTime;
     private bool pause = false;
     private GameManager() {
@@ -38,6 +39,7 @@ public class GameManager : MonoBehaviour
         time = startingTime;
         timeText.text = "Time: " + time;
         scoreText.text = "Score: " + 0;
+        multiplierText.text = "X" + multiplier;
         startingPitch = audioSourcePitch.pitch;
 
         StartCoroutine(timeScoreIncrease());
@@ -48,6 +50,16 @@ public class GameManager : MonoBehaviour
     {
         scoreText.text = "Score: " + score;
         timeText.text = "Time: " + time;
+        multiplierText.text = "X" + multiplier;
+        if(multiplier == 1){
+            multiplierText.faceColor = Color.white;
+        }
+        else if(multiplier == 2){
+            multiplierText.faceColor = Color.green;
+        }
+        else if(multiplier > 2){
+            multiplierText.faceColor = Color.yellow;
+        }
 
         //Pause logic
         if(Input.GetKeyDown(KeyCode.Escape)){
@@ -66,12 +78,16 @@ public class GameManager : MonoBehaviour
 
     public void IncreaseScore(int val)
     {
-        score += val;
+        score += (val * multiplier);
     }
 
     public void ChangeTime(int val)
     {
         time += val;
+    }
+
+    public void ChangeMultiplier(int value){
+        multiplier = value;
     }
 
     IEnumerator timeScoreIncrease()

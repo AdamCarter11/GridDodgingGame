@@ -162,10 +162,12 @@ public class EnemyMove : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other) {
         if(other.gameObject.CompareTag("LaunchTrap")){
+            if(!isBerserk){
+                this.GetComponent<SpriteRenderer>().color = Color.green;
+                enemyMoveDelayRat = .1f;
+                launched = true;
+            }
             Destroy(other.gameObject);
-            this.GetComponent<SpriteRenderer>().color = Color.green;
-            enemyMoveDelayRat = .1f;
-            launched = true;
         }
 
         if(other.gameObject.CompareTag("hole")){
@@ -194,6 +196,9 @@ public class EnemyMove : MonoBehaviour
                     }else{
                         Instantiate(gold, transform.position, Quaternion.identity);
                     }
+                    gameObject.SetActive(false);
+                }
+                else if(isBerserk){
                     gameObject.SetActive(false);
                 }
                 else{
@@ -256,14 +261,18 @@ public class EnemyMove : MonoBehaviour
         }
 
         if(other.gameObject.CompareTag("Gold")){
-            Destroy(other.gameObject);
-            this.GetComponent<SpriteRenderer>().sprite = enchantedSprite;
+            if(!launched){
+                Destroy(other.gameObject);
+                this.GetComponent<SpriteRenderer>().sprite = enchantedSprite;
+            }
         }
         if (other.gameObject.CompareTag("betterGold"))
         {
-            isBerserk = true;
-            Destroy(other.gameObject);
-            this.GetComponent<SpriteRenderer>().color = Color.red;
+            if(!launched){
+                isBerserk = true;
+                this.GetComponent<SpriteRenderer>().color = Color.red;
+                Destroy(other.gameObject);
+            }
             //this.GetComponent<SpriteRenderer>().sprite = berzerkSprite;
         }
     }

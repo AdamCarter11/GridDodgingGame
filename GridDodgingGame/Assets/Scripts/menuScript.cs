@@ -18,6 +18,13 @@ public class menuScript : MonoBehaviour
         else{
             scoreText.text = "Highscore: YOU?";
         }
+        if(!PlayerPrefs.HasKey("volume")){
+            PlayerPrefs.SetFloat("volume", 1);
+            AudioListener.volume = 1;
+        }
+        else{
+            AudioListener.volume = PlayerPrefs.GetFloat("volume");
+        }
     }
 
     public void startGame(){
