@@ -15,6 +15,7 @@ public class EnemyMove : MonoBehaviour
     [SerializeField] Sprite normalRat;
     [SerializeField] Sprite berzerkSprite;
     private Camera cam;
+    public Vector3 facing;
 
     //float ratMoveDelay = 2f;
     bool canMove = false;
@@ -39,6 +40,7 @@ public class EnemyMove : MonoBehaviour
         else{
             enemyMoveDelayRat = 2f;
         }
+        health = 1;
         startMoveDelay = enemyMoveDelayRat;
         StartCoroutine(triggerMove());
     }
@@ -67,8 +69,9 @@ public class EnemyMove : MonoBehaviour
     {
         //moves player
         transform.position = Vector3.MoveTowards(transform.position, movePoint.position, enemySpeed * Time.deltaTime);
+        transform.transform.eulerAngles = new Vector3(facing.x, facing.y, facing.z);
 
-        if(Vector3.Distance(transform.position, movePoint.position) <= .05f){
+        if (Vector3.Distance(transform.position, movePoint.position) <= .05f){
             if (!isBerserk)
             {
                 //right
@@ -112,12 +115,16 @@ public class EnemyMove : MonoBehaviour
                         // Move left
                         movePoint.position += new Vector3(1f, 0f, movePoint.position.z);
                         canMove = false;
+                        dir = 2;
+                        facing = new Vector3(0, 0, 0);
                     }
                     else if(canMove)
                     {
                         // Move right
                         movePoint.position += new Vector3(-1f, 0f, movePoint.position.z);
                         canMove = false;
+                        dir = 1;
+                        facing = new Vector3(0, 0, 180);
                     }
                 }
                 else
@@ -127,12 +134,16 @@ public class EnemyMove : MonoBehaviour
                         // Move up
                         movePoint.position += new Vector3(0f, 1f, movePoint.position.z);
                         canMove = false;
+                        dir = 3;
+                        facing = new Vector3(0, 0, 90);
                     }
                     else if(canMove)
                     {
                         // Move down
                         movePoint.position += new Vector3(0f, -1f, movePoint.position.z);
                         canMove = false;
+                        dir = 4;
+                        facing = new Vector3(0, 0, 270);
                     }
                 }
             }
@@ -140,9 +151,15 @@ public class EnemyMove : MonoBehaviour
     }
 
     // Set facing of enemy
-    public void setFacing(int facing)
+    public void setFacing(int dir)
     {
-        dir = facing;
+        Vector3 startFacing = Vector3.zero;
+        if (dir == 1) startFacing = new Vector3(0, 0, 180);
+        if (dir == 2) startFacing = new Vector3(0, 0, 270);
+        if (dir == 3) startFacing = new Vector3(0, 0, 0);
+        if (dir == 4) startFacing = new Vector3(0, 0, 90);
+        this.dir = dir;
+        this.facing = startFacing;
     }
 
     IEnumerator triggerMove(){
@@ -272,6 +289,7 @@ public class EnemyMove : MonoBehaviour
                 isBerserk = true;
                 this.GetComponent<SpriteRenderer>().color = Color.red;
                 Destroy(other.gameObject);
+                health = 3;
             }
             //this.GetComponent<SpriteRenderer>().sprite = berzerkSprite;
         }
