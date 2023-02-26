@@ -92,9 +92,15 @@ public class EnemySpawner : MonoBehaviour
             }
 
             // Construct enemy
-            GameObject currentEnemy = Instantiate(enemy, enemyPosition, Quaternion.identity);
-            currentEnemy.transform.eulerAngles = enemyFacing;
-            currentEnemy.GetComponent<EnemyMove>().setFacing(dir);
+            //GameObject currentEnemy = Instantiate(enemy, enemyPosition, Quaternion.identity);
+            GameObject currentEnemy = ObjectPooling.instance.GetPooledObject();
+            if(currentEnemy != null){
+                print("Spawn rat");
+                currentEnemy.transform.position = enemyPosition;
+                currentEnemy.SetActive(true);
+                currentEnemy.transform.eulerAngles = enemyFacing;
+                currentEnemy.GetComponent<EnemyMove>().setFacing(dir);
+            }
 
             if(spawnScaling <= spawnDelay - spawnCap){
                 spawnScaling += spawnScalingChange;

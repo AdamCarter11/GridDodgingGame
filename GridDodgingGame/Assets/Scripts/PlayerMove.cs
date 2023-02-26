@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public class PlayerMove : MonoBehaviour
 {
-    private static PlayerMove _instance = new PlayerMove();
+    //private static PlayerMove _instance = new PlayerMove();
 
     [SerializeField] float moveSpeed;
     [SerializeField] Transform movePoint;
@@ -20,6 +20,9 @@ public class PlayerMove : MonoBehaviour
     float[] possibleYVals = new float[8];
 
     public Queue<int> items = new Queue<int>();
+
+    int multiplierStreak = 0;
+    int currMultiplier = 1;
 
     [SerializeField] GameObject holeTile;
     [SerializeField] Canvas canvas;
@@ -46,6 +49,7 @@ public class PlayerMove : MonoBehaviour
     [SerializeField] private ParticleSystem particleMinus;
     Animator playerAnimator;
 
+    /*
     public static PlayerMove Instance
     {
         get
@@ -58,7 +62,8 @@ public class PlayerMove : MonoBehaviour
             return _instance;
         }
     }
-
+    */
+    
     void Start()
     {
         playerAnimator = this.GetComponent<Animator>();
@@ -147,11 +152,15 @@ public class PlayerMove : MonoBehaviour
             currDiggingTile = other.gameObject;
         }
         if(other.gameObject.CompareTag("enemy")){
+            multiplierStreak = 0;
+            GameManager.Instance.ChangeMultiplier(1);
+            currMultiplier = 1;
             if(PlayerPrefs.GetInt("ScreenShake") > 0){
                 cam.GetComponent<ScreenShake>().TriggerShake();
             }
             Instantiate(particleMinus, transform.position, Quaternion.identity);
-            Destroy(other.gameObject);
+            //Destroy(other.gameObject);
+            other.gameObject.SetActive(false);
             GameManager.Instance.ChangeTime(-5);
             health--;
             if(health <= 0){
@@ -162,16 +171,20 @@ public class PlayerMove : MonoBehaviour
         if(other.gameObject.CompareTag("Gold")){
             audioSource.PlayOneShot(sfx[0], .7f);
             Destroy(other.gameObject);
+            multiplierStreakFunc();
             //increase score
             GameManager.Instance.IncreaseScore(10);
-            GameManager.Instance.ChangeTime(1);
+            if(currMultiplier == 4){
+                GameManager.Instance.ChangeTime(1);
+            }
         }
         if(other.gameObject.CompareTag("betterGold")){
             audioSource.PlayOneShot(sfx[0], .7f);
             Destroy(other.gameObject);
+            multiplierStreakFunc();
             //increase score
             GameManager.Instance.IncreaseScore(20);
-            GameManager.Instance.ChangeTime(2);
+            GameManager.Instance.ChangeTime(1*currMultiplier);
         }
     }
     private void OnTriggerExit2D(Collider2D other) {
@@ -183,6 +196,17 @@ public class PlayerMove : MonoBehaviour
         }
     }
 
+    void multiplierStreakFunc(){
+        multiplierStreak++;
+        if(multiplierStreak > 5 && currMultiplier == 1){
+            GameManager.Instance.ChangeMultiplier(2);
+            currMultiplier = 2;
+        }
+        else if(multiplierStreak > 15 && currMultiplier == 2){
+            GameManager.Instance.ChangeMultiplier(4);
+            currMultiplier = 4;
+        }
+    }
     void DiggingLogic(){
         if(Input.GetKeyDown(KeyCode.Space)){
             canSlow = false;
@@ -218,7 +242,7 @@ public class PlayerMove : MonoBehaviour
 
     public Vector3 GetPlayerPos()
     {
-        return _instance.gameObject.transform.position;
+        return transform.position;
     }
 
     IEnumerator spawnDigTile(){

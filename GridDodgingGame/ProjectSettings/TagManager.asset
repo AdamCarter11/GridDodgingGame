@@ -16,6 +16,7 @@ TagManager:
   - Gold
   - betterGold
   - hole
+  - LaunchTrap
   layers:
   - Default
   - TransparentFX

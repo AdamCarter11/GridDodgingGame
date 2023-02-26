@@ -20,7 +20,16 @@ public class PauseMenu : MonoBehaviour
         if(!PlayerPrefs.HasKey("ScreenShake")){
             PlayerPrefs.SetInt("ScreenShake" , 1);
         }
+        else{
+            if(PlayerPrefs.GetInt("ScreenShake") == 1){
+                shakeToggle.isOn = true;
+            }
+            else{
+                shakeToggle.isOn = false;
+            }
+        }
         shakeToggle.onValueChanged.AddListener(delegate { ToggleValueChanged(shakeToggle);});
+        this.gameObject.SetActive(false);
     }
 
     void ToggleValueChanged(Toggle change){
@@ -37,6 +46,7 @@ public class PauseMenu : MonoBehaviour
 
     void LoadVolume(){
         volumeSlider.value = PlayerPrefs.GetFloat("volume");
+        AudioListener.volume = volumeSlider.value;
     }
 
     void SaveVolume(){

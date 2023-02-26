@@ -131,7 +131,9 @@ MonoBehaviour:
   gold: {fileID: 6705016374558732091, guid: 99453195e14533347ac77de8638c8a72, type: 3}
   extraGold: {fileID: 6591509246444799225, guid: decfffd2ef496934eace6ccf7951dea8, type: 3}
   enchantedSprite: {fileID: 1441109764, guid: 9d65303f8d00c634db5e94fa0ddcccc1, type: 3}
+  normalRat: {fileID: 1655149867, guid: 9d65303f8d00c634db5e94fa0ddcccc1, type: 3}
   berzerkSprite: {fileID: 21300000, guid: 7ecf7d4d18f01d147ad1d1ab1876dc6a, type: 3}
+  health: 3
 --- !u!50 &5947950031403965646
 Rigidbody2D:
   serializedVersion: 4
