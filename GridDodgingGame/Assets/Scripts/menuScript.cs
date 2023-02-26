@@ -8,15 +8,17 @@ public class menuScript : MonoBehaviour
 {
     [SerializeField] TMP_Text scoreText;
     [SerializeField] GameObject difficultyPanel;
+    [SerializeField] GameObject highScorePanel;
+    [SerializeField] GameObject creditsPanel;
 
     // Start is called before the first frame update
     void Start()
     {
         if(PlayerPrefs.HasKey("score")){
-            scoreText.text = "Highscore: " + PlayerPrefs.GetInt("score");
+            scoreText.text = "High Score: " + PlayerPrefs.GetInt("score");
         }
         else{
-            scoreText.text = "Highscore: YOU?";
+            scoreText.text = "High Score: YOU?";
         }
         if(!PlayerPrefs.HasKey("volume")){
             PlayerPrefs.SetFloat("volume", 1);
@@ -29,6 +31,28 @@ public class menuScript : MonoBehaviour
 
     public void startGame(){
         difficultyPanel.SetActive(true);
+    }
+
+    public void returnFromDifficulty()
+    {
+        difficultyPanel.SetActive(false);
+    }
+
+    public void enterHighScore()
+    {
+        highScorePanel.SetActive(true);
+    }
+    public void enterCredits()
+    {
+        creditsPanel.SetActive(true);
+    }
+    public void returnFromHighScore()
+    {
+        highScorePanel.SetActive(false);
+    }
+    public void returnFromCredits()
+    {
+        creditsPanel.SetActive(false);
     }
 
     public void quitGame(){
