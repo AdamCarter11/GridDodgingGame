@@ -7,6 +7,7 @@ using UnityEngine.SceneManagement;
 public class menuScript : MonoBehaviour
 {
     [SerializeField] TMP_Text scoreText;
+    [SerializeField] GameObject tutorialPanel;
     [SerializeField] GameObject difficultyPanel;
     [SerializeField] GameObject highScorePanel;
     [SerializeField] GameObject creditsPanel;
@@ -36,6 +37,14 @@ public class menuScript : MonoBehaviour
     public void returnFromDifficulty()
     {
         difficultyPanel.SetActive(false);
+    }
+    public void enterTutorial()
+    {
+        tutorialPanel.SetActive(true);
+    }
+    public void returnFromTutorial()
+    {
+        tutorialPanel.SetActive(false);
     }
 
     public void enterHighScore()
