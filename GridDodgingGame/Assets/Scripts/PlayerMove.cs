@@ -29,7 +29,7 @@ public class PlayerMove : MonoBehaviour
     [SerializeField] Image currentImage;
     [SerializeField] Image[] imageSlots;
     [SerializeField] Sprite empty, dirTrapRight, dirTrapLeft,
-        pushTrapDown, pushTrapLeft, pushTrapRight, pushTrapUp, launchTrap;
+        pushTrapDown, pushTrapLeft, pushTrapRight, pushTrapUp, launchTrap, explosionTrap;
     //TrapType Enum
     // dirTrapRight = 0,
     // dirTrapLeft = 1,
@@ -264,11 +264,12 @@ public class PlayerMove : MonoBehaviour
 
             if (items.ToArray()[i] == 0) currentImage.sprite = dirTrapLeft;
             else if (items.ToArray()[i] == 1) currentImage.sprite = dirTrapRight;
-            else if (items.ToArray()[i] == 2) currentImage.sprite = pushTrapDown;
-            else if (items.ToArray()[i] == 3) currentImage.sprite = pushTrapLeft;
+            else if (items.ToArray()[i] == 2) currentImage.sprite = launchTrap;
+            else if (items.ToArray()[i] == 3) currentImage.sprite = explosionTrap;
             else if (items.ToArray()[i] == 4) currentImage.sprite = pushTrapRight;
             else if (items.ToArray()[i] == 5) currentImage.sprite = pushTrapUp;
-            else if (items.ToArray()[i] == 6) currentImage.sprite = launchTrap;
+            else if (items.ToArray()[i] == 6) currentImage.sprite = pushTrapDown;
+            else if (items.ToArray()[i] == 7) currentImage.sprite = pushTrapLeft;
             else currentImage.sprite = empty;
         }
         while (i < 4)

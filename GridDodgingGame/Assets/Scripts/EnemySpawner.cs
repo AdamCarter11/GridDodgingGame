@@ -42,6 +42,7 @@ public class EnemySpawner : MonoBehaviour
         spawnCap = Difficulty.instance.spawnCap;
         
         StartCoroutine(spawnEnemy());
+        StartCoroutine(ScalingTime());
         //enemyMoveScript.dir = 4;
 
     }
@@ -50,6 +51,14 @@ public class EnemySpawner : MonoBehaviour
     void Update()
     {
         
+    }
+    IEnumerator ScalingTime(){
+        while(true){
+            yield return new WaitForSeconds(4f);
+            if(spawnScaling <= spawnDelay - spawnCap){
+                    spawnScaling += spawnScalingChange;
+            }
+        }
     }
 
     IEnumerator spawnEnemy(){
@@ -102,9 +111,7 @@ public class EnemySpawner : MonoBehaviour
                 currentEnemy.GetComponent<EnemyMove>().setFacing(dir);
             }
 
-            if(spawnScaling <= spawnDelay - spawnCap){
-                spawnScaling += spawnScalingChange;
-            }
+            
         }
     }
 }

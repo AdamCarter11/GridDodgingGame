@@ -14,6 +14,8 @@ public class EnemyMove : MonoBehaviour
     [SerializeField] Sprite enchantedSprite;
     [SerializeField] Sprite normalRat;
     [SerializeField] Sprite berzerkSprite;
+    [SerializeField] Sprite launchedSprite;
+    [SerializeField] GameObject angryParticles;
     private Camera cam;
     public Vector3 facing;
 
@@ -50,6 +52,7 @@ public class EnemyMove : MonoBehaviour
         frozen = false;
         isBerserk = false;
         launched = false;
+        angryParticles.SetActive(false);
         this.GetComponent<SpriteRenderer>().sprite = normalRat;
         gameObject.GetComponent<SpriteRenderer>().color = Color.white;
         movePoint.transform.position = transform.position;
@@ -184,7 +187,8 @@ public class EnemyMove : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D other) {
         if(other.gameObject.CompareTag("LaunchTrap")){
             if(!isBerserk){
-                this.GetComponent<SpriteRenderer>().color = Color.green;
+                //this.GetComponent<SpriteRenderer>().color = Color.green;
+                this.GetComponent<SpriteRenderer>().sprite = launchedSprite;
                 enemyMoveDelayRat = .1f;
                 launched = true;
             }
@@ -202,43 +206,7 @@ public class EnemyMove : MonoBehaviour
             gameObject.SetActive(false);
         }
         if(other.gameObject.CompareTag("enemy")){
-            //disabled screenshake on enemies for now
-            //cam.GetComponent<ScreenShake>().TriggerShake();
-            if(PlayerPrefs.GetInt("ScreenShake") > 0){
-                cam.GetComponent<ScreenShake>().TriggerShake();
-            }
-            //Destroy(other.gameObject);
-            if(!launched){
-                if(!isBerserk){
-                    //Destroy(this.gameObject);
-                    //Destroy(movePoint.gameObject);
-                    if(this.GetComponent<SpriteRenderer>().sprite == enchantedSprite){
-                        Instantiate(extraGold, transform.position, Quaternion.identity);
-                    }else{
-                        Instantiate(gold, transform.position, Quaternion.identity);
-                    }
-                    gameObject.SetActive(false);
-                }
-                else if(isBerserk){
-                    gameObject.SetActive(false);
-                }
-                else{
-                    health--;
-                    if(health <= 0){
-                        //Destroy(this.gameObject);
-                        //Destroy(movePoint.gameObject);
-                        if(this.GetComponent<SpriteRenderer>().sprite == enchantedSprite){
-                            Instantiate(extraGold, transform.position, Quaternion.identity);
-                        }else{
-                            Instantiate(gold, transform.position, Quaternion.identity);
-                        }
-                        gameObject.SetActive(false);
-                    }
-                }
-                //object pooling code
-                
-            }
-            
+           EnemyCollision();
         }
         if(other.gameObject.CompareTag("dirTrap")){
             //transform.Rotate(0.0f,0.0f,90.0f, Space.Self);
@@ -284,18 +252,24 @@ public class EnemyMove : MonoBehaviour
         if(other.gameObject.CompareTag("Gold")){
             if(!launched){
                 Destroy(other.gameObject);
-                this.GetComponent<SpriteRenderer>().sprite = enchantedSprite;
+                if(!isBerserk){
+                    this.GetComponent<SpriteRenderer>().sprite = enchantedSprite;
+                }
             }
         }
         if (other.gameObject.CompareTag("betterGold"))
         {
             if(!launched){
                 isBerserk = true;
-                this.GetComponent<SpriteRenderer>().color = Color.red;
+                angryParticles.SetActive(true);
+                //this.GetComponent<SpriteRenderer>().color = Color.red;
+                this.GetComponent<SpriteRenderer>().sprite = berzerkSprite;
                 Destroy(other.gameObject);
-                health = 3;
+                health = 2;
             }
-            //this.GetComponent<SpriteRenderer>().sprite = berzerkSprite;
+        }
+        if(other.gameObject.CompareTag("ExplosionRadius")){
+            EnemyCollision();
         }
     }
     private void OnTriggerExit2D(Collider2D other) {
@@ -303,5 +277,41 @@ public class EnemyMove : MonoBehaviour
             canBeDamaged = true;
             //print("left wall");
         }
+    }
+    private void EnemyCollision(){
+        if(PlayerPrefs.GetInt("ScreenShake") > 0){
+                cam.GetComponent<ScreenShake>().TriggerShake();
+            }
+            //Destroy(other.gameObject);
+            if(!launched){
+                if(!isBerserk){
+                    //Destroy(this.gameObject);
+                    //Destroy(movePoint.gameObject);
+                    if(this.GetComponent<SpriteRenderer>().sprite == enchantedSprite){
+                        Instantiate(extraGold, transform.position, Quaternion.identity);
+                    }else{
+                        Instantiate(gold, transform.position, Quaternion.identity);
+                    }
+                    gameObject.SetActive(false);
+                }
+                /*
+                else if(isBerserk){
+                    gameObject.SetActive(false);
+                }
+                */
+                else{
+                    health--;
+                    if(health <= 0){
+                        //Destroy(this.gameObject);
+                        //Destroy(movePoint.gameObject);
+                        if(this.GetComponent<SpriteRenderer>().sprite == enchantedSprite){
+                            Instantiate(extraGold, transform.position, Quaternion.identity);
+                        }else{
+                            Instantiate(gold, transform.position, Quaternion.identity);
+                        }
+                        gameObject.SetActive(false);
+                    }
+                }
+            }
     }
 }

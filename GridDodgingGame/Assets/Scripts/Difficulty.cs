@@ -23,7 +23,7 @@ public class Difficulty : MonoBehaviour
         enemySpawnDelay = 2f;
         enemySpawnDelayScaling = .01f;
         enemyMoveDelay = 2f;
-        spawnCap = .8f;
+        spawnCap = 1f;
         trapSpawnDelay = 3f;
         SceneManager.LoadScene("MainGame");
     }
