@@ -79,24 +79,28 @@ public class EnemyMove : MonoBehaviour
                 {
                     movePoint.position += new Vector3(-1f, 0f, movePoint.position.z);
                     canMove = false;
+                    facing = new Vector3(0, 0, 180);
                 }
                 //left
                 if (canMove && dir == 3)
                 {
                     movePoint.position += new Vector3(1f, 0f, movePoint.position.z);
                     canMove = false;
+                    facing = new Vector3(0, 0, 0);
                 }
                 //up
                 if (canMove && dir == 4)
                 {
                     movePoint.position += new Vector3(0f, 1f, movePoint.position.z);
                     canMove = false;
+                    facing = new Vector3(0, 0, 90);
                 }
                 //down
                 if (canMove && dir == 2)
                 {
                     movePoint.position += new Vector3(0f, -1f, movePoint.position.z);
                     canMove = false;
+                    facing = new Vector3(0, 0, 270);
                 }
             }
             else
@@ -237,7 +241,7 @@ public class EnemyMove : MonoBehaviour
             
         }
         if(other.gameObject.CompareTag("dirTrap")){
-            transform.Rotate(new Vector3(0.0f,0.0f,90.0f), Space.Self);
+            //transform.Rotate(0.0f,0.0f,90.0f, Space.Self);
             print(dir);
             dir++;
             //if(dir == 2){ dir = 1; }
@@ -249,7 +253,7 @@ public class EnemyMove : MonoBehaviour
             Destroy(other.gameObject);
         }
         if(other.gameObject.CompareTag("dirTrapRight")){
-            transform.Rotate(new Vector3(0.0f,0.0f,-90.0f), Space.Self);
+            //transform.Rotate(Vector2.right, -90);
             print(dir);
             dir--;
             if(dir == 2){ dir = 3; }

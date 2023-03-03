@@ -9,7 +9,8 @@ public class Difficulty : MonoBehaviour
     [HideInInspector] public float enemySpawnDelay;
     [HideInInspector] public float enemySpawnDelayScaling;
     [HideInInspector] public float enemyMoveDelay;
-    [HideInInspector] public float spawnCap;
+    [HideInInspector] public float spawnCap; 
+    [HideInInspector] public float trapSpawnDelay;
 
     [HideInInspector] public bool screenshake;
 
@@ -23,6 +24,7 @@ public class Difficulty : MonoBehaviour
         enemySpawnDelayScaling = .01f;
         enemyMoveDelay = 2f;
         spawnCap = .8f;
+        trapSpawnDelay = 3f;
         SceneManager.LoadScene("MainGame");
     }
     public void mediumMode(){
@@ -30,6 +32,7 @@ public class Difficulty : MonoBehaviour
         enemySpawnDelayScaling = .05f;
         enemyMoveDelay = 1.5f;
         spawnCap = .7f;
+        trapSpawnDelay = 2f;
         SceneManager.LoadScene("MainGame");
     }
     public void hardMode(){
@@ -37,6 +40,7 @@ public class Difficulty : MonoBehaviour
         enemySpawnDelayScaling = .1f;
         enemyMoveDelay = 1f;
         spawnCap = .5f;
+        trapSpawnDelay = 1f;
         SceneManager.LoadScene("MainGame");
     }
 }

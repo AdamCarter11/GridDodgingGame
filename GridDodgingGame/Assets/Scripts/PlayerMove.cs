@@ -29,7 +29,7 @@ public class PlayerMove : MonoBehaviour
     [SerializeField] Image currentImage;
     [SerializeField] Image[] imageSlots;
     [SerializeField] Sprite empty, dirTrapRight, dirTrapLeft,
-        pushTrapDown, pushTrapLeft, pushTrapRight, pushTrapUp;
+        pushTrapDown, pushTrapLeft, pushTrapRight, pushTrapUp, launchTrap;
     //TrapType Enum
     // dirTrapRight = 0,
     // dirTrapLeft = 1,
@@ -219,11 +219,11 @@ public class PlayerMove : MonoBehaviour
                 currDiggingTile.SetActive(false);
                 StartCoroutine(spawnDigTile());
                 if(items.Count < 4){
-                    items.Enqueue(Random.Range(0,6));
+                    items.Enqueue(Random.Range(0,traps.Length));
                 }
                 else{
                     items.Dequeue();
-                    items.Enqueue(Random.Range(0,6));
+                    items.Enqueue(Random.Range(0,traps.Length));
                 }
             }
             else{
@@ -246,7 +246,7 @@ public class PlayerMove : MonoBehaviour
     }
 
     IEnumerator spawnDigTile(){
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(Difficulty.instance.trapSpawnDelay);
         currDiggingTile.transform.position = new Vector3(possibleXVals[Random.Range(0,possibleXVals.Length)], possibleYVals[Random.Range(0,possibleYVals.Length)], currDiggingTile.transform.position.z);
         currDiggingTile.SetActive(true);
     }
@@ -268,6 +268,7 @@ public class PlayerMove : MonoBehaviour
             else if (items.ToArray()[i] == 3) currentImage.sprite = pushTrapLeft;
             else if (items.ToArray()[i] == 4) currentImage.sprite = pushTrapRight;
             else if (items.ToArray()[i] == 5) currentImage.sprite = pushTrapUp;
+            else if (items.ToArray()[i] == 6) currentImage.sprite = launchTrap;
             else currentImage.sprite = empty;
         }
         while (i < 4)
