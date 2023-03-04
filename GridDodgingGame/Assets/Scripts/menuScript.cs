@@ -67,5 +67,9 @@ public class menuScript : MonoBehaviour
     public void quitGame(){
         Application.Quit();
     }
+
+    public void ClearSaves(){
+        PlayerPrefs.DeleteAll();
+    }
     
 }

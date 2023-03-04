@@ -98,6 +98,7 @@ public class GameManager : MonoBehaviour
             time--;
             if(time <= 0){
                 print("Gameover");
+                GameManager.Instance.ChangeMultiplier(1);
                 PlayerPrefs.SetInt("tempScore", score);
                 if(PlayerPrefs.HasKey("score")){
                     if(score > PlayerPrefs.GetInt("score")){
