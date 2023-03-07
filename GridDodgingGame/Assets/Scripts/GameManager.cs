@@ -14,10 +14,14 @@ public class GameManager : MonoBehaviour
     float startingPitch;
     [SerializeField] GameObject pauseMenu;
     [HideInInspector] public static int score = 0;
-    [HideInInspector] public static int time = 1;
+    [HideInInspector] public static float time = 1;
     [HideInInspector] public static int multiplier = 1;
     [SerializeField] private int startingTime;
     private bool pause = false;
+
+    //visualized timer
+    [SerializeField] Image timeIndicator;
+
     private GameManager() {
 
     }
@@ -37,7 +41,7 @@ public class GameManager : MonoBehaviour
     {
         score = 0;
         time = startingTime;
-        timeText.text = "Time: " + time;
+        timeText.text = "Time: " + (int)time;
         scoreText.text = "Score: " + 0;
         multiplierText.text = "X" + multiplier;
         startingPitch = audioSourcePitch.pitch;
@@ -49,7 +53,7 @@ public class GameManager : MonoBehaviour
     void Update()
     {
         scoreText.text = "Score: " + score;
-        timeText.text = "Time: " + time;
+        timeText.text = "Time: " + (int)time;
         multiplierText.text = "X" + multiplier;
         if(multiplier == 1){
             multiplierText.faceColor = Color.white;
@@ -74,8 +78,16 @@ public class GameManager : MonoBehaviour
                 pause = false;
             }
         }
-    }
 
+        TimerFunc();
+    }
+    void TimerFunc(){
+        if(time > 0){
+            time -= Time.deltaTime;
+            timeIndicator.enabled = true;
+            timeIndicator.fillAmount = time/startingTime;
+        }
+    }
     public void IncreaseScore(int val)
     {
         score += (val * multiplier);
@@ -95,7 +107,7 @@ public class GameManager : MonoBehaviour
         while (true)
         {
             yield return new WaitForSeconds(1f);
-            time--;
+            //time--;
             if(time <= 0){
                 print("Gameover");
                 GameManager.Instance.ChangeMultiplier(1);
