@@ -4945,8 +4945,8 @@ MonoBehaviour:
   extraGold: {fileID: 6591509246444799225, guid: decfffd2ef496934eace6ccf7951dea8, type: 3}
   enchantedSprite: {fileID: 1441109764, guid: 9d65303f8d00c634db5e94fa0ddcccc1, type: 3}
   normalRat: {fileID: 1655149867, guid: 9d65303f8d00c634db5e94fa0ddcccc1, type: 3}
-  berzerkSprite: {fileID: 21300000, guid: 21494adbcfa25654ab6b5ff3e3be7c98, type: 3}
-  launchedSprite: {fileID: 21300000, guid: a0d7f4b209e29a645a08a298b764ef49, type: 3}
+  berzerkSprite: {fileID: 21300000, guid: 59f534c9172929544a625cdcf27c0b52, type: 3}
+  launchedSprite: {fileID: 21300000, guid: 8bd3eb9347280ea4997dde9f20220aab, type: 3}
   angryParticles: {fileID: 2465083954987418958}
   facing: {x: 0, y: 0, z: 0}
   health: 3

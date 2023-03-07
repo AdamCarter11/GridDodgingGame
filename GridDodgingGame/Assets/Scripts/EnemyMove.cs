@@ -172,6 +172,9 @@ public class EnemyMove : MonoBehaviour
     IEnumerator triggerMove(){
         while(true){
             yield return new WaitForSeconds(enemyMoveDelayRat);
+            if(enemyMoveDelayRat < .2f){
+                Instantiate(gold, transform.position, Quaternion.identity);
+            }
             if(movingDelayCo){
                 canMove = true;
             }
