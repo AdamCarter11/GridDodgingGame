@@ -174,7 +174,10 @@ public class PlayerMove : MonoBehaviour
             multiplierStreakFunc();
             //increase score
             GameManager.Instance.IncreaseScore(10);
-            if(currMultiplier == 4){
+            if(Difficulty.instance.diffLevel == 1){
+                GameManager.Instance.ChangeTime(2);
+            }
+            else if(currMultiplier == 4 || Difficulty.instance.diffLevel == 2){
                 GameManager.Instance.ChangeTime(1);
             }
         }
@@ -184,7 +187,33 @@ public class PlayerMove : MonoBehaviour
             multiplierStreakFunc();
             //increase score
             GameManager.Instance.IncreaseScore(20);
-            GameManager.Instance.ChangeTime(1*currMultiplier);
+            if(Difficulty.instance.diffLevel == 1){
+                GameManager.Instance.ChangeTime(3*currMultiplier);
+            }
+            if(Difficulty.instance.diffLevel == 2){
+                GameManager.Instance.ChangeTime(2*currMultiplier);
+            }
+            else{
+                GameManager.Instance.ChangeTime(1*currMultiplier);
+            }
+            
+        }
+        if(other.gameObject.CompareTag("Mole")){
+            multiplierStreak = 0;
+            GameManager.Instance.ChangeMultiplier(1);
+            currMultiplier = 1;
+            if(PlayerPrefs.GetInt("ScreenShake") > 0){
+                cam.GetComponent<ScreenShake>().TriggerShake();
+            }
+            Instantiate(particleMinus, transform.position, Quaternion.identity);
+            //Destroy(other.gameObject);
+            other.gameObject.SetActive(false);
+            GameManager.Instance.ChangeTime(-5);
+            health--;
+            if(health <= 0){
+                //gameover
+                print("gameover!");
+            }
         }
     }
     private void OnTriggerExit2D(Collider2D other) {
@@ -195,7 +224,6 @@ public class PlayerMove : MonoBehaviour
             canSlow = true;
         }
     }
-
     void multiplierStreakFunc(){
         multiplierStreak++;
         if(multiplierStreak > 5 && currMultiplier == 1){

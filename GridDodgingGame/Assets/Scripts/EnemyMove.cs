@@ -171,7 +171,7 @@ public class EnemyMove : MonoBehaviour
 
     IEnumerator triggerMove(){
         while(true){
-            yield return new WaitForSeconds(enemyMoveDelayRat);
+            yield return new WaitForSeconds(enemyMoveDelayRat / GameManager.multiplier);
             if(enemyMoveDelayRat < .2f){
                 Instantiate(gold, transform.position, Quaternion.identity);
             }
@@ -272,6 +272,9 @@ public class EnemyMove : MonoBehaviour
             }
         }
         if(other.gameObject.CompareTag("ExplosionRadius")){
+            EnemyCollision();
+        }
+        if(other.gameObject.CompareTag("Mole")){
             EnemyCollision();
         }
     }

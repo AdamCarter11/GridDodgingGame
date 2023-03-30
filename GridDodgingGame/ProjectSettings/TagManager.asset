@@ -19,6 +19,7 @@ TagManager:
   - LaunchTrap
   - ExplosionTrap
   - ExplosionRadius
+  - Mole
   layers:
   - Default
   - TransparentFX
