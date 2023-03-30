@@ -15,9 +15,13 @@ public class GameManager : MonoBehaviour
     [SerializeField] GameObject pauseMenu;
     [HideInInspector] public static int score = 0;
     [HideInInspector] public static float time = 1;
+    [HideInInspector] public static int playerHealth = 5;
     [HideInInspector] public static int multiplier = 1;
     [SerializeField] private int startingTime;
     private bool pause = false;
+    bool diffIncrease = true;
+    bool timeThreshText = true;
+    [SerializeField] Animator timeTextAnim;
 
     //visualized timer
     [SerializeField] Image timeIndicator;
@@ -54,6 +58,23 @@ public class GameManager : MonoBehaviour
     {
         scoreText.text = "Score: " + score;
         timeText.text = "Time: " + (int)time;
+        if(time <= startingTime / 4){
+            timeText.color = Color.red;
+            timeTextAnim.SetTrigger("timeChange");
+            if(timeThreshText){
+                timeTextAnim.speed *= 2;
+                timeThreshText = false;
+            }
+            
+        }
+        else if(time <= startingTime / 2){
+            if(!timeThreshText){
+                timeTextAnim.speed = 1;
+                timeThreshText = true;
+            }
+            timeText.color = new Color(1, .64f, 0);
+            timeTextAnim.SetTrigger("timeChange");
+        }
         multiplierText.text = "X" + multiplier;
         if(multiplier == 1){
             multiplierText.faceColor = Color.white;
@@ -91,11 +112,21 @@ public class GameManager : MonoBehaviour
     public void IncreaseScore(int val)
     {
         score += (val * multiplier);
+        if(score >= 500 && diffIncrease){
+            Difficulty.instance.spawnCap -= .2f;
+            Difficulty.instance.enemySpawnDelayScaling += .05f;
+        }
     }
 
     public void ChangeTime(int val)
     {
         time += val;
+    }
+    public void ChangeHealth(int val){
+        playerHealth += val;
+        if(playerHealth <= 0){
+            GameOverFunc();
+        }
     }
 
     public void ChangeMultiplier(int value){
@@ -109,20 +140,21 @@ public class GameManager : MonoBehaviour
             yield return new WaitForSeconds(1f);
             //time--;
             if(time <= 0){
-                print("Gameover");
-                GameManager.Instance.ChangeMultiplier(1);
-                PlayerPrefs.SetInt("tempScore", score);
-                if(PlayerPrefs.HasKey("score")){
-                    if(score > PlayerPrefs.GetInt("score")){
-                        PlayerPrefs.SetInt("score", score);
-                    }
-                }
-                else{
-                    PlayerPrefs.SetInt("score", score);
-                }
-                SceneManager.LoadScene("GameOver");
-                //gameover logic
+                GameOverFunc();
             }
         }
+    }
+    private void GameOverFunc(){
+        GameManager.Instance.ChangeMultiplier(1);
+        PlayerPrefs.SetInt("tempScore", score);
+        if(PlayerPrefs.HasKey("score")){
+            if(score > PlayerPrefs.GetInt("score")){
+                PlayerPrefs.SetInt("score", score);
+            }
+        }
+        else{
+            PlayerPrefs.SetInt("score", score);
+        }
+        SceneManager.LoadScene("GameOver");
     }
 }

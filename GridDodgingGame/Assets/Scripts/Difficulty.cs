@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 public class Difficulty : MonoBehaviour
 {
     public static Difficulty instance;
+    [HideInInspector] public int diffLevel;
     [HideInInspector] public float enemySpawnDelay;
     [HideInInspector] public float enemySpawnDelayScaling;
     [HideInInspector] public float enemyMoveDelay;
@@ -20,6 +21,7 @@ public class Difficulty : MonoBehaviour
     }
 
     public void easyMode(){
+        diffLevel = 1;
         enemySpawnDelay = 2f;
         enemySpawnDelayScaling = .01f;
         enemyMoveDelay = 2f;
@@ -28,6 +30,7 @@ public class Difficulty : MonoBehaviour
         SceneManager.LoadScene("MainGame");
     }
     public void mediumMode(){
+        diffLevel = 2;
         enemySpawnDelay = 1.5f;
         enemySpawnDelayScaling = .05f;
         enemyMoveDelay = 1.5f;
@@ -36,6 +39,7 @@ public class Difficulty : MonoBehaviour
         SceneManager.LoadScene("MainGame");
     }
     public void hardMode(){
+        diffLevel = 3;
         enemySpawnDelay = 1f;
         enemySpawnDelayScaling = .1f;
         enemyMoveDelay = 1f;

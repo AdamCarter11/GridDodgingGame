@@ -17,4 +17,8 @@ public class goBackToMenu : MonoBehaviour
         pausePanel.SetActive(false);
         Time.timeScale = 1;
     }
+    public void restartMainGame(){
+        Time.timeScale = 1;
+        SceneManager.LoadScene("MainGame");
+    }
 }
