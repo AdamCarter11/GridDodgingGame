@@ -15,6 +15,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] GameObject pauseMenu;
     [HideInInspector] public static int score = 0;
     [HideInInspector] public static float time = 1;
+    [HideInInspector] public static int playerHealth = 5;
     [HideInInspector] public static int multiplier = 1;
     [SerializeField] private int startingTime;
     private bool pause = false;
@@ -121,6 +122,12 @@ public class GameManager : MonoBehaviour
     {
         time += val;
     }
+    public void ChangeHealth(int val){
+        playerHealth += val;
+        if(playerHealth <= 0){
+            GameOverFunc();
+        }
+    }
 
     public void ChangeMultiplier(int value){
         multiplier = value;
@@ -133,20 +140,21 @@ public class GameManager : MonoBehaviour
             yield return new WaitForSeconds(1f);
             //time--;
             if(time <= 0){
-                print("Gameover");
-                GameManager.Instance.ChangeMultiplier(1);
-                PlayerPrefs.SetInt("tempScore", score);
-                if(PlayerPrefs.HasKey("score")){
-                    if(score > PlayerPrefs.GetInt("score")){
-                        PlayerPrefs.SetInt("score", score);
-                    }
-                }
-                else{
-                    PlayerPrefs.SetInt("score", score);
-                }
-                SceneManager.LoadScene("GameOver");
-                //gameover logic
+                GameOverFunc();
             }
         }
+    }
+    private void GameOverFunc(){
+        GameManager.Instance.ChangeMultiplier(1);
+        PlayerPrefs.SetInt("tempScore", score);
+        if(PlayerPrefs.HasKey("score")){
+            if(score > PlayerPrefs.GetInt("score")){
+                PlayerPrefs.SetInt("score", score);
+            }
+        }
+        else{
+            PlayerPrefs.SetInt("score", score);
+        }
+        SceneManager.LoadScene("GameOver");
     }
 }
