@@ -2104,6 +2104,7 @@ MonoBehaviour:
   - {fileID: 2404610771850897405, guid: 0252088b8a3b01c44bac29a9cf26f9db, type: 3}
   - {fileID: 2984616102695879706, guid: 56f50b6ea9a1d6544b1fd6463c09c729, type: 3}
   - {fileID: 4802805456526850199, guid: 0dc6f4c2b196796459e11a4e49687010, type: 3}
+  - {fileID: 2984616102695879706, guid: c9ae5ffe2fc5d594dae72cfbe7aa5876, type: 3}
   holeTile: {fileID: 7582865442109977119, guid: d7a5ed3044f20304c8300cffb19ee9fd, type: 3}
   canvas: {fileID: 1124709006}
   currentImage: {fileID: 0}
@@ -2117,6 +2118,7 @@ MonoBehaviour:
   pushTrapUp: {fileID: 891813673, guid: bbfa0d6e4695ada418eb1e1b265359ee, type: 3}
   launchTrap: {fileID: 21300000, guid: c01b4c6426b494043a758e38ca5d8809, type: 3}
   explosionTrap: {fileID: 21300000, guid: 418e0fe27ffef564993f6bdd10634cb8, type: 3}
+  mindControlTrap: {fileID: 21300000, guid: 8c4e6d0c84ac70f40a8ae0e3cd573cdc, type: 3}
   health: 1
   audioSource: {fileID: 519420034}
   sfx:

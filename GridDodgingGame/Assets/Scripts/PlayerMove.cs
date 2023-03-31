@@ -29,7 +29,7 @@ public class PlayerMove : MonoBehaviour
     [SerializeField] Image currentImage;
     [SerializeField] Image[] imageSlots;
     [SerializeField] Sprite empty, dirTrapRight, dirTrapLeft,
-        pushTrapDown, pushTrapLeft, pushTrapRight, pushTrapUp, launchTrap, explosionTrap;
+        pushTrapDown, pushTrapLeft, pushTrapRight, pushTrapUp, launchTrap, explosionTrap, mindControlTrap;
     //TrapType Enum
     // dirTrapRight = 0,
     // dirTrapLeft = 1,
