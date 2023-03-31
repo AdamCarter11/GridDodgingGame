@@ -15,13 +15,15 @@ public class GameManager : MonoBehaviour
     [SerializeField] GameObject pauseMenu;
     [HideInInspector] public static int score = 0;
     [HideInInspector] public static float time = 1;
-    [HideInInspector] public static int playerHealth = 5;
+    [SerializeField] int startingHealth;
+    [HideInInspector] public static int playerHealth;
     [HideInInspector] public static int multiplier = 1;
     [SerializeField] private int startingTime;
     private bool pause = false;
     bool diffIncrease = true;
     bool timeThreshText = true;
     [SerializeField] Animator timeTextAnim;
+    int scoreHealVal;
 
     //visualized timer
     [SerializeField] Image timeIndicator;
@@ -43,21 +45,34 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        playerHealth = startingHealth;
         score = 0;
         time = startingTime;
-        timeText.text = "Time: " + (int)time;
         scoreText.text = "Score: " + 0;
         multiplierText.text = "X" + multiplier;
         startingPitch = audioSourcePitch.pitch;
 
-        StartCoroutine(timeScoreIncrease());
+        if(Difficulty.instance.whichMode == 1){
+            timeText.text = "Time: " + (int)time;
+            StartCoroutine(timeScoreIncrease());
+        }
+        else{
+            timeText.text = "Health: " + playerHealth;
+        }
+        
     }
 
     // Update is called once per frame
     void Update()
     {
         scoreText.text = "Score: " + score;
-        timeText.text = "Time: " + (int)time;
+        if(Difficulty.instance.whichMode == 1){
+            timeText.text = "Time: " + (int)time;
+        }
+        else{
+            timeText.text = "Health: " + playerHealth;
+        }
+        
         if(time <= startingTime / 4){
             timeText.color = Color.red;
             timeTextAnim.SetTrigger("timeChange");
@@ -112,6 +127,11 @@ public class GameManager : MonoBehaviour
     public void IncreaseScore(int val)
     {
         score += (val * multiplier);
+        //set the increase health thresh here (200)
+        if(playerHealth < 5 && score >= scoreHealVal + 200){
+            scoreHealVal = score;
+            playerHealth++;
+        }
         if(score >= 500 && diffIncrease){
             Difficulty.instance.spawnCap -= .2f;
             Difficulty.instance.enemySpawnDelayScaling += .05f;
@@ -120,12 +140,16 @@ public class GameManager : MonoBehaviour
 
     public void ChangeTime(int val)
     {
-        time += val;
+        if(Difficulty.instance.whichMode == 1){
+            time += val;
+        }
     }
     public void ChangeHealth(int val){
-        playerHealth += val;
-        if(playerHealth <= 0){
-            GameOverFunc();
+        if(Difficulty.instance.whichMode == 2){
+            playerHealth += val;
+            if(playerHealth <= 0){
+                GameOverFunc();
+            }
         }
     }
 
