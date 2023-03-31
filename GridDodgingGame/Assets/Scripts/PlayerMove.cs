@@ -164,7 +164,7 @@ public class PlayerMove : MonoBehaviour
             GameManager.Instance.ChangeTime(-5);
 
             //if we wanted to add in a HEALTH MODE
-            //GameManager.Instance.ChangeHealth(-1);
+            GameManager.Instance.ChangeHealth(-1);
         }
         if(other.gameObject.CompareTag("Gold")){
             audioSource.PlayOneShot(sfx[0], .7f);
@@ -209,7 +209,7 @@ public class PlayerMove : MonoBehaviour
             GameManager.Instance.ChangeTime(-5);
             
             //if we wanted to add in a HEALTH MODE
-            //GameManager.Instance.ChangeHealth(-1);
+            GameManager.Instance.ChangeHealth(-1);
         }
     }
     private void OnTriggerExit2D(Collider2D other) {

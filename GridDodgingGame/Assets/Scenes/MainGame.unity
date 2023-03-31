@@ -1613,8 +1613,10 @@ MonoBehaviour:
   multiplierText: {fileID: 574653340}
   audioSourcePitch: {fileID: 519420034}
   pauseMenu: {fileID: 1884638660}
-  startingTime: 60
+  startingHealth: 5
+  startingTime: 61
   timeTextAnim: {fileID: 599777948}
+  scoreHealThresh: 20
   timeIndicator: {fileID: 1464554890}
 --- !u!4 &66823576
 Transform:
