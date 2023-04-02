@@ -16,6 +16,7 @@ public class EnemyMove : MonoBehaviour
     [SerializeField] Sprite berzerkSprite;
     [SerializeField] Sprite launchedSprite;
     [SerializeField] GameObject angryParticles;
+    [SerializeField] Vector3 mindControlTarget;
     private Camera cam;
     public Vector3 facing;
 
@@ -24,6 +25,7 @@ public class EnemyMove : MonoBehaviour
     bool canBeDamaged = false;
     bool frozen = false;
     bool isBerserk = false;
+    bool isMindControlled = false;
     bool movingDelayCo = true;
     float startMoveDelay;
     bool launched = false;
@@ -67,16 +69,113 @@ public class EnemyMove : MonoBehaviour
         StartCoroutine(triggerMove());
     }
 
-    
+
     void Update()
     {
         //moves player
         transform.position = Vector3.MoveTowards(transform.position, movePoint.position, enemySpeed * Time.deltaTime);
         transform.transform.eulerAngles = new Vector3(facing.x, facing.y, facing.z);
 
-        if (Vector3.Distance(transform.position, movePoint.position) <= .05f){
-            if (!isBerserk)
+        if (Vector3.Distance(transform.position, movePoint.position) <= .05f)
+        {
+            if (isBerserk && !isMindControlled)
             {
+                // AI movement towards player
+                //Vector3 currentPlayerPos = PlayerMove.Instance.GetPlayerPos();
+                Vector3 currentPlayerPos = GameObject.Find("Player").GetComponent<PlayerMove>().GetPlayerPos();
+                float xDiff, yDiff;
+                xDiff = Mathf.Abs(currentPlayerPos.x - transform.position.x);
+                yDiff = Mathf.Abs(currentPlayerPos.y - transform.position.y);
+                if (xDiff > yDiff)
+                {
+                    if (canMove && currentPlayerPos.x - transform.position.x > 0)
+                    {
+                        // Move left
+                        movePoint.position += new Vector3(1f, 0f, movePoint.position.z);
+                        canMove = false;
+                        dir = 2;
+                        facing = new Vector3(0, 0, 0);
+                    }
+                    else if (canMove)
+                    {
+                        // Move right
+                        movePoint.position += new Vector3(-1f, 0f, movePoint.position.z);
+                        canMove = false;
+                        dir = 1;
+                        facing = new Vector3(0, 0, 180);
+                    }
+                }
+                else
+                {
+                    if (canMove && currentPlayerPos.y - transform.position.y > 0)
+                    {
+                        // Move up
+                        movePoint.position += new Vector3(0f, 1f, movePoint.position.z);
+                        canMove = false;
+                        dir = 3;
+                        facing = new Vector3(0, 0, 90);
+                    }
+                    else if (canMove)
+                    {
+                        // Move down
+                        movePoint.position += new Vector3(0f, -1f, movePoint.position.z);
+                        canMove = false;
+                        dir = 4;
+                        facing = new Vector3(0, 0, 270);
+                    }
+                }
+            }
+            else if (isMindControlled)
+            {
+                // AI movement towards another enemy
+                // Want to reduce number of calls and set to the delay timer
+                mindControlTarget = ObjectPooling.instance.GetClosestGameObject(gameObject);
+                //Debug.Log("mind control target is: " + mindControlTarget.x + ", " + mindControlTarget.y);
+                float xDiff, yDiff;
+                xDiff = Mathf.Abs(mindControlTarget.x - transform.position.x);
+                yDiff = Mathf.Abs(mindControlTarget.y - transform.position.y);
+                if (xDiff > yDiff)
+                {
+                    if (canMove && mindControlTarget.x - transform.position.x > 0)
+                    {
+                        // Move left
+                        movePoint.position += new Vector3(1f, 0f, movePoint.position.z);
+                        canMove = false;
+                        dir = 2;
+                        facing = new Vector3(0, 0, 0);
+                    }
+                    else if (canMove)
+                    {
+                        // Move right
+                        movePoint.position += new Vector3(-1f, 0f, movePoint.position.z);
+                        canMove = false;
+                        dir = 1;
+                        facing = new Vector3(0, 0, 180);
+                    }
+                }
+                else
+                {
+                    if (canMove && mindControlTarget.y - transform.position.y > 0)
+                    {
+                        // Move up
+                        movePoint.position += new Vector3(0f, 1f, movePoint.position.z);
+                        canMove = false;
+                        dir = 3;
+                        facing = new Vector3(0, 0, 90);
+                    }
+                    else if (canMove)
+                    {
+                        // Move down
+                        movePoint.position += new Vector3(0f, -1f, movePoint.position.z);
+                        canMove = false;
+                        dir = 4;
+                        facing = new Vector3(0, 0, 270);
+                    }
+                }
+            }
+            else
+            {
+                // Move normally
                 //right
                 if (canMove && dir == 1)
                 {
@@ -106,58 +205,11 @@ public class EnemyMove : MonoBehaviour
                     facing = new Vector3(0, 0, 270);
                 }
             }
-            else
-            {
-                //print("AI calc player pos at " + PlayerMove.Instance.GetPlayerPos());
-                // AI movement towards player
-                //Vector3 currentPlayerPos = PlayerMove.Instance.GetPlayerPos();
-                Vector3 currentPlayerPos = GameObject.Find("Player").GetComponent<PlayerMove>().GetPlayerPos();
-                float xDiff, yDiff;
-                xDiff = Mathf.Abs(currentPlayerPos.x - transform.position.x);
-                yDiff = Mathf.Abs(currentPlayerPos.y - transform.position.y);
-                if (xDiff > yDiff)
-                {
-                    if (canMove && currentPlayerPos.x - transform.position.x > 0)
-                    {
-                        // Move left
-                        movePoint.position += new Vector3(1f, 0f, movePoint.position.z);
-                        canMove = false;
-                        dir = 2;
-                        facing = new Vector3(0, 0, 0);
-                    }
-                    else if(canMove)
-                    {
-                        // Move right
-                        movePoint.position += new Vector3(-1f, 0f, movePoint.position.z);
-                        canMove = false;
-                        dir = 1;
-                        facing = new Vector3(0, 0, 180);
-                    }
-                }
-                else
-                {
-                    if (canMove && currentPlayerPos.y - transform.position.y > 0)
-                    {
-                        // Move up
-                        movePoint.position += new Vector3(0f, 1f, movePoint.position.z);
-                        canMove = false;
-                        dir = 3;
-                        facing = new Vector3(0, 0, 90);
-                    }
-                    else if(canMove)
-                    {
-                        // Move down
-                        movePoint.position += new Vector3(0f, -1f, movePoint.position.z);
-                        canMove = false;
-                        dir = 4;
-                        facing = new Vector3(0, 0, 270);
-                    }
-                }
-            }
         }
     }
+        
 
-    // Set facing of enemy
+        // Set facing of enemy
     public void setFacing(int dir)
     {
         Vector3 startFacing = Vector3.zero;
@@ -276,6 +328,16 @@ public class EnemyMove : MonoBehaviour
         }
         if(other.gameObject.CompareTag("Mole")){
             EnemyCollision();
+        }
+
+        // Mind control trap
+        if (other.gameObject.CompareTag("MindControlTrap"))
+        {
+            isMindControlled = true;
+            mindControlTarget = ObjectPooling.instance.GetClosestGameObject(gameObject);
+            // temp representation
+            this.GetComponent<SpriteRenderer>().color = Color.green;
+            Destroy(other.gameObject);
         }
     }
     private void OnTriggerExit2D(Collider2D other) {

@@ -34,4 +34,48 @@ public class ObjectPooling : MonoBehaviour
         }
         return null;
     }
+
+    public Vector3 GetClosestGameObject(GameObject sourceObject)
+    {
+        // Source position to compare to
+        Vector3 sourcePosition = sourceObject.transform.position;
+
+        // Closest object to source
+        Vector3 closestPosition = new Vector3(float.MaxValue, float.MaxValue);
+
+        // Set lowest distance to max
+        float lowestDistance = float.MaxValue;
+
+        Vector3 tempPosition;
+        float currentDistance;
+
+        for (int i = 0; i < pooledObjects.Count; i++)
+        {
+            if (!pooledObjects[i].activeInHierarchy)
+            {
+                // Assign position to temp
+                tempPosition = pooledObjects[i].transform.position;
+
+                // Distance between vectors
+                //  d^2 = (x - x0)^2 + (y - y0)^2
+                currentDistance = Mathf.Pow(tempPosition.x - sourcePosition.x, 2) + Mathf.Pow(tempPosition.y - sourcePosition.y, 2);
+                currentDistance = Mathf.Pow(currentDistance, 2);
+                Debug.Log(pooledObjects[i] + " position value is " + currentDistance);
+
+                if (currentDistance < lowestDistance)
+                {
+                    lowestDistance = currentDistance;
+                    closestPosition = tempPosition;
+                }
+            }
+        }
+
+        // Return original position if no other rats to collide with
+        if (lowestDistance != float.MaxValue)
+        {
+            Debug.Log("found target " + closestPosition);
+            return closestPosition;
+        }
+        else return sourcePosition;
+    }
 }
