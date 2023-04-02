@@ -20,6 +20,7 @@ public class EnemyMove : MonoBehaviour
     private Camera cam;
     public Vector3 facing;
 
+    private Vector3 mindControlTarget;
     //float ratMoveDelay = 2f;
     bool canMove = false;
     bool canBeDamaged = false;
@@ -53,6 +54,7 @@ public class EnemyMove : MonoBehaviour
         canBeDamaged = false;
         frozen = false;
         isBerserk = false;
+        isMindControlled = false;
         launched = false;
         angryParticles.SetActive(false);
         this.GetComponent<SpriteRenderer>().sprite = normalRat;

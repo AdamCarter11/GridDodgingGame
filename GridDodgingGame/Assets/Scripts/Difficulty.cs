@@ -13,11 +13,20 @@ public class Difficulty : MonoBehaviour
     [HideInInspector] public float spawnCap; 
     [HideInInspector] public float trapSpawnDelay;
 
+    [HideInInspector] public int whichMode; //1 for time, 2 for health 
+
     [HideInInspector] public bool screenshake;
 
     private void Awake() {
         instance = this;
         DontDestroyOnLoad(this.gameObject); 
+    }
+
+    public void timeMode(){
+        whichMode = 1;
+    }
+    public void healthMode(){
+        whichMode = 2;
     }
 
     public void easyMode(){
