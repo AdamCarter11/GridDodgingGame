@@ -20,7 +20,7 @@ public class EnemyMove : MonoBehaviour
     private Camera cam;
     public Vector3 facing;
 
-    private Vector3 mindControlTarget;
+    //private Vector3 mindControlTarget;
     //float ratMoveDelay = 2f;
     bool canMove = false;
     bool canBeDamaged = false;
