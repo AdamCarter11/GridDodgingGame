@@ -16,6 +16,7 @@ public class EnemyMove : MonoBehaviour
     [SerializeField] Sprite berzerkSprite;
     [SerializeField] Sprite launchedSprite;
     [SerializeField] GameObject angryParticles;
+    [SerializeField] Vector3 mindControlTarget;
     private Camera cam;
     public Vector3 facing;
 
@@ -70,15 +71,16 @@ public class EnemyMove : MonoBehaviour
         StartCoroutine(triggerMove());
     }
 
-    
+
     void Update()
     {
         //moves player
         transform.position = Vector3.MoveTowards(transform.position, movePoint.position, enemySpeed * Time.deltaTime);
         transform.transform.eulerAngles = new Vector3(facing.x, facing.y, facing.z);
 
-        if (Vector3.Distance(transform.position, movePoint.position) <= .05f){
-            if (isBerserk)
+        if (Vector3.Distance(transform.position, movePoint.position) <= .05f)
+        {
+            if (isBerserk && !isMindControlled)
             {
                 // AI movement towards player
                 //Vector3 currentPlayerPos = PlayerMove.Instance.GetPlayerPos();
@@ -207,8 +209,9 @@ public class EnemyMove : MonoBehaviour
             }
         }
     }
+        
 
-    // Set facing of enemy
+        // Set facing of enemy
     public void setFacing(int dir)
     {
         Vector3 startFacing = Vector3.zero;
@@ -334,11 +337,10 @@ public class EnemyMove : MonoBehaviour
         {
             isMindControlled = true;
             mindControlTarget = ObjectPooling.instance.GetClosestGameObject(gameObject);
+            // temp representation
             this.GetComponent<SpriteRenderer>().color = Color.green;
             Destroy(other.gameObject);
-            //EnemyCollision();
         }
-
     }
     private void OnTriggerExit2D(Collider2D other) {
         if(other.gameObject.CompareTag("Wall")){

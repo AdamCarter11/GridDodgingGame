@@ -10,36 +10,29 @@ public class ObjectPooling : MonoBehaviour
     private int poolCap = 30;
 
     [SerializeField] private GameObject ratPrefab;
-
+    
     private void Awake() {
-        if (instance == null) {
+        if(instance == null){
             instance = this;
         }
     }
     // Start is called before the first frame update
     void Start()
     {
-        for (int i = 0; i < poolCap; i++) {
+        for(int i = 0; i < poolCap; i++){
             GameObject obj = Instantiate(ratPrefab);
             obj.SetActive(false);
             pooledObjects.Add(obj);
         }
     }
 
-    public GameObject GetPooledObject() {
-        for (int i = 0; i < pooledObjects.Count; i++) {
-            if (!pooledObjects[i].activeInHierarchy) {
+    public GameObject GetPooledObject(){
+        for(int i = 0; i < pooledObjects.Count; i++){
+            if(!pooledObjects[i].activeInHierarchy){
                 return pooledObjects[i];
             }
         }
         return null;
-    }
-
-    public Vector3 GetTrajectoryGameObject(GameObject sourceObject)
-    {
-        Vector3 sourcePosition = sourceObject.transform.position;
-        // Return sourceObject position if no rat with trajectory to collide
-        return Vector3.zero;
     }
 
     public Vector3 GetClosestGameObject(GameObject sourceObject)
@@ -65,9 +58,9 @@ public class ObjectPooling : MonoBehaviour
 
                 // Distance between vectors
                 //  d^2 = (x - x0)^2 + (y - y0)^2
-                currentDistance = Mathf.Pow(tempPosition.x - sourcePosition.x, 2) +
-                    Mathf.Pow(tempPosition.y - sourcePosition.y, 2);
+                currentDistance = Mathf.Pow(tempPosition.x - sourcePosition.x, 2) + Mathf.Pow(tempPosition.y - sourcePosition.y, 2);
                 currentDistance = Mathf.Pow(currentDistance, 2);
+                Debug.Log(pooledObjects[i] + " position value is " + currentDistance);
 
                 if (currentDistance < lowestDistance)
                 {
@@ -80,6 +73,7 @@ public class ObjectPooling : MonoBehaviour
         // Return original position if no other rats to collide with
         if (lowestDistance != float.MaxValue)
         {
+            Debug.Log("found target " + closestPosition);
             return closestPosition;
         }
         else return sourcePosition;

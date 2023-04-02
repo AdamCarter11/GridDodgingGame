@@ -7,7 +7,7 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
-    private static GameManager _instance = new GameManager();
+    public static GameManager Instance { get; private set; }
     
     [SerializeField] TextMeshProUGUI scoreText, timeText, multiplierText;
     [SerializeField] AudioSource audioSourcePitch;
@@ -28,18 +28,17 @@ public class GameManager : MonoBehaviour
     //visualized timer
     [SerializeField] Image timeIndicator;
 
-    private GameManager() {
-
-    }
-
-    public static GameManager Instance {
-        get {
-            if (_instance == null) {
-                _instance = new GameManager();
-            }
-
-            return _instance;
+    private void Awake() 
+    {
+        if (Instance != null)
+        {
+            Destroy(Instance);
         }
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+
     }
 
     // Start is called before the first frame update
