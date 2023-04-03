@@ -52,10 +52,12 @@ public class GameManager : MonoBehaviour
         startingPitch = audioSourcePitch.pitch;
 
         if(Difficulty.instance.whichMode == 1){
+            timeIndicator.enabled = true;
             timeText.text = "Time: " + (int)time;
             StartCoroutine(timeScoreIncrease());
         }
         else{
+            timeIndicator.enabled = false;
             timeText.text = "Health: " + playerHealth;
         }
         
@@ -67,28 +69,38 @@ public class GameManager : MonoBehaviour
         scoreText.text = "Score: " + score;
         if(Difficulty.instance.whichMode == 1){
             timeText.text = "Time: " + (int)time;
+            if(time <= startingTime / 4){
+                timeText.color = Color.red;
+                timeTextAnim.SetTrigger("timeChange");
+                if(timeThreshText){
+                    timeTextAnim.speed *= 2;
+                    timeThreshText = false;
+                }
+            }
+            else if(time <= startingTime / 2){
+                if(!timeThreshText){
+                    timeTextAnim.speed = 1;
+                    timeThreshText = true;
+                }
+                timeText.color = new Color(1, .64f, 0);
+                timeTextAnim.SetTrigger("timeChange");
+            }
+            else{
+                timeText.color = new Color(.16f, 1, 0);
+            }
+            TimerFunc();
         }
         else{
             timeText.text = "Health: " + playerHealth;
+            if(playerHealth == 1){
+                timeText.color = Color.red;
+                timeTextAnim.SetTrigger("timeChange");
+            }
+            else{
+                timeText.color = new Color(.16f, 1, 0);
+            }
         }
         
-        if(time <= startingTime / 4){
-            timeText.color = Color.red;
-            timeTextAnim.SetTrigger("timeChange");
-            if(timeThreshText){
-                timeTextAnim.speed *= 2;
-                timeThreshText = false;
-            }
-            
-        }
-        else if(time <= startingTime / 2){
-            if(!timeThreshText){
-                timeTextAnim.speed = 1;
-                timeThreshText = true;
-            }
-            timeText.color = new Color(1, .64f, 0);
-            timeTextAnim.SetTrigger("timeChange");
-        }
         multiplierText.text = "X" + multiplier;
         if(multiplier == 1){
             multiplierText.faceColor = Color.white;
@@ -114,7 +126,7 @@ public class GameManager : MonoBehaviour
             }
         }
 
-        TimerFunc();
+        
     }
     void TimerFunc(){
         if(time > 0){
@@ -127,7 +139,7 @@ public class GameManager : MonoBehaviour
     {
         score += (val * multiplier);
         //set the increase health thresh here (200)
-        if(playerHealth < 5 && score >= scoreHealVal + 200){
+        if(playerHealth < startingHealth && score >= scoreHealVal + 200){
             scoreHealVal = score;
             playerHealth++;
         }

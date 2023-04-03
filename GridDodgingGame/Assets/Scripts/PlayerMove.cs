@@ -158,7 +158,10 @@ public class PlayerMove : MonoBehaviour
             if(PlayerPrefs.GetInt("ScreenShake") > 0){
                 cam.GetComponent<ScreenShake>().TriggerShake();
             }
-            Instantiate(particleMinus, transform.position, Quaternion.identity);
+            if(Difficulty.instance.whichMode == 1)
+            {
+                Instantiate(particleMinus, transform.position, Quaternion.identity);
+            }
             //Destroy(other.gameObject);
             other.gameObject.SetActive(false);
             GameManager.Instance.ChangeTime(-5);
@@ -203,7 +206,10 @@ public class PlayerMove : MonoBehaviour
             if(PlayerPrefs.GetInt("ScreenShake") > 0){
                 cam.GetComponent<ScreenShake>().TriggerShake();
             }
-            Instantiate(particleMinus, transform.position, Quaternion.identity);
+            if(Difficulty.instance.whichMode == 1)
+            {
+                Instantiate(particleMinus, transform.position, Quaternion.identity);
+            }
             //Destroy(other.gameObject);
             other.gameObject.SetActive(false);
             GameManager.Instance.ChangeTime(-5);
@@ -290,7 +296,7 @@ public class PlayerMove : MonoBehaviour
             else if (items.ToArray()[i] == 1) currentImage.sprite = dirTrapRight;
             else if (items.ToArray()[i] == 2) currentImage.sprite = launchTrap;
             else if (items.ToArray()[i] == 3) currentImage.sprite = explosionTrap;
-            else if (items.ToArray()[i] == 4) currentImage.sprite = pushTrapRight;
+            else if (items.ToArray()[i] == 4) currentImage.sprite = mindControlTrap;
             else if (items.ToArray()[i] == 5) currentImage.sprite = pushTrapUp;
             else if (items.ToArray()[i] == 6) currentImage.sprite = pushTrapDown;
             else if (items.ToArray()[i] == 7) currentImage.sprite = pushTrapLeft;
