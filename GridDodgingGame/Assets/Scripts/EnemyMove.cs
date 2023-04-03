@@ -19,6 +19,7 @@ public class EnemyMove : MonoBehaviour
     [SerializeField] Vector3 mindControlTarget;
     private Camera cam;
     private Vector3 targetFacing;
+    private Vector3 startingScale;
     public Vector3 facing;
 
     //private Vector3 mindControlTarget;
@@ -40,6 +41,7 @@ public class EnemyMove : MonoBehaviour
     void Start()
     {
         cam = GameObject.Find("Main Camera").GetComponent<Camera>();
+        startingScale = gameObject.transform.localScale;
         movePoint.transform.position = transform.position;
         movePoint.parent = null;
         if(Difficulty.instance.enemyMoveDelay >= 0){
@@ -64,7 +66,8 @@ public class EnemyMove : MonoBehaviour
         this.GetComponent<SpriteRenderer>().sprite = normalRat;
         gameObject.GetComponent<SpriteRenderer>().color = Color.white;
         movePoint.transform.position = transform.position;
-        if(Difficulty.instance.enemyMoveDelay >= 0){
+
+        if (Difficulty.instance.enemyMoveDelay >= 0){
             enemyMoveDelayRat = Difficulty.instance.enemyMoveDelay;
             //print("mode select");
         }
@@ -431,12 +434,14 @@ public class EnemyMove : MonoBehaviour
         }
 
         // Firework trap
-        //if (other.gameObject.CompareTag("FireworkTrap"))
-        //{
-        //    isLaunching = true;
-        //    Destroy(other.gameObject);
-        //    calculateLaunch(gameObject);
-        //}
+        if (other.gameObject.CompareTag("FireworkTrap"))
+        {
+            canMove = false;
+            isLaunching = true;
+            launched = true;
+            Destroy(other.gameObject);
+            calculateLaunch(gameObject);
+        }
     }
     private void OnTriggerExit2D(Collider2D other) {
         if(other.gameObject.CompareTag("Wall")){
@@ -492,26 +497,34 @@ public class EnemyMove : MonoBehaviour
         fireworkLandingPosition = new Vector3(GameManager.START_X + GameManager.GRID_INTERVAL * pos_x, 
             GameManager.START_X + GameManager.GRID_INTERVAL * pos_y);
 
+        currentDistance = 0;
+        launchDistance = VectorUtility.Instance.calculateDistance(gameObject.transform.position,
+            fireworkLandingPosition);
+
+        // Checked in Update()
+        isLaunching = true;
+        launched = true;
+        canMove = false;
         
+        gameObject.GetComponent<BoxCollider2D>().enabled = false;
     }
 
     public void launchEnemy()
     {
-        float target_z;
-        if (launchDistance / 2 > currentDistance)
-        {
-            target_z = 2;
-        }
-        else target_z = 1;
 
         gameObject.transform.position = new Vector3(
-            Mathf.Lerp(gameObject.transform.position.x, fireworkLandingPosition.x, Time.deltaTime),
-            Mathf.Lerp(gameObject.transform.position.y, fireworkLandingPosition.y, Time.deltaTime),
-            Mathf.Lerp(gameObject.transform.position.z, target_z, Time.deltaTime));
+            Mathf.Lerp(gameObject.transform.position.x, fireworkLandingPosition.x, Time.deltaTime * 50f),
+            Mathf.Lerp(gameObject.transform.position.y, fireworkLandingPosition.y, Time.deltaTime * 50f));
 
-        if (gameObject.transform.position == fireworkLandingPosition)
+        if (gameObject.transform.position.x == fireworkLandingPosition.x && 
+            gameObject.transform.position.y == fireworkLandingPosition.y)
         {
-            // trigger launch
+            Debug.Log("got to new position");
+            // trigger explosion
+            isLaunching = false;
+            launched = false;
+            canMove = true;
         }
+        
     }
 }
