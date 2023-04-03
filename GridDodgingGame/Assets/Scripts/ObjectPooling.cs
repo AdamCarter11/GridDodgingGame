@@ -60,7 +60,6 @@ public class ObjectPooling : MonoBehaviour
                 //  d^2 = (x - x0)^2 + (y - y0)^2
                 currentDistance = Mathf.Pow(tempPosition.x - sourcePosition.x, 2) + Mathf.Pow(tempPosition.y - sourcePosition.y, 2);
                 currentDistance = Mathf.Pow(currentDistance, 2);
-                Debug.Log(pooledObjects[i] + " position value is " + currentDistance);
 
                 if (currentDistance < lowestDistance)
                 {
@@ -73,7 +72,6 @@ public class ObjectPooling : MonoBehaviour
         // Return original position if no other rats to collide with
         if (lowestDistance != float.MaxValue)
         {
-            Debug.Log("found target " + closestPosition);
             return closestPosition;
         }
         else return sourcePosition;

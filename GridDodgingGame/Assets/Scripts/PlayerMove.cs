@@ -286,11 +286,13 @@ public class PlayerMove : MonoBehaviour
             else if (i == 2) currentImage = GameObject.Find("queue2").GetComponent<Image>();
             else if (i == 3) currentImage = GameObject.Find("queue3").GetComponent<Image>();
 
+            // Add specific numbers for trap types (should rechange to name check)
             if (items.ToArray()[i] == 0) currentImage.sprite = dirTrapLeft;
             else if (items.ToArray()[i] == 1) currentImage.sprite = dirTrapRight;
             else if (items.ToArray()[i] == 2) currentImage.sprite = launchTrap;
             else if (items.ToArray()[i] == 3) currentImage.sprite = explosionTrap;
-            else if (items.ToArray()[i] == 4) currentImage.sprite = pushTrapRight;
+            else if (items.ToArray()[i] == 4) currentImage.sprite = mindControlTrap;
+            //else if (items.ToArray()[i] == 4) currentImage.sprite = pushTrapRight;
             else if (items.ToArray()[i] == 5) currentImage.sprite = pushTrapUp;
             else if (items.ToArray()[i] == 6) currentImage.sprite = pushTrapDown;
             else if (items.ToArray()[i] == 7) currentImage.sprite = pushTrapLeft;
