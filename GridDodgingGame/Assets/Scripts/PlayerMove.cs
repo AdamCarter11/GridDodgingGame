@@ -48,7 +48,8 @@ public class PlayerMove : MonoBehaviour
     private Camera cam;
     [SerializeField] private ParticleSystem particleMinus;
     Animator playerAnimator;
-
+    int movingWhichDirUI = 0;
+    bool triggerDig = false;
     /*
     public static PlayerMove Instance
     {
@@ -91,6 +92,21 @@ public class PlayerMove : MonoBehaviour
         moveLogic();
 
     }
+    public void buttonMoveLeft(){
+        movingWhichDirUI = 1;
+    }
+    public void buttonMoveRight(){
+        movingWhichDirUI = 2;
+    }
+    public void buttonMoveUp(){
+        movingWhichDirUI = 3;
+    }
+    public void buttonMoveDown(){
+        movingWhichDirUI = 4;
+    }
+    public void releaseButton(){
+        movingWhichDirUI = 0;
+    }
     void moveLogic(){
         transform.position = Vector3.MoveTowards(transform.position, movePoint.position, moveSpeed * Time.deltaTime);
         if(dir == false && movePoint.transform.position.x > transform.position.x){
@@ -102,19 +118,53 @@ public class PlayerMove : MonoBehaviour
         if(Vector3.Distance(transform.position, movePoint.position) <= .05f){
             if(!movePause){
             //left-right input
-            if(Mathf.Abs(Input.GetAxisRaw("Horizontal")) == 1f && movingDelayCo){
-                if(!Physics2D.OverlapCircle(movePoint.position + new Vector3(Input.GetAxisRaw("Horizontal"), 0f, movePoint.position.z), .2f, whatStopsMovement)){
-                    movePoint.position += new Vector3(Input.GetAxisRaw("Horizontal"), 0f, movePoint.position.z);
-                    StartCoroutine(onMovePause());
+                if(Mathf.Abs(Input.GetAxisRaw("Horizontal")) == 1f && movingDelayCo){
+                    if(!Physics2D.OverlapCircle(movePoint.position + new Vector3(Input.GetAxisRaw("Horizontal"), 0f, movePoint.position.z), .2f, whatStopsMovement)){
+                        movePoint.position += new Vector3(Input.GetAxisRaw("Horizontal"), 0f, movePoint.position.z);
+                        StartCoroutine(onMovePause());
+                    }
+                }
+                //top-down input
+                if(Mathf.Abs(Input.GetAxisRaw("Vertical")) == 1f && movingDelayCo){
+                    if(!Physics2D.OverlapCircle(movePoint.position + new Vector3(0f, Input.GetAxisRaw("Vertical"), movePoint.position.z), .2f, whatStopsMovement)){
+                        movePoint.position += new Vector3(0f, Input.GetAxisRaw("Vertical"), movePoint.position.z);
+                        StartCoroutine(onMovePause());
+                    }
                 }
             }
-            //top-down input
-            if(Mathf.Abs(Input.GetAxisRaw("Vertical")) == 1f && movingDelayCo){
-                if(!Physics2D.OverlapCircle(movePoint.position + new Vector3(0f, Input.GetAxisRaw("Vertical"), movePoint.position.z), .2f, whatStopsMovement)){
-                    movePoint.position += new Vector3(0f, Input.GetAxisRaw("Vertical"), movePoint.position.z);
-                    StartCoroutine(onMovePause());
+        }
+
+        //UI movement
+        if(Vector3.Distance(transform.position, movePoint.position) <= .05f){
+            if(!movePause){
+                if(movingWhichDirUI == 1 && movingDelayCo){
+                    //left
+                    if(!Physics2D.OverlapCircle(movePoint.position + new Vector3(-1, 0f, movePoint.position.z), .2f, whatStopsMovement)){
+                        movePoint.position += new Vector3(-1, 0f, movePoint.position.z);
+                        StartCoroutine(onMovePause());
+                    }
                 }
-            }
+                if(movingWhichDirUI == 2 && movingDelayCo){
+                    //right
+                    if(!Physics2D.OverlapCircle(movePoint.position + new Vector3(1, 0f, movePoint.position.z), .2f, whatStopsMovement)){
+                        movePoint.position += new Vector3(1, 0f, movePoint.position.z);
+                        StartCoroutine(onMovePause());
+                    }
+                }
+                if(movingWhichDirUI == 3 && movingDelayCo){
+                    //up
+                    if(!Physics2D.OverlapCircle(movePoint.position + new Vector3(0f, 1, movePoint.position.z), .2f, whatStopsMovement)){
+                        movePoint.position += new Vector3(0f, 1, movePoint.position.z);
+                        StartCoroutine(onMovePause());
+                    }
+                }
+                if(movingWhichDirUI == 4 && movingDelayCo){
+                    //down
+                    if(!Physics2D.OverlapCircle(movePoint.position + new Vector3(0f, -1, movePoint.position.z), .2f, whatStopsMovement)){
+                        movePoint.position += new Vector3(0f, -1, movePoint.position.z);
+                        StartCoroutine(onMovePause());
+                    }
+                }
             }
         }
     }
@@ -237,9 +287,13 @@ public class PlayerMove : MonoBehaviour
             currMultiplier = 4;
         }
     }
+    public void UITriggerDig(){
+        triggerDig = true;
+    }
     void DiggingLogic(){
-        if(Input.GetKeyDown(KeyCode.Space)){
+        if(Input.GetKeyDown(KeyCode.Space) || triggerDig){
             canSlow = false;
+            triggerDig = false;
             if(canDig){
                 playerAnimator.SetTrigger("dig");
                 GameObject spawnedHoleTile = Instantiate(holeTile, movePoint.transform.position, Quaternion.identity);
