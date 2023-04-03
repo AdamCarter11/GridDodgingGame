@@ -511,16 +511,22 @@ public class EnemyMove : MonoBehaviour
 
     public void launchEnemy()
     {
+        float targetScale = 2;
 
         gameObject.transform.position = new Vector3(
-            Mathf.Lerp(gameObject.transform.position.x, fireworkLandingPosition.x, Time.deltaTime * 50f),
-            Mathf.Lerp(gameObject.transform.position.y, fireworkLandingPosition.y, Time.deltaTime * 50f));
+            Mathf.Lerp(gameObject.transform.position.x, fireworkLandingPosition.x, Time.deltaTime * 5f),
+            Mathf.Lerp(gameObject.transform.position.y, fireworkLandingPosition.y, Time.deltaTime * 5f));
+
+        gameObject.transform.localScale = new Vector3(
+            Mathf.Lerp(gameObject.transform.localScale.x, targetScale, Time.deltaTime * 100f),
+            Mathf.Lerp(gameObject.transform.localScale.y, targetScale, Time.deltaTime * 100f));
 
         if (gameObject.transform.position.x == fireworkLandingPosition.x && 
             gameObject.transform.position.y == fireworkLandingPosition.y)
         {
             Debug.Log("got to new position");
             // trigger explosion
+            gameObject.transform.localScale = startingScale;
             isLaunching = false;
             launched = false;
             canMove = true;
