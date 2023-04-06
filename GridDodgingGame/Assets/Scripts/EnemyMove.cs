@@ -368,7 +368,7 @@ public class EnemyMove : MonoBehaviour
         int pos_y = Random.Range(3, 7);
 
         fireworkLandingPosition = new Vector3(GameManager.START_X + GameManager.GRID_INTERVAL * pos_x, 
-            GameManager.START_X + GameManager.GRID_INTERVAL * pos_y);
+            GameManager.START_Y + GameManager.GRID_INTERVAL * pos_y);
 
         Debug.Log("position " + fireworkLandingPosition);
 
