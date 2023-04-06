@@ -28,6 +28,7 @@ public class PlayerMove : MonoBehaviour
     [SerializeField] Canvas canvas;
     [SerializeField] Image currentImage;
     [SerializeField] Image[] imageSlots;
+    [SerializeField] GameObject firstQue; //for animation
     [SerializeField] Sprite empty, dirTrapRight, dirTrapLeft,
         pushTrapDown, pushTrapLeft, pushTrapRight, pushTrapUp, launchTrap, explosionTrap, 
         mindControlTrap, fireworkTrap, fenceTrap;

@@ -2687,6 +2687,7 @@ MonoBehaviour:
   canvas: {fileID: 1124709006}
   currentImage: {fileID: 0}
   imageSlots: []
+  firstQue: {fileID: 0}
   empty: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
   dirTrapRight: {fileID: -417341133, guid: bbfa0d6e4695ada418eb1e1b265359ee, type: 3}
   dirTrapLeft: {fileID: -724259592, guid: bbfa0d6e4695ada418eb1e1b265359ee, type: 3}
@@ -5063,14 +5064,14 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1465287989}
-  m_LocalRotation: {x: -0, y: -0, z: 0.13052616, w: 0.9914449}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.79999995, y: 0.79999995, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1284293105}
   m_RootOrder: 5
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 15}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0.000030517578, y: -150.00002}
