@@ -23,6 +23,7 @@ TagManager:
   - MindControlTrap
   - FireworkTrap
   - FenceTrap
+  - pylonLine
   layers:
   - Default
   - TransparentFX

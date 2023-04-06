@@ -29,6 +29,9 @@ public class GameManager : MonoBehaviour
     [SerializeField] GameObject[] fenceTraps;
     public int numFenceTraps;
     private bool isFenceActive;
+    [SerializeField] LineRenderer pylonLine;
+    [SerializeField] EdgeCollider2D pylonCol;
+    [SerializeField] GameObject pylonObj;
 
     // Grid spawn borders (from EnemySpawner)
     public const float START_X = -7.5f;
@@ -62,6 +65,7 @@ public class GameManager : MonoBehaviour
         scoreText.text = "Score: " + 0;
         multiplierText.text = "X" + multiplier;
         startingPitch = audioSourcePitch.pitch;
+        pylonObj.SetActive(false);
 
         if(Difficulty.instance.whichMode == 1){
             timeIndicator.enabled = true;
@@ -234,12 +238,29 @@ public class GameManager : MonoBehaviour
 
     IEnumerator PlayLightningParticleEffect(GameObject a, GameObject b)
     {
-        LineRenderer CurrentLR = new GameObject().AddComponent<LineRenderer>();
-        CurrentLR.sortingOrder = 3;
-        Vector3[] positions = { a.transform.position, b.transform.position };
-        CurrentLR.SetPositions(positions);
+        pylonObj.SetActive(true);
+        //LineRenderer CurrentLR = new GameObject().AddComponent<LineRenderer>();
+        //CurrentLR.sortingOrder = 3;
+        Vector3[] positions = { new Vector3(a.transform.position.x, a.transform.position.y, -3), new Vector3(b.transform.position.x, b.transform.position.y, -3) };
+        //CurrentLR.SetPositions(positions);
+        pylonLine.SetPositions(positions);
+
+        SetEdgeCol();
 
         yield return new WaitForSeconds(10f);
+        Destroy(a.gameObject);
+        Destroy(b.gameObject);
+        pylonObj.SetActive(false);
         isFenceActive = false;
+        //will need to destroy the line or something here too
+    }
+    void SetEdgeCol(){
+        //For this to work, make sure the lineRenderer's origin is zero, otherwise there will be an offset
+        List<Vector2> edges = new List<Vector2>();
+        for(int point = 0; point < pylonLine.positionCount; point++){
+            Vector3 lineRenderTempPoint = pylonLine.GetPosition(point);
+            edges.Add(new Vector2(lineRenderTempPoint.x, lineRenderTempPoint.y));
+        }
+        pylonCol.SetPoints(edges);
     }
 }

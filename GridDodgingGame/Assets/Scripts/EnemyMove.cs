@@ -317,6 +317,11 @@ public class EnemyMove : MonoBehaviour
             Destroy(other.gameObject);
             calculateLaunch(gameObject);
         }
+
+        //pylon trap
+        if(other.gameObject.CompareTag("pylonLine")){
+            EnemyCollision();
+        }
     }
     private void OnTriggerExit2D(Collider2D other) {
         if(other.gameObject.CompareTag("Wall")){

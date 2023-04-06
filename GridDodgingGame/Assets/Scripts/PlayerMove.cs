@@ -28,7 +28,7 @@ public class PlayerMove : MonoBehaviour
     [SerializeField] Canvas canvas;
     [SerializeField] Image currentImage;
     [SerializeField] Image[] imageSlots;
-    [SerializeField] GameObject firstQue; //for animation
+    [SerializeField] Animator firstQue; //for animation
     [SerializeField] Sprite empty, dirTrapRight, dirTrapLeft,
         pushTrapDown, pushTrapLeft, pushTrapRight, pushTrapUp, launchTrap, explosionTrap, 
         mindControlTrap, fireworkTrap, fenceTrap;
@@ -317,7 +317,13 @@ public class PlayerMove : MonoBehaviour
                 }
             }
         }
-        
+        //animating the queue UI
+        if(items.Count > 0){
+            firstQue.SetBool("haveItem", true);
+        }
+        else{
+            firstQue.SetBool("haveItem", false);
+        }
     }
 
     public Vector3 GetPlayerPos()
