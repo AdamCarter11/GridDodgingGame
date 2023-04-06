@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public class PlayerMove : MonoBehaviour
 {
-    //private static PlayerMove _instance = new PlayerMove();
+    public static PlayerMove Instance { get; private set; }
 
     [SerializeField] float moveSpeed;
     [SerializeField] Transform movePoint;
@@ -30,7 +30,7 @@ public class PlayerMove : MonoBehaviour
     [SerializeField] Image[] imageSlots;
     [SerializeField] Sprite empty, dirTrapRight, dirTrapLeft,
         pushTrapDown, pushTrapLeft, pushTrapRight, pushTrapUp, launchTrap, explosionTrap, 
-        mindControlTrap, fireworkTrap;
+        mindControlTrap, fireworkTrap, fenceTrap;
     //TrapType Enum
     // dirTrapRight = 0,
     // dirTrapLeft = 1,
@@ -51,21 +51,15 @@ public class PlayerMove : MonoBehaviour
     Animator playerAnimator;
     int movingWhichDirUI = 0;
     bool triggerDig = false;
-    /*
-    public static PlayerMove Instance
-    {
-        get
-        {
-            if (_instance == null)
-            {
-                _instance = new PlayerMove();
-            }
 
-            return _instance;
+    private void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
         }
     }
-    */
-    
+
     void Start()
     {
         playerAnimator = this.GetComponent<Animator>();
@@ -354,9 +348,10 @@ public class PlayerMove : MonoBehaviour
             else if (items.ToArray()[i] == 3) currentImage.sprite = explosionTrap;
             else if (items.ToArray()[i] == 4) currentImage.sprite = mindControlTrap;
             else if (items.ToArray()[i] == 5) currentImage.sprite = fireworkTrap;
+            else if (items.ToArray()[i] == 6) currentImage.sprite = fenceTrap;
             //else if (items.ToArray()[i] == 4) currentImage.sprite = pushTrapRight;
             //else if (items.ToArray()[i] == 5) currentImage.sprite = pushTrapUp;
-            else if (items.ToArray()[i] == 6) currentImage.sprite = pushTrapDown;
+            //else if (items.ToArray()[i] == 6) currentImage.sprite = pushTrapDown;
             else if (items.ToArray()[i] == 7) currentImage.sprite = pushTrapLeft;
             else currentImage.sprite = empty;
         }

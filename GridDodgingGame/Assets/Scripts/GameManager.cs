@@ -25,6 +25,11 @@ public class GameManager : MonoBehaviour
     [SerializeField] Animator timeTextAnim;
     int scoreHealVal;
 
+    // Manage fence traps
+    [SerializeField] GameObject[] fenceTraps;
+    public int numFenceTraps;
+    private bool isFenceActive;
+
     // Grid spawn borders (from EnemySpawner)
     public const float START_X = -7.5f;
     public const float START_Y = -4.5f;
@@ -133,8 +138,23 @@ public class GameManager : MonoBehaviour
             }
         }
 
-        
+        // Check if at any given point, 2 fence traps are on the field
+        // If there are, enable both and connect a electric fence between
+        // them for 10 seconds (ignore others while 2 are active)
+        // Then delete traps and reset the check
+        if (!isFenceActive)
+        {
+            if (numFenceTraps >= 2)
+            {
+                Debug.Log("2 traps detected");
+                // Start particle effect for 10 sec
+                StartFenceEffect();
+                isFenceActive = true;
+            }
+        }
+
     }
+
     void TimerFunc(){
         if(time > 0){
             time -= Time.deltaTime;
@@ -198,5 +218,28 @@ public class GameManager : MonoBehaviour
             PlayerPrefs.SetInt("score", score);
         }
         SceneManager.LoadScene("GameOver");
+    }
+
+    private void StartFenceEffect()
+    {
+        fenceTraps = GameObject.FindGameObjectsWithTag("FenceTrap");
+
+        if (fenceTraps.Length >= 2)
+        {
+            fenceTraps[0].GetComponent<fenceTrapBehavior>().SwapSprite();
+            fenceTraps[1].GetComponent<fenceTrapBehavior>().SwapSprite();
+            StartCoroutine(PlayLightningParticleEffect(fenceTraps[0], fenceTraps[1]));
+        }
+    }
+
+    IEnumerator PlayLightningParticleEffect(GameObject a, GameObject b)
+    {
+        LineRenderer CurrentLR = new GameObject().AddComponent<LineRenderer>();
+        CurrentLR.sortingOrder = 3;
+        Vector3[] positions = { a.transform.position, b.transform.position };
+        CurrentLR.SetPositions(positions);
+
+        yield return new WaitForSeconds(10f);
+        isFenceActive = false;
     }
 }

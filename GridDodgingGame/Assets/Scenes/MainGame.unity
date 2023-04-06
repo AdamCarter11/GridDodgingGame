@@ -1726,7 +1726,7 @@ GameObject:
   - component: {fileID: 66823575}
   m_Layer: 0
   m_Name: GameManager
-  m_TagString: Untagged
+  m_TagString: GameController
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1751,6 +1751,8 @@ MonoBehaviour:
   startingHealth: 3
   startingTime: 60
   timeTextAnim: {fileID: 599777948}
+  fenceTraps: []
+  numFenceTraps: 0
   timeIndicator: {fileID: 1464554890}
 --- !u!4 &66823576
 Transform:
@@ -2680,6 +2682,7 @@ MonoBehaviour:
   - {fileID: 4802805456526850199, guid: 0dc6f4c2b196796459e11a4e49687010, type: 3}
   - {fileID: 2984616102695879706, guid: 2a539071b6544054b8b410cc2ac9dead, type: 3}
   - {fileID: 2984616102695879706, guid: 8827fec4038a3984180e387bd85d11fc, type: 3}
+  - {fileID: 2984616102695879706, guid: f7b7aee06c0963d49adba212abf440c2, type: 3}
   holeTile: {fileID: 7582865442109977119, guid: d7a5ed3044f20304c8300cffb19ee9fd, type: 3}
   canvas: {fileID: 1124709006}
   currentImage: {fileID: 0}
@@ -2695,6 +2698,7 @@ MonoBehaviour:
   explosionTrap: {fileID: 21300000, guid: 418e0fe27ffef564993f6bdd10634cb8, type: 3}
   mindControlTrap: {fileID: 21300000, guid: 5f62c4cfd3b8701488765ed060576ddc, type: 3}
   fireworkTrap: {fileID: 21300000, guid: 128f07d45cf163347920bd88df287c77, type: 3}
+  fenceTrap: {fileID: 21300000, guid: a506805ef7f97e14f9802757bd060c19, type: 3}
   health: 1
   audioSource: {fileID: 519420034}
   sfx:
