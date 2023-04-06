@@ -247,7 +247,7 @@ public class GameManager : MonoBehaviour
 
         SetEdgeCol();
 
-        yield return new WaitForSeconds(10f);
+        yield return new WaitForSeconds(8f);
         Destroy(a.gameObject);
         Destroy(b.gameObject);
         pylonObj.SetActive(false);

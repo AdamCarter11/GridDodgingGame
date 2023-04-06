@@ -2698,8 +2698,8 @@ MonoBehaviour:
   pushTrapUp: {fileID: 891813673, guid: bbfa0d6e4695ada418eb1e1b265359ee, type: 3}
   launchTrap: {fileID: 21300000, guid: c01b4c6426b494043a758e38ca5d8809, type: 3}
   explosionTrap: {fileID: 21300000, guid: 418e0fe27ffef564993f6bdd10634cb8, type: 3}
-  mindControlTrap: {fileID: 21300000, guid: 5f62c4cfd3b8701488765ed060576ddc, type: 3}
-  fireworkTrap: {fileID: 21300000, guid: 128f07d45cf163347920bd88df287c77, type: 3}
+  mindControlTrap: {fileID: 21300000, guid: 380ff2104b79cb64b872d2fc11f37665, type: 3}
+  fireworkTrap: {fileID: 21300000, guid: 153ab220bc2a60b459af63a8ef525192, type: 3}
   fenceTrap: {fileID: 21300000, guid: a506805ef7f97e14f9802757bd060c19, type: 3}
   health: 1
   audioSource: {fileID: 519420034}

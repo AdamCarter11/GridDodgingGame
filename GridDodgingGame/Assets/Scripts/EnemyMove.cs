@@ -38,6 +38,7 @@ public class EnemyMove : MonoBehaviour
 
     private Vector3 fireworkLandingPosition;
     private float currentDistance, launchDistance;
+    int coins = 0;
 
     void Start()
     {
@@ -58,6 +59,8 @@ public class EnemyMove : MonoBehaviour
     }
 
     private void OnEnable() {
+        coins = 0;
+        gameObject.tag = "enemy";
         canBeDamaged = false;
         isLaunching = false;
         isBerserk = false;
@@ -227,7 +230,7 @@ public class EnemyMove : MonoBehaviour
             canBeDamaged = false;
             gameObject.SetActive(false);
         }
-        if(other.gameObject.CompareTag("enemy")){
+        if(other.gameObject.CompareTag("enemy") || other.gameObject.CompareTag("mindControlled")){
            EnemyCollision();
         }
         if(other.gameObject.CompareTag("dirTrap")){
@@ -301,6 +304,7 @@ public class EnemyMove : MonoBehaviour
         if (other.gameObject.CompareTag("MindControlTrap"))
         {
             isMindControlled = true;
+            gameObject.tag = "mindControlled";
             mindControlTarget = ObjectPooling.instance.GetClosestGameObject(gameObject);
             // temp representation
             //this.GetComponent<SpriteRenderer>().color = Color.green;
@@ -337,7 +341,7 @@ public class EnemyMove : MonoBehaviour
         }
         //Destroy(other.gameObject);
         if(!launched){
-            if(!isBerserk){
+            if(!isBerserk && !isMindControlled){
                 //Destroy(this.gameObject);
                 //Destroy(movePoint.gameObject);
                 if(this.GetComponent<SpriteRenderer>().sprite == enchantedSprite){
@@ -421,6 +425,8 @@ public class EnemyMove : MonoBehaviour
             launched = false;
             canMove = true;
             gameObject.GetComponent<BoxCollider2D>().enabled = true;
+            GameManager.Instance.ChangeTime(3);
+            GameManager.Instance.ChangeHealth(1);
             EnemyCollision();
         }
         
