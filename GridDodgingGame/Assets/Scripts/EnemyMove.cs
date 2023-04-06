@@ -15,6 +15,7 @@ public class EnemyMove : MonoBehaviour
     [SerializeField] Sprite normalRat;
     [SerializeField] Sprite berzerkSprite;
     [SerializeField] Sprite launchedSprite;
+    [SerializeField] Sprite mindControlSprite;
     [SerializeField] GameObject angryParticles;
     [SerializeField] Vector3 mindControlTarget;
     private Camera cam;
@@ -302,7 +303,8 @@ public class EnemyMove : MonoBehaviour
             isMindControlled = true;
             mindControlTarget = ObjectPooling.instance.GetClosestGameObject(gameObject);
             // temp representation
-            this.GetComponent<SpriteRenderer>().color = Color.green;
+            //this.GetComponent<SpriteRenderer>().color = Color.green;
+            this.GetComponent<SpriteRenderer>().sprite = mindControlSprite;
             Destroy(other.gameObject);
         }
 
