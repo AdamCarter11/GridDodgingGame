@@ -51,15 +51,14 @@ public class ObjectPooling : MonoBehaviour
 
         for (int i = 0; i < pooledObjects.Count; i++)
         {
-            if (!pooledObjects[i].activeInHierarchy)
+            if (pooledObjects[i].activeInHierarchy && pooledObjects[i] != sourceObject)
             {
                 // Assign position to temp
                 tempPosition = pooledObjects[i].transform.position;
 
                 // Distance between vectors
                 //  d^2 = (x - x0)^2 + (y - y0)^2
-                currentDistance = Mathf.Pow(tempPosition.x - sourcePosition.x, 2) + Mathf.Pow(tempPosition.y - sourcePosition.y, 2);
-                currentDistance = Mathf.Pow(currentDistance, 2);
+                currentDistance = Vector3.Distance(sourcePosition, tempPosition);
 
                 if (currentDistance < lowestDistance)
                 {
@@ -72,6 +71,7 @@ public class ObjectPooling : MonoBehaviour
         // Return original position if no other rats to collide with
         if (lowestDistance != float.MaxValue)
         {
+            Debug.Log("found closest " + closestPosition);
             return closestPosition;
         }
         else return sourcePosition;

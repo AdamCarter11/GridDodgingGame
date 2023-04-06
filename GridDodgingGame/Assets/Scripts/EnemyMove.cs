@@ -165,133 +165,6 @@ public class EnemyMove : MonoBehaviour
                     Debug.LogError("error finding enemy facing");
                 }
             }
-            //if (isBerserk && !isMindControlled)
-            //{
-            //    // AI movement towards player
-            //    //Vector3 currentPlayerPos = PlayerMove.Instance.GetPlayerPos();
-            //    Vector3 currentPlayerPos = GameObject.Find("Player").GetComponent<PlayerMove>().GetPlayerPos();
-            //    float xDiff, yDiff;
-            //    xDiff = Mathf.Abs(currentPlayerPos.x - transform.position.x);
-            //    yDiff = Mathf.Abs(currentPlayerPos.y - transform.position.y);
-            //    if (xDiff > yDiff)
-            //    {
-            //        if (canMove && currentPlayerPos.x - transform.position.x > 0)
-            //        {
-            //            // Move left
-            //            movePoint.position += new Vector3(1f, 0f, movePoint.position.z);
-            //            canMove = false;
-            //            dir = 2;
-            //            facing = new Vector3(0, 0, 0);
-            //        }
-            //        else if (canMove)
-            //        {
-            //            // Move right
-            //            movePoint.position += new Vector3(-1f, 0f, movePoint.position.z);
-            //            canMove = false;
-            //            dir = 1;
-            //            facing = new Vector3(0, 0, 180);
-            //        }
-            //    }
-            //    else
-            //    {
-            //        if (canMove && currentPlayerPos.y - transform.position.y > 0)
-            //        {
-            //            // Move up
-            //            movePoint.position += new Vector3(0f, 1f, movePoint.position.z);
-            //            canMove = false;
-            //            dir = 3;
-            //            facing = new Vector3(0, 0, 90);
-            //        }
-            //        else if (canMove)
-            //        {
-            //            // Move down
-            //            movePoint.position += new Vector3(0f, -1f, movePoint.position.z);
-            //            canMove = false;
-            //            dir = 4;
-            //            facing = new Vector3(0, 0, 270);
-            //        }
-            //    }
-            //}
-            //else if (isMindControlled)
-            //{
-            //    // AI movement towards another enemy
-            //    // Want to reduce number of calls and set to the delay timer
-            //    mindControlTarget = ObjectPooling.instance.GetClosestGameObject(gameObject);
-            //    //Debug.Log("mind control target is: " + mindControlTarget.x + ", " + mindControlTarget.y);
-            //    float xDiff, yDiff;
-            //    xDiff = Mathf.Abs(mindControlTarget.x - transform.position.x);
-            //    yDiff = Mathf.Abs(mindControlTarget.y - transform.position.y);
-            //    if (xDiff > yDiff)
-            //    {
-            //        if (canMove && mindControlTarget.x - transform.position.x > 0)
-            //        {
-            //            // Move left
-            //            movePoint.position += new Vector3(1f, 0f, movePoint.position.z);
-            //            canMove = false;
-            //            dir = 2;
-            //            facing = new Vector3(0, 0, 0);
-            //        }
-            //        else if (canMove)
-            //        {
-            //            // Move right
-            //            movePoint.position += new Vector3(-1f, 0f, movePoint.position.z);
-            //            canMove = false;
-            //            dir = 1;
-            //            facing = new Vector3(0, 0, 180);
-            //        }
-            //    }
-            //    else
-            //    {
-            //        if (canMove && mindControlTarget.y - transform.position.y > 0)
-            //        {
-            //            // Move up
-            //            movePoint.position += new Vector3(0f, 1f, movePoint.position.z);
-            //            canMove = false;
-            //            dir = 3;
-            //            facing = new Vector3(0, 0, 90);
-            //        }
-            //        else if (canMove)
-            //        {
-            //            // Move down
-            //            movePoint.position += new Vector3(0f, -1f, movePoint.position.z);
-            //            canMove = false;
-            //            dir = 4;
-            //            facing = new Vector3(0, 0, 270);
-            //        }
-            //    }
-            //}
-            //else
-            //{
-            //    // Move normally
-            //    //right
-            //    if (canMove && dir == 1)
-            //    {
-            //        movePoint.position += new Vector3(-1f, 0f, movePoint.position.z);
-            //        canMove = false;
-            //        facing = new Vector3(0, 0, 180);
-            //    }
-            //    //left
-            //    if (canMove && dir == 3)
-            //    {
-            //        movePoint.position += new Vector3(1f, 0f, movePoint.position.z);
-            //        canMove = false;
-            //        facing = new Vector3(0, 0, 0);
-            //    }
-            //    //up
-            //    if (canMove && dir == 4)
-            //    {
-            //        movePoint.position += new Vector3(0f, 1f, movePoint.position.z);
-            //        canMove = false;
-            //        facing = new Vector3(0, 0, 90);
-            //    }
-            //    //down
-            //    if (canMove && dir == 2)
-            //    {
-            //        movePoint.position += new Vector3(0f, -1f, movePoint.position.z);
-            //        canMove = false;
-            //        facing = new Vector3(0, 0, 270);
-            //    }
-            //}
         }
 
         // Launch Animate
@@ -495,7 +368,9 @@ public class EnemyMove : MonoBehaviour
         int pos_y = Random.Range(3, 7);
 
         fireworkLandingPosition = new Vector3(GameManager.START_X + GameManager.GRID_INTERVAL * pos_x, 
-            GameManager.START_X + GameManager.GRID_INTERVAL * pos_y);
+            GameManager.START_Y + GameManager.GRID_INTERVAL * pos_y);
+
+        Debug.Log("position " + fireworkLandingPosition);
 
         currentDistance = 0;
         launchDistance = VectorUtility.Instance.calculateDistance(gameObject.transform.position,
@@ -507,22 +382,30 @@ public class EnemyMove : MonoBehaviour
         canMove = false;
         
         gameObject.GetComponent<BoxCollider2D>().enabled = false;
+        
     }
 
     public void launchEnemy()
     {
-        float targetScale = 2;
+        float targetScale = 3;
 
+        // Gameobject transform
         gameObject.transform.position = new Vector3(
-            Mathf.Lerp(gameObject.transform.position.x, fireworkLandingPosition.x, Time.deltaTime * 5f),
-            Mathf.Lerp(gameObject.transform.position.y, fireworkLandingPosition.y, Time.deltaTime * 5f));
+            Mathf.Lerp(gameObject.transform.position.x, fireworkLandingPosition.x, Time.deltaTime * 4f),
+            Mathf.Lerp(gameObject.transform.position.y, fireworkLandingPosition.y, Time.deltaTime * 4f));
+        // Movepoint transform
+        movePoint.transform.position = transform.position;
+        
+        // Rotate
+        gameObject.transform.Rotate(0, 0, Time.deltaTime * 400000f);
 
         gameObject.transform.localScale = new Vector3(
-            Mathf.Lerp(gameObject.transform.localScale.x, targetScale, Time.deltaTime * 100f),
-            Mathf.Lerp(gameObject.transform.localScale.y, targetScale, Time.deltaTime * 100f));
+            Mathf.Lerp(gameObject.transform.localScale.x, targetScale, Time.deltaTime * 5f),
+            Mathf.Lerp(gameObject.transform.localScale.y, targetScale, Time.deltaTime * 5f));
+        
 
-        if (gameObject.transform.position.x == fireworkLandingPosition.x && 
-            gameObject.transform.position.y == fireworkLandingPosition.y)
+        if (Mathf.Abs(gameObject.transform.position.x - fireworkLandingPosition.x) <= 0.5f && 
+            Mathf.Abs(gameObject.transform.position.y - fireworkLandingPosition.y) <= 0.5f)
         {
             Debug.Log("got to new position");
             // trigger explosion
@@ -530,6 +413,8 @@ public class EnemyMove : MonoBehaviour
             isLaunching = false;
             launched = false;
             canMove = true;
+            gameObject.GetComponent<BoxCollider2D>().enabled = true;
+            EnemyCollision();
         }
         
     }
