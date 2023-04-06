@@ -21,6 +21,7 @@ TagManager:
   - ExplosionRadius
   - Mole
   - MindControlTrap
+  - FireworkTrap
   layers:
   - Default
   - TransparentFX

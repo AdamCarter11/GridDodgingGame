@@ -18,13 +18,15 @@ public class EnemyMove : MonoBehaviour
     [SerializeField] GameObject angryParticles;
     [SerializeField] Vector3 mindControlTarget;
     private Camera cam;
+    private Vector3 targetFacing;
+    private Vector3 startingScale;
     public Vector3 facing;
 
     //private Vector3 mindControlTarget;
     //float ratMoveDelay = 2f;
     bool canMove = false;
     bool canBeDamaged = false;
-    bool frozen = false;
+    bool isLaunching = false;
     bool isBerserk = false;
     bool isMindControlled = false;
     bool movingDelayCo = true;
@@ -33,9 +35,13 @@ public class EnemyMove : MonoBehaviour
     int dir;
     [SerializeField] private int health;
 
+    private Vector3 fireworkLandingPosition;
+    private float currentDistance, launchDistance;
+
     void Start()
     {
         cam = GameObject.Find("Main Camera").GetComponent<Camera>();
+        startingScale = gameObject.transform.localScale;
         movePoint.transform.position = transform.position;
         movePoint.parent = null;
         if(Difficulty.instance.enemyMoveDelay >= 0){
@@ -52,7 +58,7 @@ public class EnemyMove : MonoBehaviour
 
     private void OnEnable() {
         canBeDamaged = false;
-        frozen = false;
+        isLaunching = false;
         isBerserk = false;
         isMindControlled = false;
         launched = false;
@@ -60,7 +66,8 @@ public class EnemyMove : MonoBehaviour
         this.GetComponent<SpriteRenderer>().sprite = normalRat;
         gameObject.GetComponent<SpriteRenderer>().color = Color.white;
         movePoint.transform.position = transform.position;
-        if(Difficulty.instance.enemyMoveDelay >= 0){
+
+        if (Difficulty.instance.enemyMoveDelay >= 0){
             enemyMoveDelayRat = Difficulty.instance.enemyMoveDelay;
             //print("mode select");
         }
@@ -80,133 +87,217 @@ public class EnemyMove : MonoBehaviour
 
         if (Vector3.Distance(transform.position, movePoint.position) <= .05f)
         {
-            if (isBerserk && !isMindControlled)
+            if (canMove)
             {
-                // AI movement towards player
-                //Vector3 currentPlayerPos = PlayerMove.Instance.GetPlayerPos();
-                Vector3 currentPlayerPos = GameObject.Find("Player").GetComponent<PlayerMove>().GetPlayerPos();
-                float xDiff, yDiff;
-                xDiff = Mathf.Abs(currentPlayerPos.x - transform.position.x);
-                yDiff = Mathf.Abs(currentPlayerPos.y - transform.position.y);
-                if (xDiff > yDiff)
+                if (isBerserk && !isMindControlled)
                 {
-                    if (canMove && currentPlayerPos.x - transform.position.x > 0)
-                    {
-                        // Move left
-                        movePoint.position += new Vector3(1f, 0f, movePoint.position.z);
-                        canMove = false;
-                        dir = 2;
-                        facing = new Vector3(0, 0, 0);
-                    }
-                    else if (canMove)
-                    {
-                        // Move right
-                        movePoint.position += new Vector3(-1f, 0f, movePoint.position.z);
-                        canMove = false;
-                        dir = 1;
-                        facing = new Vector3(0, 0, 180);
-                    }
+                    // Get player position
+                    Vector3 currentPlayerPos = GameObject.Find("Player").GetComponent<PlayerMove>().GetPlayerPos();
+
+                    // Set facing based on player position
+                    targetFacing = VectorUtility.Instance.calculateFacing(transform.position, currentPlayerPos);
+                }
+                else if (isMindControlled)
+                {
+                    // Get other enemy position
+                    Vector3 closestEnemyPos = ObjectPooling.instance.GetClosestGameObject(gameObject);
+
+                    // Set facing based on other enemy position
+                    targetFacing = VectorUtility.Instance.calculateFacing(transform.position, transform.position + closestEnemyPos);
                 }
                 else
                 {
-                    if (canMove && currentPlayerPos.y - transform.position.y > 0)
+                    // Move normally
+                    switch (dir)
                     {
-                        // Move up
-                        movePoint.position += new Vector3(0f, 1f, movePoint.position.z);
-                        canMove = false;
-                        dir = 3;
-                        facing = new Vector3(0, 0, 90);
-                    }
-                    else if (canMove)
-                    {
-                        // Move down
-                        movePoint.position += new Vector3(0f, -1f, movePoint.position.z);
-                        canMove = false;
-                        dir = 4;
-                        facing = new Vector3(0, 0, 270);
-                    }
-                }
-            }
-            else if (isMindControlled)
-            {
-                // AI movement towards another enemy
-                // Want to reduce number of calls and set to the delay timer
-                mindControlTarget = ObjectPooling.instance.GetClosestGameObject(gameObject);
-                //Debug.Log("mind control target is: " + mindControlTarget.x + ", " + mindControlTarget.y);
-                float xDiff, yDiff;
-                xDiff = Mathf.Abs(mindControlTarget.x - transform.position.x);
-                yDiff = Mathf.Abs(mindControlTarget.y - transform.position.y);
-                if (xDiff > yDiff)
-                {
-                    if (canMove && mindControlTarget.x - transform.position.x > 0)
-                    {
-                        // Move left
-                        movePoint.position += new Vector3(1f, 0f, movePoint.position.z);
-                        canMove = false;
-                        dir = 2;
-                        facing = new Vector3(0, 0, 0);
-                    }
-                    else if (canMove)
-                    {
-                        // Move right
-                        movePoint.position += new Vector3(-1f, 0f, movePoint.position.z);
-                        canMove = false;
-                        dir = 1;
-                        facing = new Vector3(0, 0, 180);
+                        case 1:
+                            targetFacing = Vector3.right;
+                            break;
+                        case 2:
+                            targetFacing = Vector3.down;
+                            break;
+                        case 3:
+                            targetFacing = Vector3.left;
+                            break;
+                        case 4:
+                            targetFacing = Vector3.up;
+                            break;
+                        default:
+                            Debug.LogError("error with enemy facing");
+                            break;
                     }
                 }
-                else
+                
+                if (Vector3.up == targetFacing)
                 {
-                    if (canMove && mindControlTarget.y - transform.position.y > 0)
-                    {
-                        // Move up
-                        movePoint.position += new Vector3(0f, 1f, movePoint.position.z);
-                        canMove = false;
-                        dir = 3;
-                        facing = new Vector3(0, 0, 90);
-                    }
-                    else if (canMove)
-                    {
-                        // Move down
-                        movePoint.position += new Vector3(0f, -1f, movePoint.position.z);
-                        canMove = false;
-                        dir = 4;
-                        facing = new Vector3(0, 0, 270);
-                    }
-                }
-            }
-            else
-            {
-                // Move normally
-                //right
-                if (canMove && dir == 1)
-                {
-                    movePoint.position += new Vector3(-1f, 0f, movePoint.position.z);
-                    canMove = false;
-                    facing = new Vector3(0, 0, 180);
-                }
-                //left
-                if (canMove && dir == 3)
-                {
-                    movePoint.position += new Vector3(1f, 0f, movePoint.position.z);
-                    canMove = false;
-                    facing = new Vector3(0, 0, 0);
-                }
-                //up
-                if (canMove && dir == 4)
-                {
+                    // Move up
                     movePoint.position += new Vector3(0f, 1f, movePoint.position.z);
                     canMove = false;
+                    //dir = 3;
                     facing = new Vector3(0, 0, 90);
                 }
-                //down
-                if (canMove && dir == 2)
+                else if (Vector3.down == targetFacing)
                 {
+                    // Move down
                     movePoint.position += new Vector3(0f, -1f, movePoint.position.z);
                     canMove = false;
+                    //dir = 4;
                     facing = new Vector3(0, 0, 270);
                 }
+                else if (Vector3.left == targetFacing)
+                {
+                    // Move left
+                    movePoint.position += new Vector3(1f, 0f, movePoint.position.z);
+                    canMove = false;
+                    //dir = 2;
+                    facing = new Vector3(0, 0, 0);
+                }
+                else if (Vector3.right == targetFacing)
+                {
+                    // Move right
+                    movePoint.position += new Vector3(-1f, 0f, movePoint.position.z);
+                    canMove = false;
+                    //dir = 1;
+                    facing = new Vector3(0, 0, 180);
+                }
+                else
+                {
+                    Debug.LogError("error finding enemy facing");
+                }
             }
+            //if (isBerserk && !isMindControlled)
+            //{
+            //    // AI movement towards player
+            //    //Vector3 currentPlayerPos = PlayerMove.Instance.GetPlayerPos();
+            //    Vector3 currentPlayerPos = GameObject.Find("Player").GetComponent<PlayerMove>().GetPlayerPos();
+            //    float xDiff, yDiff;
+            //    xDiff = Mathf.Abs(currentPlayerPos.x - transform.position.x);
+            //    yDiff = Mathf.Abs(currentPlayerPos.y - transform.position.y);
+            //    if (xDiff > yDiff)
+            //    {
+            //        if (canMove && currentPlayerPos.x - transform.position.x > 0)
+            //        {
+            //            // Move left
+            //            movePoint.position += new Vector3(1f, 0f, movePoint.position.z);
+            //            canMove = false;
+            //            dir = 2;
+            //            facing = new Vector3(0, 0, 0);
+            //        }
+            //        else if (canMove)
+            //        {
+            //            // Move right
+            //            movePoint.position += new Vector3(-1f, 0f, movePoint.position.z);
+            //            canMove = false;
+            //            dir = 1;
+            //            facing = new Vector3(0, 0, 180);
+            //        }
+            //    }
+            //    else
+            //    {
+            //        if (canMove && currentPlayerPos.y - transform.position.y > 0)
+            //        {
+            //            // Move up
+            //            movePoint.position += new Vector3(0f, 1f, movePoint.position.z);
+            //            canMove = false;
+            //            dir = 3;
+            //            facing = new Vector3(0, 0, 90);
+            //        }
+            //        else if (canMove)
+            //        {
+            //            // Move down
+            //            movePoint.position += new Vector3(0f, -1f, movePoint.position.z);
+            //            canMove = false;
+            //            dir = 4;
+            //            facing = new Vector3(0, 0, 270);
+            //        }
+            //    }
+            //}
+            //else if (isMindControlled)
+            //{
+            //    // AI movement towards another enemy
+            //    // Want to reduce number of calls and set to the delay timer
+            //    mindControlTarget = ObjectPooling.instance.GetClosestGameObject(gameObject);
+            //    //Debug.Log("mind control target is: " + mindControlTarget.x + ", " + mindControlTarget.y);
+            //    float xDiff, yDiff;
+            //    xDiff = Mathf.Abs(mindControlTarget.x - transform.position.x);
+            //    yDiff = Mathf.Abs(mindControlTarget.y - transform.position.y);
+            //    if (xDiff > yDiff)
+            //    {
+            //        if (canMove && mindControlTarget.x - transform.position.x > 0)
+            //        {
+            //            // Move left
+            //            movePoint.position += new Vector3(1f, 0f, movePoint.position.z);
+            //            canMove = false;
+            //            dir = 2;
+            //            facing = new Vector3(0, 0, 0);
+            //        }
+            //        else if (canMove)
+            //        {
+            //            // Move right
+            //            movePoint.position += new Vector3(-1f, 0f, movePoint.position.z);
+            //            canMove = false;
+            //            dir = 1;
+            //            facing = new Vector3(0, 0, 180);
+            //        }
+            //    }
+            //    else
+            //    {
+            //        if (canMove && mindControlTarget.y - transform.position.y > 0)
+            //        {
+            //            // Move up
+            //            movePoint.position += new Vector3(0f, 1f, movePoint.position.z);
+            //            canMove = false;
+            //            dir = 3;
+            //            facing = new Vector3(0, 0, 90);
+            //        }
+            //        else if (canMove)
+            //        {
+            //            // Move down
+            //            movePoint.position += new Vector3(0f, -1f, movePoint.position.z);
+            //            canMove = false;
+            //            dir = 4;
+            //            facing = new Vector3(0, 0, 270);
+            //        }
+            //    }
+            //}
+            //else
+            //{
+            //    // Move normally
+            //    //right
+            //    if (canMove && dir == 1)
+            //    {
+            //        movePoint.position += new Vector3(-1f, 0f, movePoint.position.z);
+            //        canMove = false;
+            //        facing = new Vector3(0, 0, 180);
+            //    }
+            //    //left
+            //    if (canMove && dir == 3)
+            //    {
+            //        movePoint.position += new Vector3(1f, 0f, movePoint.position.z);
+            //        canMove = false;
+            //        facing = new Vector3(0, 0, 0);
+            //    }
+            //    //up
+            //    if (canMove && dir == 4)
+            //    {
+            //        movePoint.position += new Vector3(0f, 1f, movePoint.position.z);
+            //        canMove = false;
+            //        facing = new Vector3(0, 0, 90);
+            //    }
+            //    //down
+            //    if (canMove && dir == 2)
+            //    {
+            //        movePoint.position += new Vector3(0f, -1f, movePoint.position.z);
+            //        canMove = false;
+            //        facing = new Vector3(0, 0, 270);
+            //    }
+            //}
+        }
+
+        // Launch Animate
+        if (isLaunching)
+        {
+            launchEnemy();
         }
     }
         
@@ -341,6 +432,16 @@ public class EnemyMove : MonoBehaviour
             this.GetComponent<SpriteRenderer>().color = Color.green;
             Destroy(other.gameObject);
         }
+
+        // Firework trap
+        if (other.gameObject.CompareTag("FireworkTrap"))
+        {
+            canMove = false;
+            isLaunching = true;
+            launched = true;
+            Destroy(other.gameObject);
+            calculateLaunch(gameObject);
+        }
     }
     private void OnTriggerExit2D(Collider2D other) {
         if(other.gameObject.CompareTag("Wall")){
@@ -348,13 +449,32 @@ public class EnemyMove : MonoBehaviour
             //print("left wall");
         }
     }
-    private void EnemyCollision(){
-        if(PlayerPrefs.GetInt("ScreenShake") > 0){
-                cam.GetComponent<ScreenShake>().TriggerShake();
+    private void EnemyCollision()
+    {
+        if(PlayerPrefs.GetInt("ScreenShake") > 0)
+        {
+            cam.GetComponent<ScreenShake>().TriggerShake();
+        }
+        //Destroy(other.gameObject);
+        if(!launched){
+            if(!isBerserk){
+                //Destroy(this.gameObject);
+                //Destroy(movePoint.gameObject);
+                if(this.GetComponent<SpriteRenderer>().sprite == enchantedSprite){
+                    Instantiate(extraGold, transform.position, Quaternion.identity);
+                }else{
+                    Instantiate(gold, transform.position, Quaternion.identity);
+                }
+                gameObject.SetActive(false);
             }
-            //Destroy(other.gameObject);
-            if(!launched){
-                if(!isBerserk){
+            /*
+            else if(isBerserk){
+                gameObject.SetActive(false);
+            }
+            */
+            else{
+                health--;
+                if(health <= 0){
                     //Destroy(this.gameObject);
                     //Destroy(movePoint.gameObject);
                     if(this.GetComponent<SpriteRenderer>().sprite == enchantedSprite){
@@ -364,24 +484,53 @@ public class EnemyMove : MonoBehaviour
                     }
                     gameObject.SetActive(false);
                 }
-                /*
-                else if(isBerserk){
-                    gameObject.SetActive(false);
-                }
-                */
-                else{
-                    health--;
-                    if(health <= 0){
-                        //Destroy(this.gameObject);
-                        //Destroy(movePoint.gameObject);
-                        if(this.GetComponent<SpriteRenderer>().sprite == enchantedSprite){
-                            Instantiate(extraGold, transform.position, Quaternion.identity);
-                        }else{
-                            Instantiate(gold, transform.position, Quaternion.identity);
-                        }
-                        gameObject.SetActive(false);
-                    }
-                }
             }
+        }
+    }
+
+    public void calculateLaunch(GameObject launchedEnemy)
+    {
+        // Find valid position on map to land
+        int pos_x = Random.Range(3, 8);
+        int pos_y = Random.Range(3, 7);
+
+        fireworkLandingPosition = new Vector3(GameManager.START_X + GameManager.GRID_INTERVAL * pos_x, 
+            GameManager.START_X + GameManager.GRID_INTERVAL * pos_y);
+
+        currentDistance = 0;
+        launchDistance = VectorUtility.Instance.calculateDistance(gameObject.transform.position,
+            fireworkLandingPosition);
+
+        // Checked in Update()
+        isLaunching = true;
+        launched = true;
+        canMove = false;
+        
+        gameObject.GetComponent<BoxCollider2D>().enabled = false;
+    }
+
+    public void launchEnemy()
+    {
+        float targetScale = 2;
+
+        gameObject.transform.position = new Vector3(
+            Mathf.Lerp(gameObject.transform.position.x, fireworkLandingPosition.x, Time.deltaTime * 5f),
+            Mathf.Lerp(gameObject.transform.position.y, fireworkLandingPosition.y, Time.deltaTime * 5f));
+
+        gameObject.transform.localScale = new Vector3(
+            Mathf.Lerp(gameObject.transform.localScale.x, targetScale, Time.deltaTime * 100f),
+            Mathf.Lerp(gameObject.transform.localScale.y, targetScale, Time.deltaTime * 100f));
+
+        if (gameObject.transform.position.x == fireworkLandingPosition.x && 
+            gameObject.transform.position.y == fireworkLandingPosition.y)
+        {
+            Debug.Log("got to new position");
+            // trigger explosion
+            gameObject.transform.localScale = startingScale;
+            isLaunching = false;
+            launched = false;
+            canMove = true;
+        }
+        
     }
 }
