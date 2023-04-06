@@ -26,11 +26,6 @@ public class EnemySpawner : MonoBehaviour
 
     //[SerializeField] EnemyMove enemyMoveScript;
 
-    void Awake()
-    {
-
-    }
-
     void Start()
     {
         if(Difficulty.instance.enemySpawnDelay >= 0){
