@@ -25,6 +25,13 @@ public class GameManager : MonoBehaviour
     [SerializeField] Animator timeTextAnim;
     int scoreHealVal;
 
+    // Grid spawn borders (from EnemySpawner)
+    public const float START_X = -7.5f;
+    public const float START_Y = -4.5f;
+    public const float END_X = 4.5f;
+    public const float END_Y = 4.5f;
+    public const float GRID_INTERVAL = 1.0f;
+
     //visualized timer
     [SerializeField] Image timeIndicator;
 
