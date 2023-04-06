@@ -26,8 +26,8 @@ public class moleSpawner : MonoBehaviour
         while(true){
             yield return new WaitForSeconds(spawnTime);
             spawnTime = Random.Range(2, 5);
-            pos_x = Random.Range(1,10);
-            pos_y = Random.Range(1,9);
+            pos_x = Random.Range(1,9);
+            pos_y = Random.Range(1,8);
             spawnPos = new Vector3(START_X + GRID_INTERVAL * pos_x, START_Y + GRID_INTERVAL * pos_y, 0);
             GameObject tempMoleHole = Instantiate(moleHoleObj, spawnPos, Quaternion.identity);
             Destroy(tempMoleHole, moleSpawnDelay);
