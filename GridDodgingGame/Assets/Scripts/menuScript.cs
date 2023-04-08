@@ -7,7 +7,7 @@ using UnityEngine.SceneManagement;
 
 public class menuScript : MonoBehaviour
 {
-    [SerializeField] TMP_Text scoreText;
+    [SerializeField] TMP_Text scoreText, mediumScoreText, hardScoreText;
     [SerializeField] GameObject tutorialPanel;
     [SerializeField] GameObject difficultyPanel;
     [SerializeField] GameObject highScorePanel;
@@ -29,12 +29,25 @@ public class menuScript : MonoBehaviour
     {
         currentTutorialUIState = TutorialState.t0;
 
-        if(PlayerPrefs.HasKey("score")){
-            scoreText.text = "High Score: " + PlayerPrefs.GetInt("score");
+        if(PlayerPrefs.HasKey("easyScore")){
+            scoreText.text = "Easy: " + PlayerPrefs.GetInt("score");
         }
         else{
-            scoreText.text = "High Score: YOU?";
+            scoreText.text = "Easy: YOU?";
         }
+        if(PlayerPrefs.HasKey("mediumScore")){
+            mediumScoreText.text = "Medium: " + PlayerPrefs.GetInt("mediumScore");
+        }
+        else{
+            mediumScoreText.text = "Medium: YOU?";
+        }
+        if(PlayerPrefs.HasKey("hardScore")){
+            hardScoreText.text = "Hard: " + PlayerPrefs.GetInt("hardScore");
+        }
+        else{
+            hardScoreText.text = "Hard: YOU?";
+        }
+
         if(!PlayerPrefs.HasKey("volume")){
             PlayerPrefs.SetFloat("volume", 1);
             AudioListener.volume = 1;

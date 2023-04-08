@@ -33,6 +33,7 @@ public class EnemyMove : MonoBehaviour
     bool movingDelayCo = true;
     float startMoveDelay;
     bool launched = false;
+    bool canSpawnCoin = true;
     int dir;
     [SerializeField] private int health;
 
@@ -55,6 +56,24 @@ public class EnemyMove : MonoBehaviour
         }
         health = 1;
         startMoveDelay = enemyMoveDelayRat;
+        coins = 0;
+        gameObject.tag = "enemy";
+        canBeDamaged = false;
+        isLaunching = false;
+        isBerserk = false;
+        isMindControlled = false;
+        launched = false;
+        angryParticles.SetActive(false);
+        this.GetComponent<SpriteRenderer>().sprite = normalRat;
+        gameObject.GetComponent<SpriteRenderer>().color = Color.white;
+        movePoint.transform.position = transform.position;
+        if (Difficulty.instance.enemyMoveDelay >= 0){
+            enemyMoveDelayRat = Difficulty.instance.enemyMoveDelay;
+            //print("mode select");
+        }
+        else{
+            enemyMoveDelayRat = 2f;
+        }
         StartCoroutine(triggerMove());
     }
 
@@ -190,12 +209,17 @@ public class EnemyMove : MonoBehaviour
         this.dir = dir;
         this.facing = startFacing;
     }
-
+    IEnumerator coinSpawnDelay(){
+        canSpawnCoin = false;
+        yield return new WaitForSeconds(.2f);
+        canSpawnCoin = true;
+    }
     IEnumerator triggerMove(){
         while(true){
             yield return new WaitForSeconds(enemyMoveDelayRat / GameManager.multiplier);
-            if(enemyMoveDelayRat < .2f){
+            if(launched && canSpawnCoin){
                 Instantiate(gold, transform.position, Quaternion.identity);
+                StartCoroutine(coinSpawnDelay());
             }
             if(movingDelayCo){
                 canMove = true;

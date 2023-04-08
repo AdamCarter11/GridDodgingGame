@@ -14,7 +14,16 @@ public class UIGameover : MonoBehaviour
     void Start()
     {
         scoreText.text = "your score: " + PlayerPrefs.GetInt("tempScore");
-        highScoreText.text = "highscore: " + PlayerPrefs.GetInt("score");
+        if(Difficulty.instance.diffLevel == 1){
+            highScoreText.text = "highscore: " + PlayerPrefs.GetInt("easyScore");
+        }
+        if(Difficulty.instance.diffLevel == 2){
+            highScoreText.text = "highscore: " + PlayerPrefs.GetInt("mediumScore");
+        }
+        if(Difficulty.instance.diffLevel == 3){
+            highScoreText.text = "highscore: " + PlayerPrefs.GetInt("hardScore");
+        }
+        
         if(PlayerPrefs.GetInt("tempScore") == PlayerPrefs.GetInt("score")){
             ratImage1.sprite = goldRat;
             ratImage2.sprite = goldRat;

@@ -63,6 +63,7 @@ public class GameManager : MonoBehaviour
         score = 0;
         time = startingTime;
         scoreText.text = "Score: " + 0;
+        multiplier = 1;
         multiplierText.text = "X" + multiplier;
         startingPitch = audioSourcePitch.pitch;
         pylonObj.SetActive(false);
@@ -174,10 +175,6 @@ public class GameManager : MonoBehaviour
             scoreHealVal = score;
             playerHealth++;
         }
-        if(score >= 500 && diffIncrease){
-            Difficulty.instance.spawnCap -= .2f;
-            Difficulty.instance.enemySpawnDelayScaling += .05f;
-        }
     }
 
     public void ChangeTime(int val)
@@ -214,13 +211,40 @@ public class GameManager : MonoBehaviour
         GameManager.Instance.ChangeMultiplier(1);
         PlayerPrefs.SetInt("tempScore", score);
         if(PlayerPrefs.HasKey("score")){
-            if(score > PlayerPrefs.GetInt("score")){
-                PlayerPrefs.SetInt("score", score);
+            if(Difficulty.instance.diffLevel == 1){
+                //easy score
+                if(score > PlayerPrefs.GetInt("easyScore")){
+                    PlayerPrefs.SetInt("easyScore", score);
+                }
+            }
+            if(Difficulty.instance.diffLevel == 2){
+                //medium score
+                if(score > PlayerPrefs.GetInt("mediumScore")){
+                    PlayerPrefs.SetInt("mediumScore", score);
+                }
+            }  
+            if(Difficulty.instance.diffLevel == 3){
+                //hard score
+                if(score > PlayerPrefs.GetInt("hardScore")){
+                    PlayerPrefs.SetInt("hardScore", score);
+                }
             }
         }
         else{
-            PlayerPrefs.SetInt("score", score);
+            if(Difficulty.instance.diffLevel == 1){
+                //easy score
+                PlayerPrefs.SetInt("easyScore", score);
+            }
+            if(Difficulty.instance.diffLevel == 2){
+                //medium score
+                PlayerPrefs.SetInt("mediumScore", score);
+            }  
+            if(Difficulty.instance.diffLevel == 3){
+                //hard score
+                PlayerPrefs.SetInt("hardScore", score);
+            }
         }
+        
         SceneManager.LoadScene("GameOver");
     }
 

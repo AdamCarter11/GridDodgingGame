@@ -58,7 +58,12 @@ public class EnemySpawner : MonoBehaviour
 
     IEnumerator spawnEnemy(){
         while(true){
-            yield return new WaitForSeconds(spawnDelay - spawnScaling);
+            float tempSpawnDelay = spawnDelay - spawnScaling;
+            print(tempSpawnDelay);
+            if(tempSpawnDelay < spawnCap){
+                tempSpawnDelay = spawnCap;
+            }
+            yield return new WaitForSeconds(tempSpawnDelay);
 
             // Initialize direction and position of enemy
             dir = Random.Range(1,5);
