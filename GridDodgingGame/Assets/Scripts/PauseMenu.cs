@@ -8,7 +8,10 @@ public class PauseMenu : MonoBehaviour
 {
     [SerializeField] Slider volumeSlider;
     [SerializeField] Toggle shakeToggle;
+    [SerializeField] Toggle invertControlToggle;
     [SerializeField] TextMeshProUGUI highScoreText;
+    [SerializeField] GameObject arrows, digButton;
+    Button testButton;
     // Start is called before the first frame update
     void Start()
     {
@@ -19,6 +22,7 @@ public class PauseMenu : MonoBehaviour
         else{
             LoadVolume();
         }
+
         if(!PlayerPrefs.HasKey("ScreenShake")){
             PlayerPrefs.SetInt("ScreenShake" , 1);
         }
@@ -31,7 +35,31 @@ public class PauseMenu : MonoBehaviour
             }
         }
         shakeToggle.onValueChanged.AddListener(delegate { ToggleValueChanged(shakeToggle);});
-        if(Difficulty.instance.diffLevel == 1){
+
+        //invert controls
+        if (!PlayerPrefs.HasKey("InvertControls"))
+        {
+            PlayerPrefs.SetInt("InvertControls", -1);
+        }
+        else
+        {
+            if (PlayerPrefs.GetInt("InvertControls") == 1)
+            {
+                invertControlToggle.isOn = true;
+                arrows.GetComponent<RectTransform>().anchoredPosition = new Vector3(545, 0, 0);
+                digButton.GetComponent<RectTransform>().anchoredPosition = new Vector3(-698, 1, 0);
+                
+            }
+            else
+            {
+                invertControlToggle.isOn = false;
+                arrows.GetComponent<RectTransform>().anchoredPosition = new Vector3(0, 0, 0);
+                digButton.GetComponent<RectTransform>().anchoredPosition = new Vector3(-130, 1, 0);
+            }
+        }
+        invertControlToggle.onValueChanged.AddListener(delegate { ToggleAltControlValueChanged(invertControlToggle); });
+
+        if (Difficulty.instance.diffLevel == 1){
             if(PlayerPrefs.HasKey("easyScore"))
                 highScoreText.text = "Current highscore: " + PlayerPrefs.GetInt("easyScore");
             else
@@ -58,6 +86,24 @@ public class PauseMenu : MonoBehaviour
         int tempShake = PlayerPrefs.GetInt("ScreenShake");
         tempShake *= -1;
         PlayerPrefs.SetInt("ScreenShake", tempShake);
+    }
+
+    void ToggleAltControlValueChanged(Toggle change)
+    {
+        print("change alt controls toggle");
+        int tempAltControl = PlayerPrefs.GetInt("InvertControls");
+        tempAltControl *= -1;
+        PlayerPrefs.SetInt("InvertControls", tempAltControl);
+        if(tempAltControl == 1)
+        {
+            arrows.GetComponent<RectTransform>().anchoredPosition = new Vector3(545, 0, 0);
+            digButton.GetComponent<RectTransform>().anchoredPosition = new Vector3(-698, 1, 0);
+        }
+        else
+        {
+            arrows.GetComponent<RectTransform>().anchoredPosition = new Vector3(0, 0, 0);
+            digButton.GetComponent<RectTransform>().anchoredPosition = new Vector3(-130, 1, 0);
+        }
     }
 
     public void ChangeVolume(){

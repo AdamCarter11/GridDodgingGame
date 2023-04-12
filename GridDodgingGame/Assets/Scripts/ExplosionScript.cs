@@ -1,9 +1,11 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class ExplosionScript : MonoBehaviour
 {
+
     bool canTrigger = true;
     private void OnTriggerEnter2D(Collider2D other) {
         if(other.gameObject.CompareTag("enemy") && canTrigger){
@@ -17,4 +19,5 @@ public class ExplosionScript : MonoBehaviour
         yield return new WaitForSeconds(2f);
         Destroy(this.gameObject);
     }
+
 }

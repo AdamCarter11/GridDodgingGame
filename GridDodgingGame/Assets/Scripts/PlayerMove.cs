@@ -198,6 +198,7 @@ public class PlayerMove : MonoBehaviour
             currDiggingTile = other.gameObject;
         }
         if(other.gameObject.CompareTag("enemy")){
+            audioSource.PlayOneShot(sfx[2], .8f);
             multiplierStreak = 0;
             GameManager.Instance.ChangeMultiplier(1);
             currMultiplier = 1;
@@ -246,6 +247,7 @@ public class PlayerMove : MonoBehaviour
             
         }
         if(other.gameObject.CompareTag("Mole")){
+            audioSource.PlayOneShot(sfx[2], .8f);
             multiplierStreak = 0;
             GameManager.Instance.ChangeMultiplier(1);
             currMultiplier = 1;
