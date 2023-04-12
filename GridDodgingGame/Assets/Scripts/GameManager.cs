@@ -159,6 +159,21 @@ public class GameManager : MonoBehaviour
         }
 
     }
+    public void TriggerPauseMenu()
+    {
+        if (!pause)
+        {
+            Time.timeScale = 0;
+            pauseMenu.SetActive(true);
+            pause = true;
+        }
+        else
+        {
+            pauseMenu.SetActive(false);
+            Time.timeScale = 1;
+            pause = false;
+        }
+    }
 
     void TimerFunc(){
         if(time > 0){
