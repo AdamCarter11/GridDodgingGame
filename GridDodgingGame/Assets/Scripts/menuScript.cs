@@ -30,7 +30,7 @@ public class menuScript : MonoBehaviour
         currentTutorialUIState = TutorialState.t0;
 
         if(PlayerPrefs.HasKey("easyScore")){
-            scoreText.text = "Easy: " + PlayerPrefs.GetInt("score");
+            scoreText.text = "Easy: " + PlayerPrefs.GetInt("easyScore");
         }
         else{
             scoreText.text = "Easy: YOU?";

@@ -6,15 +6,19 @@ using TMPro;
 
 public class PauseMenu : MonoBehaviour
 {
+    public static PauseMenu Instance { get; private set; }
+
     [SerializeField] Slider volumeSlider;
     [SerializeField] Toggle shakeToggle;
     [SerializeField] Toggle invertControlToggle;
     [SerializeField] TextMeshProUGUI highScoreText;
     [SerializeField] GameObject arrows, digButton;
     Button testButton;
+    [HideInInspector] public static bool toggleFlipControls;
     // Start is called before the first frame update
     void Start()
     {
+        toggleFlipControls = false;
         if(!PlayerPrefs.HasKey("volume")){
             PlayerPrefs.SetFloat("volume", 1);
             LoadVolume();
@@ -46,15 +50,17 @@ public class PauseMenu : MonoBehaviour
             if (PlayerPrefs.GetInt("InvertControls") == 1)
             {
                 invertControlToggle.isOn = true;
-                arrows.GetComponent<RectTransform>().anchoredPosition = new Vector3(545, 0, 0);
-                digButton.GetComponent<RectTransform>().anchoredPosition = new Vector3(-698, 1, 0);
+                toggleFlipControls = true;
+                arrows.GetComponent<RectTransform>().anchoredPosition = new Vector3(650, 0, 0);
+                digButton.GetComponent<RectTransform>().anchoredPosition = new Vector3(-677, 1, 0);
                 
             }
             else
             {
                 invertControlToggle.isOn = false;
+                toggleFlipControls = false;
                 arrows.GetComponent<RectTransform>().anchoredPosition = new Vector3(0, 0, 0);
-                digButton.GetComponent<RectTransform>().anchoredPosition = new Vector3(-130, 1, 0);
+                digButton.GetComponent<RectTransform>().anchoredPosition = new Vector3(-20, 1, 0);
             }
         }
         invertControlToggle.onValueChanged.AddListener(delegate { ToggleAltControlValueChanged(invertControlToggle); });
@@ -96,13 +102,15 @@ public class PauseMenu : MonoBehaviour
         PlayerPrefs.SetInt("InvertControls", tempAltControl);
         if(tempAltControl == 1)
         {
-            arrows.GetComponent<RectTransform>().anchoredPosition = new Vector3(545, 0, 0);
-            digButton.GetComponent<RectTransform>().anchoredPosition = new Vector3(-698, 1, 0);
+            toggleFlipControls = true;
+            arrows.GetComponent<RectTransform>().anchoredPosition = new Vector3(650, 0, 0);
+            digButton.GetComponent<RectTransform>().anchoredPosition = new Vector3(-677, 1, 0);
         }
         else
         {
+            toggleFlipControls = false;
             arrows.GetComponent<RectTransform>().anchoredPosition = new Vector3(0, 0, 0);
-            digButton.GetComponent<RectTransform>().anchoredPosition = new Vector3(-130, 1, 0);
+            digButton.GetComponent<RectTransform>().anchoredPosition = new Vector3(-20, 1, 0);
         }
     }
 

@@ -52,6 +52,7 @@ public class PlayerMove : MonoBehaviour
     Animator playerAnimator;
     int movingWhichDirUI = 0;
     bool triggerDig = false;
+    [SerializeField] joyStickScript joyStickRef;
 
     private void Awake()
     {
@@ -133,28 +134,32 @@ public class PlayerMove : MonoBehaviour
         //UI movement
         if(Vector3.Distance(transform.position, movePoint.position) <= .05f){
             if(!movePause){
-                if(movingWhichDirUI == 1 && movingDelayCo){
+                if(movingWhichDirUI == 1 || joyStickRef.joystickVec.x < -.5f && movingDelayCo)
+                {
                     //left
                     if(!Physics2D.OverlapCircle(movePoint.position + new Vector3(-1, 0f, movePoint.position.z), .2f, whatStopsMovement)){
                         movePoint.position += new Vector3(-1, 0f, movePoint.position.z);
                         StartCoroutine(onMovePause());
                     }
                 }
-                if(movingWhichDirUI == 2 && movingDelayCo){
+                if(movingWhichDirUI == 2 || joyStickRef.joystickVec.x > .5f && movingDelayCo)
+                {
                     //right
                     if(!Physics2D.OverlapCircle(movePoint.position + new Vector3(1, 0f, movePoint.position.z), .2f, whatStopsMovement)){
                         movePoint.position += new Vector3(1, 0f, movePoint.position.z);
                         StartCoroutine(onMovePause());
                     }
                 }
-                if(movingWhichDirUI == 3 && movingDelayCo){
+                if(movingWhichDirUI == 3 || joyStickRef.joystickVec.y > .5f && movingDelayCo)
+                {
                     //up
                     if(!Physics2D.OverlapCircle(movePoint.position + new Vector3(0f, 1, movePoint.position.z), .2f, whatStopsMovement)){
                         movePoint.position += new Vector3(0f, 1, movePoint.position.z);
                         StartCoroutine(onMovePause());
                     }
                 }
-                if(movingWhichDirUI == 4 && movingDelayCo){
+                if(movingWhichDirUI == 4 || joyStickRef.joystickVec.y < -.5f && movingDelayCo)
+                {
                     //down
                     if(!Physics2D.OverlapCircle(movePoint.position + new Vector3(0f, -1, movePoint.position.z), .2f, whatStopsMovement)){
                         movePoint.position += new Vector3(0f, -1, movePoint.position.z);

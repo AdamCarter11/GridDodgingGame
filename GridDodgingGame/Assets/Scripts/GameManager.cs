@@ -225,26 +225,54 @@ public class GameManager : MonoBehaviour
     private void GameOverFunc(){
         GameManager.Instance.ChangeMultiplier(1);
         PlayerPrefs.SetInt("tempScore", score);
-        if(PlayerPrefs.HasKey("score")){
+        //if(PlayerPrefs.HasKey("score")){
             if(Difficulty.instance.diffLevel == 1){
-                //easy score
-                if(score > PlayerPrefs.GetInt("easyScore")){
+            //easy score
+                if (PlayerPrefs.HasKey("easyScore"))
+                {
+                    if (score > PlayerPrefs.GetInt("easyScore"))
+                    {
+                        PlayerPrefs.SetInt("easyScore", score);
+                    }
+                }
+                else
+                {
                     PlayerPrefs.SetInt("easyScore", score);
                 }
+                
             }
             if(Difficulty.instance.diffLevel == 2){
                 //medium score
-                if(score > PlayerPrefs.GetInt("mediumScore")){
+                if (PlayerPrefs.HasKey("mediumScore"))
+                {
+                    if (score > PlayerPrefs.GetInt("mediumScore"))
+                    {
+                        PlayerPrefs.SetInt("mediumScore", score);
+                    }
+                }
+                else
+                {
                     PlayerPrefs.SetInt("mediumScore", score);
                 }
+                
             }  
             if(Difficulty.instance.diffLevel == 3){
-                //hard score
-                if(score > PlayerPrefs.GetInt("hardScore")){
+            //hard score
+                if (PlayerPrefs.HasKey("hardScore"))
+                {
+                    if (score > PlayerPrefs.GetInt("hardScore"))
+                    {
+                        PlayerPrefs.SetInt("hardScore", score);
+                    }
+                }
+                else
+                {
                     PlayerPrefs.SetInt("hardScore", score);
                 }
+                
             }
-        }
+        //}
+        /*
         else{
             if(Difficulty.instance.diffLevel == 1){
                 //easy score
@@ -259,7 +287,7 @@ public class GameManager : MonoBehaviour
                 PlayerPrefs.SetInt("hardScore", score);
             }
         }
-        
+        */
         SceneManager.LoadScene("GameOver");
     }
 
