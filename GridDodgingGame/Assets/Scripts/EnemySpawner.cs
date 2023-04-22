@@ -13,9 +13,9 @@ public class EnemySpawner : MonoBehaviour
     private float spawnScaling = 0;
 
     // Grid spawn borders
-    const float START_X = -7.5f;
+    const float START_X = -6.5f;
     const float START_Y = -4.5f;
-    const float END_X = 4.5f;
+    const float END_X = 3.5f;
     const float END_Y = 4.5f;
     const float GRID_INTERVAL = 1.0f;
 

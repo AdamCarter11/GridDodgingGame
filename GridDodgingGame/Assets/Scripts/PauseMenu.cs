@@ -51,15 +51,26 @@ public class PauseMenu : MonoBehaviour
             {
                 invertControlToggle.isOn = true;
                 toggleFlipControls = true;
-                arrows.GetComponent<RectTransform>().anchoredPosition = new Vector3(650, 0, 0);
-                digButton.GetComponent<RectTransform>().anchoredPosition = new Vector3(-677, 1, 0);
-                
+                //arrows.GetComponent<RectTransform>().anchoredPosition = new Vector3(720, 0, 0);
+                arrows.GetComponent<RectTransform>().anchorMin = new Vector2(1,0);
+                arrows.GetComponent<RectTransform>().anchorMax = new Vector2(1,0);
+                arrows.GetComponent<RectTransform>().anchoredPosition = new Vector3(-150, 0, 0);
+
+                //digButton.GetComponent<RectTransform>().anchoredPosition = new Vector3(-790, 1, 0);
+                digButton.GetComponent<RectTransform>().anchorMin = new Vector2(0,0);
+                digButton.GetComponent<RectTransform>().anchorMax = new Vector2(0,0);
+                digButton.GetComponent<RectTransform>().anchoredPosition = new Vector3(125, 1, 0);
             }
             else
             {
                 invertControlToggle.isOn = false;
                 toggleFlipControls = false;
+                arrows.GetComponent<RectTransform>().anchorMin = new Vector2(0, 0);
+                arrows.GetComponent<RectTransform>().anchorMax = new Vector2(0, 0);
                 arrows.GetComponent<RectTransform>().anchoredPosition = new Vector3(0, 0, 0);
+
+                digButton.GetComponent<RectTransform>().anchorMin = new Vector2(1, 0);
+                digButton.GetComponent<RectTransform>().anchorMax = new Vector2(1, 0);
                 digButton.GetComponent<RectTransform>().anchoredPosition = new Vector3(-20, 1, 0);
             }
         }
@@ -103,13 +114,29 @@ public class PauseMenu : MonoBehaviour
         if(tempAltControl == 1)
         {
             toggleFlipControls = true;
-            arrows.GetComponent<RectTransform>().anchoredPosition = new Vector3(650, 0, 0);
-            digButton.GetComponent<RectTransform>().anchoredPosition = new Vector3(-677, 1, 0);
+            //arrows.GetComponent<RectTransform>().anchoredPosition = new Vector3(650, 0, 0);
+            //digButton.GetComponent<RectTransform>().anchoredPosition = new Vector3(-677, 1, 0);
+
+            arrows.GetComponent<RectTransform>().anchorMin = new Vector2(1, 0);
+            arrows.GetComponent<RectTransform>().anchorMax = new Vector2(1, 0);
+            arrows.GetComponent<RectTransform>().anchoredPosition = new Vector3(-150, 0, 0);
+
+            //digButton.GetComponent<RectTransform>().anchoredPosition = new Vector3(-790, 1, 0);
+            digButton.GetComponent<RectTransform>().anchorMin = new Vector2(0, 0);
+            digButton.GetComponent<RectTransform>().anchorMax = new Vector2(0, 0);
+            digButton.GetComponent<RectTransform>().anchoredPosition = new Vector3(125, 1, 0);
         }
         else
         {
             toggleFlipControls = false;
+            //arrows.GetComponent<RectTransform>().anchoredPosition = new Vector3(0, 0, 0);
+            //digButton.GetComponent<RectTransform>().anchoredPosition = new Vector3(-20, 1, 0);
+            arrows.GetComponent<RectTransform>().anchorMin = new Vector2(0, 0);
+            arrows.GetComponent<RectTransform>().anchorMax = new Vector2(0, 0);
             arrows.GetComponent<RectTransform>().anchoredPosition = new Vector3(0, 0, 0);
+
+            digButton.GetComponent<RectTransform>().anchorMin = new Vector2(1, 0);
+            digButton.GetComponent<RectTransform>().anchorMax = new Vector2(1, 0);
             digButton.GetComponent<RectTransform>().anchoredPosition = new Vector3(-20, 1, 0);
         }
     }
