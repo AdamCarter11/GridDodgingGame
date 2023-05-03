@@ -378,7 +378,7 @@ public class PlayerMove : MonoBehaviour
     }
 
     void setupTiles(){
-        float xStart = -6.5f;
+        float xStart = -5.5f;
         for(int i = 0; i < possibleXVals.Length; i++){
             possibleXVals[i] = xStart;
             xStart += 1.0f;
